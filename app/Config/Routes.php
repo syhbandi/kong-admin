@@ -39,10 +39,13 @@ $routes->add('verifikasi/pencairan-rider', 'Verifikasi::pencairanRider');
 $routes->add('verifikasi/pencairan-toko', 'Verifikasi::pencairanToko');
 
 // Routing rider
-$routes->add('rider', 'rider::index');
-$routes->add('rider/top-up', 'rider::topUp');
-$routes->add('rider/pencairan', 'rider::pencairan');
-$routes->add('rider/pengajuan-kendaraan', 'rider::pengajuanKendaraan');
+$routes->add('rider', 'Rider::index');
+$routes->add('rider/top-up', 'Rider::topUp');
+$routes->add('rider/detail/(:num)', 'Rider::detail/$1');
+$routes->add('rider/pencairan', 'Rider::pencairan');
+$routes->add('rider/pengajuan-kendaraan', 'Rider::pengajuanKendaraan');
+$routes->add('rider/top-up/detail/(:num)', 'Rider::detailTopUp/$1');
+$routes->add('rider/pencairan/detail/(:segment)', 'Rider::detailPencairan/$1');
 
 /*
  * --------------------------------------------------------------------

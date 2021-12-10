@@ -21,7 +21,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url() ?>/assets/dist/css/adminlte.min.css" />
   <!-- overlayScrollbars -->
-  <!-- <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" /> -->
+  <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
   <!-- Daterange picker -->
   <!-- <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/daterangepicker/daterangepicker.css" /> -->
   <!-- summernote -->
@@ -29,6 +29,9 @@
 
   <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/sweetalert2/sweetalert2.min.css">
+  <!-- <link rel="stylesheet" href="<?= base_url() ?>/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css"> -->
 
 
   <!-- jQuery -->
@@ -48,6 +51,17 @@
   <script src="<?= base_url() ?>/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
   <script src="<?= base_url() ?>/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
+  <script src="<?= base_url() ?>/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+  <style>
+    th.text-body-right {
+      text-align: inherit;
+    }
+
+    td.text-body-right {
+      text-align: right;
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -73,6 +87,7 @@
           <div class="row mb-2">
             <div class="col-sm-6">
               <h1 class="m-0">Dashboard</h1>
+              <!-- <button class="btn btn-sm btn-warning" id="tesToast">Toast</button> -->
             </div>
             <!-- /.col -->
             <div class="col-sm-6">
@@ -131,6 +146,43 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <!-- <script src="<?= base_url() ?>/assets/dist/js/pages/dashboard.js"></script> -->
   <?php endif ?>
+
+  <script>
+    $(function() {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+
+      <?php if (session()->getFlashdata('sukses') != '') : ?>
+        Toast.fire({
+          icon: 'success',
+          title: '<?= session()->getFlashdata('sukses') ?>'
+        })
+      <?php endif ?>
+
+      <?php if (session()->getFlashdata('error') != '') : ?>
+        Toast.fire({
+          icon: 'error',
+          title: '<?= session()->getFlashdata('error') ?>'
+        })
+      <?php endif ?>
+
+      // $('#tesToast').on('click', function(e) {
+      //   Toast.fire({
+      //     icon: 'success',
+      //     title: 'tes teks panjang di toasts dan lebih panjang lagi sampai ke langit'
+      //   })
+      // })
+    })
+  </script>
 </body>
 
 </html>
