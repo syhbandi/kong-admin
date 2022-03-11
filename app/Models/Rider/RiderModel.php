@@ -40,11 +40,12 @@ class RiderModel extends Model
 			$builder->orLike($key);
 		}
 
-		$builder->select("a.kd_driver,a.nama_depan,a.alamat_tinggal,a.hp1,a.hp2,a.email,a.no_ktp,a.kd_zona,a.status,c.merk_nama,d.model_nama, b.nomor_plat,b.tahun_pembuatan,b.STNK_expired,b.kd_kendaraan,e.deskripsi");
+		$builder->select("a.kd_driver,a.nama_depan,a.alamat_tinggal,a.hp1,a.hp2,a.email,a.no_ktp,a.kd_zona,a.status,c.merk_nama,d.model_nama, b.nomor_plat,b.tahun_pembuatan,b.STNK_expired,b.kd_kendaraan,e.deskripsi, f.saldo");
 		$builder->join("m_driver_kendaraan b", "a.kd_driver = b.kd_driver", "INNER");
 		$builder->join("m_merk_kendaraan AS c", "c.merk_id = b.kd_merk", "INNER");
 		$builder->join("m_model_kendaraan AS d", "d.model_id = b.kd_model", "INNER");
 		$builder->join("m_driver_zona AS e", "d.model_id = b.kd_model", "INNER");
+		$builder->join("m_saldo_driver f", "a.kd_driver = f.kd_driver", 'LEFT');
 
 		if ($kd_driver != null) {
 			$builder->where('a.kd_driver', $kd_driver);
@@ -53,29 +54,27 @@ class RiderModel extends Model
 		// seleksi rider berdasarkan jenis (baru, aktif, nonaktif, banned)
 		switch ($jenis) {
 			case 'baru':
-				$builder->where("a.`status` =0 OR a.`status` =1 OR a.`status`!=3 AND b.kd_kendaraan!=''");
+				$builder->where("a.`status`", 0)->orWhere("a.`status`", -1)->orWhere("a.`status`", 2);
 				break;
 			case 'aktif':
-				$builder->where("a.`status` =3 AND b.kd_kendaraan!=''");
+				$builder->where("a.`status`", 3);
 				break;
 			case 'nonaktif':
-				$builder->where("a.`status` =-2 AND b.kd_kendaraan!=''");
+				$builder->where("a.`status`", -2);
 				break;
 			case 'banned':
-				$builder->where("a.`status` =-3 AND b.kd_kendaraan!=''");
+				$builder->where("a.`status`", -3);
 				break;
 
 			default:
 				break;
 		}
-
+		$builder->where("b.kd_kendaraan != ", '');
 		$builder->groupBy('a.kd_driver');
 
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
 		}
-
-
 
 		return $builder->get();
 	}

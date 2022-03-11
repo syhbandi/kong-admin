@@ -4,6 +4,7 @@
   <div class="card-header d-flex align-items-center">
     <h3 class="card-title">Pengajuan Pencairan (<?= $pencairan['nama rider'] ?>) : <strong><?= $pencairan['jumlah penarikan'] ?></strong></h3>
     <div class="ml-auto <?= $status == 1 ? 'd-none' : '' ?>">
+      <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
       <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
     </div>

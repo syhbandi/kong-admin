@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Rider;
+namespace App\Models;
 
 use CodeIgniter\Model;
 
@@ -57,28 +57,36 @@ class PencairanModel extends Model
 
 		$builder = $this->db->table($this->table);
 
-		if ($jenis != '') {
-			switch ($jenis) {
-				case '2':
-					$builder->select('t_penarikan_validasi.*, m_driver.nama_depan, m_bank.nama_bank');
-					$builder->join('m_driver', "t_penarikan_validasi.id = m_driver.kd_driver");
-					$builder->join('m_bank', "t_penarikan_validasi.kd_bank = m_bank.kd_bank");
-					break;
+		switch ($jenis) {
+			case '2': // penarikan saldo driver
+				$builder->select('t_penarikan_validasi.*, m_driver.nama_depan, m_bank.nama_bank, m_saldo_driver.saldo')
+					->join('m_driver', "t_penarikan_validasi.id = m_driver.kd_driver")
+					->join('m_saldo_driver', 't_penarikan_validasi.id = m_saldo_driver.kd_driver');
 
-				default:
-					break;
-			}
+				break;
+			case '1': //penarikan saldo toko
+				$builder->select("t_penarikan_validasi.*, company.nama_usaha, m_bank.nama_bank, m_saldo_toko.saldo")
+					->join("(SELECT id, nama_usaha from m_user_company) company", "t_penarikan_validasi.id = company.id")
+					->join('m_saldo_toko', 't_penarikan_validasi.id = m_saldo_toko.kd_toko');
+				break;
+			default:
+				$builder->select("*");
+				break;
 		}
+
+		$builder->join('m_bank', "t_penarikan_validasi.kd_bank = m_bank.kd_bank");
 
 		if ($cari != '') {
 			$builder->like('no_transaksi', $cari)->orLike($key);
 		}
 
-		if ($no_transaksi != '') {
+		$builder->where('jenis_user', $jenis); //sesuai jenis
+
+		if ($no_transaksi != '') { // khusus tampilkan detail penarikan
 			$builder->where('no_transaksi', $no_transaksi);
 		}
 
-		if ($status == 'unverif') {
+		if ($status == 'unverif') { //utk status belum verifikasi
 			$builder->where('t_penarikan_validasi.status', '0');
 		}
 

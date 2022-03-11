@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Rider\PencairanModel;
+use App\Models\PencairanModel;
 use App\Models\Rider\RiderModel;
 use App\Models\Rider\TopUpModel;
 
@@ -78,6 +78,7 @@ class Rider extends BaseController
 				$value->alamat_tinggal,
 				$value->hp1 . "<br>" . $value->hp2,
 				$value->email,
+				"Rp " . number_format($value->saldo, 0, "", "."),
 				'<span class="' . $text . ' font-weight-bold">' . $status . '</span>',
 				'<a href="' . base_url('rider/detail/' . $value->kd_driver) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 				$jenis == 'baru' ? '<button class="btn btn-primary btn-sm verifikasi" data-driver="' . $value->kd_driver . '"><i class="fas fa-check mr-1"></i> Verifikasi</button>' : '',
@@ -97,6 +98,19 @@ class Rider extends BaseController
 	{
 		$rider = $this->riderModel->getRider(null, null, null, $kd_driver)->getRowArray();
 		$tahun_lahir = substr($rider['no_ktp'], 10, 2);
+
+		// dokumen data diri
+		$foto_ktp = file_exists(FCPATH . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg') ? base_url() . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg' : base_url() . '/assets/file-not-found.png';
+		$foto_sim = file_exists(FCPATH . '/../kajek/images/sim/' . $rider['kd_driver'] . 'sim.jpg') ? base_url() . '/../kajek/images/sim/' . $rider['kd_driver'] . 'sim.jpg' : base_url() . '/assets/file-not-found.png';
+		$foto_skck = file_exists(FCPATH . '/../kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg') ? base_url() . '/../kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg' : base_url() . '/assets/file-not-found.png';
+
+		//dokumen kendaraan
+		$foto_stnk = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'stnk.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'stnk.jpg' : base_url() . '/assets/file-not-found.png';
+		$foto_pajak = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'pajak.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'pajak.jpg' : base_url() . '/assets/file-not-found.png';
+		$foto_depan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg' : base_url() . '/assets/file-not-found.png';
+		$foto_kanan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg' : base_url() . '/assets/file-not-found.png';
+		$foto_belakang = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg' : base_url() . '/assets/file-not-found.png';
+
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
 			'Nama Rider' => $rider['nama_depan'],
@@ -113,16 +127,17 @@ class Rider extends BaseController
 			'Tgl Kadaluarsa STNK' => date('d/m/Y', strtotime($rider['STNK_expired'])),
 			'Dokumen Data Diri' =>
 			'
-					<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg">Foto KTP</button>
-					<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/sim/' . $rider['kd_driver'] . 'sim.jpg">Foto SIM</button>
-					<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg">Foto skck</button>
+					<img class="img-thumbnail btn-dok" src="' . $foto_ktp . '" data-title="Foto KTP" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_sim . '" data-title="Foto SIM" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_skck . '" data-title="Foto SKCK" />
 			',
-			'Dokumen Data Kendaraan' =>
+			'Dokumen Kendaraan' =>
 			'
-				<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'stnk.jpg">Foto STNK</button>
-				<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg">Foto Tampak Depan</button>
-				<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg">Foto Tampak Kanan</button>
-				<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kiri.jpg">Foto Tampak Kiri</button>
+					<img class="img-thumbnail btn-dok" src="' . $foto_stnk . '" data-title="Foto STNK" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_pajak . '" data-title="Foto pajak" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_depan . '" data-title="Foto tampak depan" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_kanan . '" data-title="Foto tampak kanan" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_belakang . '" data-title="Foto tampak belakang" />
 			',
 		];
 		$data['kd_driver'] = $rider['kd_driver'];
@@ -160,7 +175,11 @@ class Rider extends BaseController
 
 		if ($updateStatus) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $kd_driver . ' telah dikirimi pengajuan perbaikan data'); // tampilkan toast ke aplikasi
-			$this->sendNotifToRider($kd_driver, $pesan); //kirim notif ke rider
+			$this->sendNotifToRider(
+				$kd_driver,
+				$pesan,
+				8
+			); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('rider')
@@ -179,31 +198,28 @@ class Rider extends BaseController
 
 	public function topUp()
 	{
+		// dd($this->topUpModel->getData('', '', '', '2')->getResult());
 		return view('rider/topUp');
 	}
 
-	public function getTopUp($jenis = null)
+	public function getTopUp($jenis = null, $status = null)
 	{
 		$search = $this->request->getPost('search')['value'];
 		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
 		$start = $this->request->getPost('start');
 		$limit = $this->request->getPost('length');
 
-		$result = $this->topUpModel->getData($search, $start, $limit, $jenis)->getResult();
-		$totalCount = count($this->topUpModel->getData($search, '', '', $jenis)->getResultArray());
+		$result = $this->topUpModel->getData($search, $start, $limit, $jenis, $status)->getResult();
+		$totalCount = count($this->topUpModel->getData($search, '', '', $jenis, $status)->getResultArray());
 
 		$no = $start + 1;
 		$data = [];
 
 		foreach ($result as $key => $value) {
-			switch ($value->approve_state) {
-				case '-1':
+			switch ($value->status) {
+				case '0':
 					$status = 'Belum Verifikasi';
 					$textColor = 'text-danger';
-					break;
-				case '0':
-					$status = 'Ditolak';
-					$textColor = 'text-navy';
 					break;
 				case '1':
 					$status = 'Diterima';
@@ -219,11 +235,12 @@ class Rider extends BaseController
 			$data[$key] = [
 				$no,
 				$value->nama_depan,
-				$value->hp1 . "<br>" . $value->hp2,
+				$value->no_rek_pengirim,
 				'Rp ' . number_format($value->nominal, 0, ',', '.'),
-				date('d/m/Y', strtotime($value->createat)),
+				$value->nama_bank,
+				date('d/m/Y H:i:s', strtotime($value->tanggal)),
 				"<span class='$textColor font-weight-bold'>$status</span>",
-				'<a href="' . base_url('rider/top-up/detail/' . $value->top_id) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('rider/top-up/detail/' . $value->no_transaksi) . '" class="btn btn-info btn-sm"><i class="fas fa-eye mr-1"></i> Detail</a>',
 			];
 			$no++;
 		}
@@ -236,20 +253,23 @@ class Rider extends BaseController
 		]);
 	}
 
-	public function detailTopUp($top_id)
+	public function detailTopUp($no_transaksi)
 	{
-		$topUp = $this->topUpModel->getData('', '', '', '', $top_id)->getRow();
+		$topUp = $this->topUpModel->getData('', '', '', '2', '',  $no_transaksi)->getRow();
 		$data['dataTopUp'] = $topUp;
-		$disable = $topUp->filepath == '' ? 'disabled' : '';
+		$disable = $topUp->status == '1' ? 'disabled' : '';
+		$bukti = file_exists(FCPATH . '/../kajek/images/' . $topUp->bukti_tf) ? base_url() . '/../kajek/images/' . $topUp->bukti_tf : base_url() . '/assets/file-not-found.png';
 		$data['topUp'] = [
-			'Kode Top Up' => $topUp->top_id,
+			'Kode Top Up' => $topUp->no_transaksi,
 			'Nama Rider' => $topUp->nama_depan,
-			'No. Hp' => $topUp->hp1 . ' - ' . $topUp->hp2,
-			'Jumlah Top Up' => 'Rp ' . number_format($topUp->nominal, 0, ',', '.'),
-			'Tanggal Top Up' => date('d/m/Y', strtotime($topUp->createat)),
-			'Status' => ($topUp->approve_state == '-1' ? 'belum verifikasi' : ($topUp->approve_state == '1' ? 'Sudah diverifikasi' : 'Ditolak')),
-			'Verifikasi Oleh' => $topUp->approveby ?? '-',
-			'bukti Top Up' => '<button class="btn bg-navy btn-sm btn-dok" data-source="https://www.misterkong.com/kajek/images/' . $topUp->filepath . '" ' . $disable . '>Foto Bukti</button>',
+			'Nominal Top Up' => 'Rp ' . number_format($topUp->nominal, 0, ',', '.'),
+			'Tanggal Top Up' => date('d/m/Y H:i:s', strtotime($topUp->tanggal)),
+			'No. Rekening' => $topUp->no_rek_pengirim,
+			'Bank' => $topUp->nama_bank,
+			'Status' => ($topUp->status == '0' ? 'belum verifikasi' : 'Sudah diverifikasi'),
+			// 'bukti Top Up' => '<button class="btn bg-navy btn-sm btn-dok" data-source="/kajek/images/topup/' . $topUp->bukti_tf . '" ' . $disable . '>Foto Bukti</button>',
+			// 'bukti Top Up' => '<button class="btn bg-navy btn-sm btn-dok" data-source="' . $bukti . '" ' . $disable . '>Foto Bukti</button>',
+			'bukti Top Up' => '<img src="' . $bukti . '" class="img-thumbnail btn-dok w-25" data-title="Foto bukti transfer" />',
 		];
 
 		return view('rider/detailTopUp', $data);
@@ -257,15 +277,49 @@ class Rider extends BaseController
 
 	public function verifikasiTopUp()
 	{
-		$top_id = $this->request->getPost('top_id');
-		$kd_driver = $this->request->getPost('kd_driver');
-		$status = $this->request->getPost('status');
-		$pesan = $status == 1 ? 'Top Up sudah diverifikasi, selamat bekerja!' : 'Top up ditolak karena ' . $this->request->getPost('pesan');
+		$data = $this->request->getPost();
 
-		$approved = $this->topUpModel->update($top_id, ['approveat' => date('Y-m-d H:i:s'), 'approve_state' => $status, 'approveby' => '1']);
+
+		$pesan = $data['status'] == 1 ? 'Top Up sudah diverifikasi, selamat bekerja!' : 'Top Up ditolak dengan pesan: ' . $data['pesan'];
+
+		$approved = $this->topUpModel->update($data['no_transaksi'], ['approveat' => date('Y-m-d H:i:s'), 'status' => $data['status'], 'kd_admin' => '1']);
 		if ($approved) {
-			$this->session->setFlashdata('sukses', $status == 1 ? 'Top Up diverifikasi' : 'Top Up ditolak'); // tampilkan toast ke aplikasi
-			$this->sendNotifToRider($kd_driver, $pesan); //kirim notif ke rider
+
+			// jika top up terverifikasi
+			if ($data['status'] == 1) {
+				unset($data['status']);
+				// return json_encode(['data' => $data]);
+				$insertTopUp = $this->topUpModel->insertTopUp($data);
+
+				if ($insertTopUp) {
+					$updateSaldo = $this->topUpModel->db->query("UPDATE m_saldo_driver SET saldo = saldo + " . $data['nominal'] . " WHERE kd_driver = '" . $data['id'] . "'");
+
+					if ($updateSaldo) {
+						$this->session->setFlashdata('sukses', 'Top Up diverifikasi'); // tampilkan toast ke aplikasi
+						$this->sendNotifToRider($data['id'], $pesan, 3); //kirim notif ke rider
+						return json_encode([
+							'success' => true,
+							'redirect' => base_url('rider/top-up'),
+						]);
+					}
+
+					// gagal update saldo
+					return json_encode([
+						'success' => false,
+						'msg' => 'Gagal update saldo'
+					]);
+				}
+
+				// gagal insert ke tabel top up
+				return json_encode([
+					'success' => false,
+					'msg' => 'Gagal menambah data top up'
+				]);
+			}
+
+			// jika topup ditolak
+			$this->session->setFlashdata('sukses', 'Top Up ditolak'); // tampilkan toast ke aplikasi
+			$this->sendNotifToRider($data['id'], $pesan, 2); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('rider/top-up'),
@@ -321,6 +375,7 @@ class Rider extends BaseController
 				$no,
 				$value->no_transaksi,
 				$value->nama_depan,
+				'Rp ' . number_format($value->saldo, 0, ',', '.'),
 				'Rp ' . number_format($value->nominal, 0, ',', '.'),
 				$value->nama_bank,
 				$value->no_rek_tujuan . '<br> A.N ' . $value->atas_nama,
@@ -384,7 +439,7 @@ class Rider extends BaseController
 		]);
 		if ($approved && $insertPencairan) {
 			$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
-			$this->sendNotifToRider($kd_driver, $pesan); //kirim notif ke rider
+			$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('rider/pencairan'),
@@ -399,7 +454,7 @@ class Rider extends BaseController
 
 
 	// fungsi utk kirim notif ke aplikasi rider
-	public function sendNotifToRider($kd_driver, $pesan)
+	public function sendNotifToRider($kd_driver, $pesan, $jenis = 0)
 	{
 		$payload = array(
 			'to' => '/topics/kongVal',
@@ -407,7 +462,9 @@ class Rider extends BaseController
 			"mutable_content" => true,
 			'data' => array(
 				"id_dr" => $kd_driver,
-				"psn" => $pesan
+				"psn" => $pesan,
+				"mode" => '1',
+				"jenis_notif" => $jenis
 			),
 		);
 		$headers = array(

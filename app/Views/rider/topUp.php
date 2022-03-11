@@ -20,8 +20,9 @@
             <tr>
               <th>No</th>
               <th>Nama</th>
-              <th>No. Hp</th>
-              <th>Jumlah Top Up</th>
+              <th>No. Rekening</th>
+              <th>Nominal</th>
+              <th>Bank</th>
               <th>Tanggal</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -38,8 +39,9 @@
             <tr>
               <th>No</th>
               <th>Nama</th>
-              <th>No. Hp</th>
-              <th>Jumlah Top Up</th>
+              <th>No. Rekening</th>
+              <th>Nominal</th>
+              <th>Bank</th>
               <th>Tanggal</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -61,12 +63,12 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/rider/getTopUp/unverif`,
+        "url": `<?= base_url() ?>/rider/getTopUp/2/0`,
         "type": "POST",
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 2, 4, 5, 6],
+          "targets": [0, 2, 4, 5, 6, 7],
           "className": "text-center",
         },
         {
@@ -81,12 +83,12 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/rider/getTopUp`,
+        "url": `<?= base_url() ?>/rider/getTopUp/2`,
         "type": "POST",
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 2, 4, 5, 6],
+          "targets": [0, 2, 4, 5, 6, 7],
           "className": "text-center",
         },
         {

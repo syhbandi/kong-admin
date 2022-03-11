@@ -61,6 +61,13 @@
     td.text-body-right {
       text-align: right;
     }
+
+    .img-thumbnail {
+      max-width: 200px;
+      height: auto;
+      cursor: pointer;
+      margin: 5px;
+    }
   </style>
 </head>
 

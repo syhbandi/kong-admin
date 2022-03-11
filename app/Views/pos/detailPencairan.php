@@ -2,18 +2,21 @@
 <?= $this->section('content'); ?>
 <div class="card">
   <div class="card-header d-flex align-items-center">
-    <h3 class="card-title">Data Top Up (<?= $topUp['Nama Rider'] ?>) : <strong><?= $topUp['Nominal Top Up'] ?></strong></h3>
-    <div class="ml-auto <?= $dataTopUp->status == '1' ? 'd-none' : '' ?>">
+    <h3 class="card-title">Pengajuan Pencairan (<?= $pencairan['nama usaha'] ?>) : <strong><?= $pencairan['jumlah penarikan'] ?></strong></h3>
+    <div class="ml-auto <?= $status == 1 ? 'd-none' : '' ?>">
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
-      <button class="btn btn-danger perbaikan"><i class="fas fa-reply-all mr-1"></i> Reject</button>
+      <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
       <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
+    </div>
+    <div class="ml-auto <?= $status == 0 ? 'd-none' : '' ?>">
+      <strong>Tanggal Verifikasi: </strong> <?= date('d/m/Y', strtotime($dataPencairan['approveat'])) ?>
     </div>
   </div>
   <div class="card-body">
     <table class="table table-bordered">
-      <?php foreach ($topUp as $key => $value) : ?>
+      <?php foreach ($pencairan as $key => $value) : ?>
         <tr>
-          <th><?= $key ?></th>
+          <th class="text-capitalize"><?= $key ?></th>
           <td class="text-capitalize"><?= $value ?></td>
         </tr>
       <?php endforeach ?>
@@ -25,7 +28,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalImageLabel"></h5>
+        <h5 class="modal-title" id="modalLabel"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -41,12 +44,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Tolak Top Up</h5>
+        <h5 class="modal-title">Tolak pengajuan penarikan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?= base_url('rider/verifikasiTopUp') ?>">
+      <form action="<?= base_url('pos/verifikasiPencairan') ?>">
         <div class="modal-body">
           <div class="form-group">
             <label for="">Keterangan Penolakan</label>
@@ -55,9 +58,6 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary"><i class="fab fa-telegram-plane mr-2"></i>Kirim</button>
-          <input type="hidden" name="no_transaksi" value="<?= $dataTopUp->no_transaksi ?>">
-          <input type="hidden" name="status" value="-2">
-          <input type="hidden" name="id" value="<?= $dataTopUp->id ?>">
         </div>
       </form>
     </div>
@@ -65,20 +65,17 @@
 </div>
 
 <script>
-  const data = <?= json_encode($dataTopUp) ?>;
   $(function() {
     $('.btn-dok').on('click', function() {
-      // const source = $(this).data('source');
-      const source = $(this).attr('src');
+      const source = $(this).data('source');
       $('#data-image').attr('src', source)
-      $('#modalImageLabel').text($(this).data('title'))
       $('#modalImage').modal('show');
     })
 
     $('.verifikasi').on('click', () => {
       Swal.fire({
         title: 'Verifikasi Top Up?',
-        text: "Pastikan sudah cek top up Rider",
+        text: "Pastikan sudah cek",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -88,20 +85,14 @@
       }).then((result) => {
         if (result.isConfirmed) {
           $.ajax({
-            url: '<?= base_url('rider/verifikasiTopUp') ?>',
+            url: '<?= base_url('pos/verifikasiPencairan') ?>',
             type: 'POST',
             data: {
-              no_transaksi: '<?= $dataTopUp->no_transaksi ?>',
-              id: '<?= $dataTopUp->kd_driver ?>',
-              jenis_user: '2',
-              nominal: `<?= $dataTopUp->nominal ?>`,
-              kd_bank: '<?= $dataTopUp->kd_bank ?>',
-              no_rek_pengirim: '<?= $dataTopUp->no_rek_pengirim ?>',
+              no_transaksi: '<?= $dataPenarikan->no_transaksi ?>',
+              id: '<?= $dataPenarikan->id ?>',
               status: 1
             },
             dataType: 'json',
-            // contentType: false,
-            // processData: false,
             success: function(res) {
               if (res.success) {
                 location.href = res.redirect

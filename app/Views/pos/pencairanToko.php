@@ -63,7 +63,7 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/rider/getPencairan/2/unverif`,
+        "url": `<?= base_url() ?>/pos/getPencairan/1/unverif`,
         "type": "POST",
         'data': {}
       },
@@ -83,7 +83,7 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/rider/getPencairan/2`,
+        "url": `<?= base_url() ?>/pos/getPencairan/1`,
         "type": "POST",
         'data': {}
       },

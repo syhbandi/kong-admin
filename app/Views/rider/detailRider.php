@@ -4,6 +4,7 @@
   <div class="card-header d-flex align-items-center">
     <h3 class="card-title">Data Lengkap Rider (<?= $rider['Nama Rider'] ?>)</h3>
     <div class="ml-auto <?= $status == 3 ? 'd-none' : '' ?>">
+      <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
       <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
     </div>
@@ -24,7 +25,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalLabel"></h5>
+        <h5 class="modal-title" id="modalImageLabel"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -63,9 +64,10 @@
 <script>
   $(function() {
     $('.btn-dok').on('click', function() {
-      const source = $(this).data('source');
+      const source = $(this).attr('src');
       $('#data-image').attr('src', source)
       $('#modalImage').modal('show');
+      $('#modalImageLabel').text($(this).data('title'));
     })
 
     $('.verifikasi').on('click', () => {

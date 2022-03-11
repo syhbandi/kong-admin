@@ -75,6 +75,29 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'pos' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'pos' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-store-alt"></i>
+            <p>
+              POS
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('pos') ?>" class="nav-link <?= service('uri')->getPath() == 'pos' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-user-check"></i>
+                <p>Data Toko</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= base_url('pos/pencairan') ?>" class="nav-link <?= service('uri')->getPath() == 'pos/pencairan' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-hand-holding-usd"></i>
+                <p>Pencairan Toko</p>
+              </a>
+            </li>
+          </ul>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

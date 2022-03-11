@@ -30,6 +30,7 @@
               <th>Alamat</th>
               <th>No. Hp</th>
               <th>Email</th>
+              <th>Saldo</th>
               <th>Status</th>
               <th>Detail</th>
               <th>Aksi</th>
@@ -41,7 +42,7 @@
       </div>
       <!-- tab rider aktif -->
       <div class="tab-pane fade" id="aktif" role="tabpanel" aria-labelledby="tab-aktif">
-        <table id="riderAktif" class="table table-bordered table-hover table-striped w-100">
+        <table id="rider-aktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
@@ -50,9 +51,9 @@
               <th>Alamat</th>
               <th>No. Hp</th>
               <th>Email</th>
+              <th>Saldo</th>
               <th>Status</th>
               <th>Detail</th>
-              <!-- <th>Aksi</th> -->
             </tr>
           </thead>
           <tbody>
@@ -70,6 +71,7 @@
               <th>Alamat</th>
               <th>No. Hp</th>
               <th>Email</th>
+              <th>Saldo</th>
               <th>Status</th>
               <th>Detail</th>
               <!-- <th>Aksi</th> -->
@@ -90,6 +92,7 @@
               <th>Alamat</th>
               <th>No. Hp</th>
               <th>Email</th>
+              <th>Saldo</th>
               <th>Status</th>
               <th>Detail</th>
               <!-- <th>Aksi</th> -->
@@ -106,7 +109,6 @@
 
 <script>
   $(function() {
-
     $('#riderBaru').DataTable({
       "processing": true,
       "serverSide": true,
@@ -118,55 +120,78 @@
         'data': {}
       },
       "columnDefs": [{
-        "targets": [0, 1, 4, 5, 6, 7, 8],
-        "className": "text-center",
-      }, ],
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
     });
 
-    $('#riderAktif').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "order": [],
+    $('#rider-aktif').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
       "ajax": {
         "url": `<?= base_url() ?>/rider/getRider/aktif`,
         "type": "POST",
         'data': {}
       },
       "columnDefs": [{
-        "targets": [0, 1, 4, 5, 6],
-        "className": "text-center",
-      }, ],
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
     });
-
     $('#riderNonaktif').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "order": [],
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
       "ajax": {
         "url": `<?= base_url() ?>/rider/getRider/nonaktif`,
         "type": "POST",
         'data': {}
       },
       "columnDefs": [{
-        "targets": [0, 1, 4, 5, 6],
-        "className": "text-center",
-      }, ],
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
     });
-
     $('#riderBanned').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "order": [],
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
       "ajax": {
         "url": `<?= base_url() ?>/rider/getRider/banned`,
         "type": "POST",
         'data': {}
       },
       "columnDefs": [{
-        "targets": [0, 1, 4, 5, 6],
-        "className": "text-center",
-      }, ],
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
     });
+
+
 
     $('table').on('click', '.verifikasi', function(e) {
       const kd_driver = $(this).data('driver')

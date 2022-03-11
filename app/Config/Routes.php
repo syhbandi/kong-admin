@@ -44,8 +44,12 @@ $routes->add('rider/top-up', 'Rider::topUp');
 $routes->add('rider/detail/(:num)', 'Rider::detail/$1');
 $routes->add('rider/pencairan', 'Rider::pencairan');
 $routes->add('rider/pengajuan-kendaraan', 'Rider::pengajuanKendaraan');
-$routes->add('rider/top-up/detail/(:num)', 'Rider::detailTopUp/$1');
+$routes->add('rider/top-up/detail/(:segment)', 'Rider::detailTopUp/$1');
 $routes->add('rider/pencairan/detail/(:segment)', 'Rider::detailPencairan/$1');
+
+// routing toko
+$routes->add('pos/pencairan', 'Pos::pencairan/index');
+$routes->add('pos/pencairan/(:segment)', 'Pos::pencairan/detailPencairan/$1');
 
 /*
  * --------------------------------------------------------------------

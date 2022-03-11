@@ -7,19 +7,15 @@ use CodeIgniter\Model;
 class TopUpModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 't_driver_topup_his';
-    protected $primaryKey       = 'top_id';
+    protected $table            = 't_topup_validasi';
+    protected $primaryKey       = 'no_transaksi';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'top_id',
-        'driver_id',
-        'approveby',
-        'approveat',
-        'approve_state',
+        'approveat', 'kd_admin', 'status', 'no_transaksi'
     ];
 
     // Dates
@@ -46,42 +42,55 @@ class TopUpModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getData($cari = null, $start = null, $limit = null, $jenis = null, $top_id = null)
+    public function getData($cari = null, $start = null, $limit = null, $jenis = null, $status = null, $no_transaksi = null)
     {
         $key = [
             'nama_depan' => $cari,
-            'hp1' => $cari,
-            'hp2' => $cari,
-            'kd_driver' => $cari,
-            'filepath' => $cari,
+            'no_rek_pengirim' => $cari,
+            'id' => $cari,
             'nominal' => $cari,
         ];
 
-        $builder = $this->db->table("t_driver_topup_his a");
+        $builder = $this->db->table($this->table);
+
+        if ($jenis != '') {
+            switch ($jenis) {
+                case '2':
+                    $builder
+                        ->join('(SELECT kd_driver, nama_depan from m_driver) driver', 't_topup_validasi.id = driver.kd_driver')
+                        ->join('m_bank', 't_topup_validasi.kd_bank = m_bank.kd_bank', 'left');
+                    break;
+
+                default:
+                    break;
+            }
+        }
 
         if ($cari != null) {
             $builder->like("top_id", $cari);
             $builder->orLike($key);
         }
 
-        $builder->select("b.nama_depan,b.hp1,b.hp2,a.*");
-        $builder->join("m_driver b", "b.kd_driver=a.driver_id", "INNER");
-
-        if ($jenis == 'unverif') {
-            $builder->where('approve_state', '-1');
-            // $builder->orWhere('approve_state', '0');
+        if ($no_transaksi != '') {
+            $builder->where('no_transaksi', $no_transaksi);
         }
 
-        if ($top_id != '') {
-            $builder->where('a.top_id', $top_id);
+        if ($status != '') {
+            $builder->where('status', $status);
         }
 
-        $builder->orderBy('createat', "DESC");
+        $builder->orderBy('tanggal', "DESC");
 
         if ($start != null && $limit != null) {
             $builder->limit($limit, $start);
         }
 
         return $builder->get();
+    }
+
+    public function insertTopUp($data)
+    {
+        $builder = $this->db->table('t_topup');
+        return $builder->insert($data);
     }
 }
