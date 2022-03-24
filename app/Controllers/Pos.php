@@ -3,7 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\PencairanModel;
+// use App\Models\TokoModel;
+use App\Models\Pos\TokoModel;
 
 class Pos extends BaseController
 {
@@ -11,12 +12,12 @@ class Pos extends BaseController
 
 	public function __construct()
 	{
-		$this->pencairanModel = new PencairanModel();
+		$this->TokoModel = new TokoModel();
 	}
 
 	public function index()
 	{
-		//
+		return view('pos/dataPos.php');
 	}
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -27,16 +28,15 @@ class Pos extends BaseController
 	{
 		return view('pos/pencairanToko');
 	}
-
-	public function getPencairan($status = null)
+	public function getToko($jenis = null)
 	{
 		$search = $this->request->getPost('search')['value'];
 		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
 		$start = $this->request->getPost('start');
 		$limit = $this->request->getPost('length');
 
-		$result = $this->pencairanModel->getPencairan($search, $start, $limit, '1', $status)->getResult();
-		$totalCount = count($this->pencairanModel->getPencairan($search, '', '', '1', $status)->getResultArray());
+		$result = $this->TokoModel->getToko($search, $start, $limit, null, $jenis)->getResult();
+		$totalCount = count($this->TokoModel->getToko($search, '', '', '', $jenis)->getResultArray());
 
 		$no = $start + 1;
 		$data = [];
@@ -44,11 +44,11 @@ class Pos extends BaseController
 		foreach ($result as $key => $value) {
 			switch ($value->status) {
 				case '0':
-					$status = 'Belum Verifikasi';
+					$status = 'Non Aktif';
 					$textColor = 'text-danger';
 					break;
 				case '1':
-					$status = 'Diterima';
+					$status = 'Aktif';
 					$textColor = 'text-success';
 					break;
 
@@ -60,14 +60,15 @@ class Pos extends BaseController
 
 			$data[$key] = [
 				$no,
-				$value->no_transaksi,
 				$value->nama_usaha,
-				'Rp ' . number_format($value->saldo, 0, ',', '.'),
-				'Rp ' . number_format($value->nominal, 0, ',', '.'),
-				$value->nama_bank,
-				$value->no_rek_tujuan . '<br> A.N ' . $value->atas_nama,
-				"<span class='$textColor font-weight-bold'>$status</span>",
-				'<a href="' . base_url('pos/pencairan/' . $value->no_transaksi) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				$value->usaha,
+				$value->no_telepon,
+				$value->email_usaha,
+				$value->nama,
+				$value->province,
+				$value->date_add,
+				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+
 			];
 			$no++;
 		}
@@ -79,10 +80,31 @@ class Pos extends BaseController
 			"data" => $data,
 		]);
 	}
+	public function detailPos($company_id)
+	{
+		$pos = $this->TokoModel->getToko(null, null, null, $company_id)->getRowArray();
+
+		$data['pos'] = [
+			'Company Id' => $pos['company_id'],
+			'Nama Usaha' => $pos['nama_usaha'],
+			'Kategori Usaha' => $pos['usaha'],
+			'Alamat' => $pos['alamat'],
+			'Email' => $pos['email_usaha'],
+			'No. Hp' => $pos['no_telepon'],
+			'Rekening' =>$pos['nama_bank'].' <br> '. $pos['no_rek'] . ' - ' . $pos['nama_pemilik_rekening'],
+			'Province' => $pos['province'],
+			'Lat' => $pos['koordinat_lat'],
+			'Lng' => $pos ['koordinat_lng'],
+			'Location' => '<div id="map" class="border-2" style="width: 100%; height: 200px;"></div>',
+		];
+		$data['company_id'] = $pos['company_id'];
+		$data['status'] = $pos['status'];
+		return view('pos/detailPos', $data);
+	}
 
 	public function detailPencairan($no_transaksi)
 	{
-		$pencairan = $this->pencairanModel->getPencairan('', '', '', '1', '', $no_transaksi)->getRow();
+		$pencairan = $this->TokoModel->getToko('', '', '', '1', '', $no_transaksi)->getRow();
 
 		$data['dataPencairan'] = $pencairan;
 		// hanya utk tampilan
@@ -112,7 +134,7 @@ class Pos extends BaseController
 	{
 		$id_penjualan = $this->request->getVar('id_penjualan');
 		$id_driver = $this->request->getVar('id_driver');
-		$isRejected = $this->pencairanModel->db->query("SELECT * FROM t_penjualan_driver_batal WHERE id_penjualan = '$id_penjualan' AND id_driver='$id_driver'")->getNumRows();
+		$isRejected = $this->TokoModel->db->query("SELECT * FROM t_penjualan_driver_batal WHERE id_penjualan = '$id_penjualan' AND id_driver='$id_driver'")->getNumRows();
 
 		if ($isRejected > 0) {
 			return json_encode([
