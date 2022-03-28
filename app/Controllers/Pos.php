@@ -17,7 +17,12 @@ class Pos extends BaseController
 
 	public function index()
 	{
-		return view('pos/dataPos.php');
+		$version = $this->TokoModel->version()->getRowArray();
+		$data['pos'] = [
+			'version app' => $version['app_store_version'],
+			'id version' => $version['id'],
+		];
+		return view('pos/dataPos', $data);
 	}
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -68,7 +73,6 @@ class Pos extends BaseController
 				$value->province,
 				$value->date_add,
 				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
-
 			];
 			$no++;
 		}
@@ -83,7 +87,7 @@ class Pos extends BaseController
 	public function detailPos($company_id)
 	{
 		$pos = $this->TokoModel->getToko(null, null, null, $company_id)->getRowArray();
-
+		// $version = $this->TokoModel->version()->getRowArray();
 		$data['pos'] = [
 			'Company Id' => $pos['company_id'],
 			'Nama Usaha' => $pos['nama_usaha'],
@@ -96,10 +100,20 @@ class Pos extends BaseController
 			'Lat' => $pos['koordinat_lat'],
 			'Lng' => $pos ['koordinat_lng'],
 			'Location' => '<div id="map" class="border-2" style="width: 100%; height: 200px;"></div>',
+			// 'version app' => $version['app_store_version'],
 		];
 		$data['company_id'] = $pos['company_id'];
 		$data['status'] = $pos['status'];
 		return view('pos/detailPos', $data);
+	}
+
+	public function updatever()
+	{
+		print_r($_POST);
+		$id = $this->request->getVar('id');
+		$app_version = $this->request->getVar('version');
+		$this->TokoModel->updatev($id, $app_version);
+		return redirect()->to('pos');
 	}
 
 	public function detailPencairan($no_transaksi)

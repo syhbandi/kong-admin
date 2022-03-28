@@ -16,7 +16,7 @@ class TokoModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['company_id', 'status'];
 
-    public function getToko($cari = null, $start = null, $limit = null, $company_id = null, $jenis = null)
+    public function getToko($cari = null, $start = null, $limit = null, $company_id = null, $jenis = null, $id = null)
     {
         $key = [
 			"a.nama_usaha" => $cari,
@@ -47,6 +47,7 @@ class TokoModel extends Model
         $builder->join("m_kategori_usaha AS d", "a.kategori_usaha = d.kd_kategori_usaha", "INNER");
         $builder->join("m_bank AS f", "a.kd_bank = f.kd_bank", "INNER");
 
+
         if($company_id != null){
             $builder->where('a.company_id', $company_id);
         }
@@ -68,7 +69,23 @@ class TokoModel extends Model
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
 		}
-
 		return $builder->get();
+    }
+    public function version()
+    {
+       $builder = $this->db->table("g_app_version");
+       $builder->select("*");
+       return $builder->get();
+    }
+
+    public function updatev($id, $app_version)
+    {
+        echo "UPDATE g_app_version SET app_store_version = '$app_version' WHERE id = '$id'";
+        $update = $this->db->query("UPDATE g_app_version SET app_store_version = '$app_version' WHERE id = '$id' ");
+        
+        // $q = ['id' => $id,];
+        // $update = $this->db->update('g_app_version', $app_version, $q);
+        
+        return $update;
     }
 }
