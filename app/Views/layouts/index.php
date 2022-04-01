@@ -114,28 +114,29 @@
       </div>
       <!-- /.content-header -->
       <!-- Modal -->
-<form class="form-control-sm" action="<?= base_url('pos/updatever') ?>" method="POST">
-<div class="modal fade" id="exampleModal<?= $pos['id version']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Version</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+<?= (!empty($pos['version app'])) ? "
+<form class='form-control-sm' action='".base_url('pos/updatever')."' method='POST'>
+<div class='modal fade' id='exampleModal".$pos['id version']."' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='exampleModalLabel'>Edit Version</h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <input class="form-control form-control-sm" type="text" name="version" value="<?= $pos['version app']?>" >
+      <div class='modal-body'>
+        <input class='form-control form-control-sm' type='text' name='version' value='".$pos['version app']."' >
       </div>
-      <div class="modal-footer">
-        <input type="hidden" name="id" value="<?= $pos['id version']?>">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" >Update</button>
+      <div class='modal-footer'>
+        <input type='hidden' name='id' value='".$pos['id version']."'>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <button type='submit' class='btn btn-primary' >Update</button>
       </div>
     </div>
   </div>
 </div>
-</form>
+</form>": " " ?>
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">

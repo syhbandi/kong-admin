@@ -50,16 +50,16 @@ class Pos extends BaseController
 			switch ($value->status) {
 				case '0':
 					$status = 'Non Aktif';
-					$textColor = 'text-danger';
+					$textColor = 'danger';
 					break;
 				case '1':
 					$status = 'Aktif';
-					$textColor = 'text-success';
+					$textColor = 'success';
 					break;
 
 				default:
 					$status = 'terjadi kesalahan';
-					$textColor = 'text-danger';
+					$textColor = 'danger';
 					break;
 			}
 
@@ -72,7 +72,7 @@ class Pos extends BaseController
 				$value->nama,
 				$value->province,
 				$value->date_add,
-				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-'.$textColor.' btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
 		}
@@ -114,6 +114,28 @@ class Pos extends BaseController
 		$app_version = $this->request->getVar('version');
 		$this->TokoModel->updatev($id, $app_version);
 		return redirect()->to('pos');
+	}
+
+	public function verivikasiToko()
+	{
+		$company_id = $this->request->getVar('company_id');
+		$setStatus = $this->TokoModel->update($company_id, ['status' => '1']);
+
+		if ($setStatus) {
+			$this->session->setFlashdata('sukses', 'Toko dengan Company id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
+			$this->sendNotifToRider($company_id, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
+			return json_encode([
+				'success' => true,
+				'redirect' => base_url('pos'),
+				'driver' => $company_id
+			]);
+		}
+
+		return json_encode([
+			'success' => false,
+			'msg' => 'Gagal melakukan validasi'
+		]);
+
 	}
 
 	public function detailPencairan($no_transaksi)
