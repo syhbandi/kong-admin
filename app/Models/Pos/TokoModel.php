@@ -90,7 +90,7 @@ class TokoModel extends Model
 
     public function verivikasi($company_id)
     {
-        $verivikasi = $this->db->query("UPDATE m_user_company SET status = '3' WHERE company_id = '$company_id'");
+        $verivikasi = $this->db->query("UPDATE m_user_company SET status = '1' WHERE company_id = '$company_id'");
         return $verivikasi;
     }
 }
