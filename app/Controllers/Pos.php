@@ -109,7 +109,6 @@ class Pos extends BaseController
 
 	public function updatever()
 	{
-		print_r($_POST);
 		$id = $this->request->getVar('id');
 		$app_version = $this->request->getVar('version');
 		$this->TokoModel->updatev($id, $app_version);
