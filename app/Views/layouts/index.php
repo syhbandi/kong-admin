@@ -85,7 +85,6 @@
     <!-- Main Sidebar Container -->
     <?= $this->include('layouts/sidebar'); ?>
 
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
@@ -94,6 +93,10 @@
           <div class="row mb-2">
             <div class="col-sm-6">
               <h1 class="m-0">Dashboard</h1>
+              <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item active"><?= (!empty($pos['version app'])) ? "App Version (". $pos['version app'] . ")": " " ?></li>
+                <?= (!empty($pos['version app'])) ? "<li class='breadcrumb-item active'><a href='".$pos['id version']."' data-toggle='modal' data-target='#exampleModal".$pos['id version']."'>Edit</a> </li>": " " ?>
+              </ol>
               <!-- <button class="btn btn-sm btn-warning" id="tesToast">Toast</button> -->
             </div>
             <!-- /.col -->
@@ -110,7 +113,29 @@
         <!-- /.container-fluid -->
       </div>
       <!-- /.content-header -->
-
+      <!-- Modal -->
+<form class="form-control-sm" action="<?= base_url('pos/updatever') ?>" method="POST">
+<div class="modal fade" id="exampleModal<?= $pos['id version']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Version</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input class="form-control form-control-sm" type="text" name="version" value="<?= $pos['version app']?>" >
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" name="id" value="<?= $pos['id version']?>">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
@@ -153,7 +178,7 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <!-- <script src="<?= base_url() ?>/assets/dist/js/pages/dashboard.js"></script> -->
   <?php endif ?>
-
+    
   <script>
     $(function() {
       const Toast = Swal.mixin({

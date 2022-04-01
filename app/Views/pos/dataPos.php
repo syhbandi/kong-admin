@@ -34,7 +34,7 @@
         </table>
       </div>
       <!-- tab rider aktif -->
-      <div class="tab-pane fade show active" id="aktif" role="tabpanel" aria-labelledby="tab-aktif">
+      <div class="tab-pane fade" id="aktif" role="tabpanel" aria-labelledby="tab-aktif">
         <table id="posaktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
