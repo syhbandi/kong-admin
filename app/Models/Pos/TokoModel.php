@@ -80,12 +80,17 @@ class TokoModel extends Model
 
     public function updatev($id, $app_version)
     {
-        echo "UPDATE g_app_version SET app_store_version = '$app_version' WHERE id = '$id'";
         $update = $this->db->query("UPDATE g_app_version SET app_store_version = '$app_version' WHERE id = '$id' ");
         
         // $q = ['id' => $id,];
         // $update = $this->db->update('g_app_version', $app_version, $q);
         
         return $update;
+    }
+
+    public function verivikasi($company_id)
+    {
+        $verivikasi = $this->db->query("UPDATE m_user_company SET status = '3' WHERE company_id = '$company_id'");
+        return $verivikasi;
     }
 }
