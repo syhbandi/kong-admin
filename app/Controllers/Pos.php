@@ -118,7 +118,7 @@ class Pos extends BaseController
 	public function verivikasiToko()
 	{
 		$company_id = $this->request->getVar('company_id');
-		$setStatus = $this->TokoModel->update($company_id, ['status' => '1']);
+		$setStatus = $this->TokoModel->verivikasi($company_id);
 
 		if ($setStatus) {
 			$this->session->setFlashdata('sukses', 'Toko dengan Company id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
