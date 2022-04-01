@@ -120,21 +120,48 @@ class Pos extends BaseController
 		$company_id = $this->request->getVar('company_id');
 		$setStatus = $this->TokoModel->verivikasi($company_id);
 
-		if ($setStatus) {
-			$this->session->setFlashdata('sukses', 'Toko dengan Company id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
-			$this->sendNotifToRider($company_id, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
+		if ($setStatus == 'TRUE') {
+			$this->session->setFlashdata('sukses', 'Toko dengan Company id ' . $company_id . ' telah diverifikasi'); 
+			$this->sendNotifToToko($company_id, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); 
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('pos'),
-				'driver' => $company_id
+				'company' => $company_id
 			]);
 		}
-
 		return json_encode([
 			'success' => false,
 			'msg' => 'Gagal melakukan validasi'
 		]);
 
+	}
+
+	public function sendNotifToToko($company_id, $pesan, $jenis = 0)
+	{
+		$payload = array(
+			'to' => '/topics/kongVal',
+			'priority' => 'high',
+			"mutable_content" => true,
+			'data' => array(
+				"id_dr" => $company_id,
+				"psn" => $pesan,
+				"mode" => '1',
+				"jenis_notif" => $jenis
+			),
+		);
+		$headers = array(
+			'Authorization:key=AAAAJrZwZQg:APA91bEp4BYq1kZcVwUyuh02a_s5F3txxf_CJHNbvdwsdjs6qwdHuWIiS3BKN7ETR3gtQkVZgHebKCH4C6N-QaHeJTEC5m8pMT0MDD5i6oG2bqPwbPT3XR3dY9h_zku1TtamNt9_Tn9q', 'Content-Type: application/json',
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+		$result = curl_exec($ch);
+		curl_close($ch);
 	}
 
 	public function detailPencairan($no_transaksi)
