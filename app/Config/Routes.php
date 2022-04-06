@@ -52,6 +52,11 @@ $routes->add('pos', 'Pos::index');
 $routes->add('pos/detailPos/(:segment)', 'Pos::detailPos/$1');
 $routes->add('pos/pencairan', 'Pos::pencairan/index');
 $routes->add('pos/pencairan/(:segment)', 'Pos::pencairan/detailPencairan/$1');
+$routes->add('pos/barang', 'Pos::barang');
+$routes->add('pos/detailBarang/(:segment)', 'Pos::detailBarang/$1');
+
+// routing User marketplace
+$routes->add('market', 'Marketplace::index');
 
 /*
  * --------------------------------------------------------------------

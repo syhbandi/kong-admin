@@ -40,6 +40,23 @@
             </p>
           </a>
         </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'market' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'market' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-user"></i>
+            <p>
+              Mister Kong User
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('market') ?>" class="nav-link <?= service('uri')->getPath() == 'market' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-user-check"></i>
+                <p>Data User</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'rider' ? 'menu-open' : '' ?>">
           <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'rider' ? 'active' : '' ?>">
             <i class="nav-icon fas fa-biking"></i>
@@ -94,6 +111,29 @@
               <a href="<?= base_url('pos/pencairan') ?>" class="nav-link <?= service('uri')->getPath() == 'pos/pencairan' ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-hand-holding-usd"></i>
                 <p>Pencairan Toko</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= base_url('pos/barang') ?>" class="nav-link <?= service('uri')->getPath() == 'pos/barang' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-box"></i>
+                <p>Data Barang</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'market' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'market' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-shopping-cart"></i>
+            <p>
+              Transaksi
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('market') ?>" class="nav-link <?= service('uri')->getPath() == 'market' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-handshake"></i>
+                <p>Data Transaksi</p>
               </a>
             </li>
           </ul>

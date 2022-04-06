@@ -9,26 +9,22 @@
       <li class="nav-item">
         <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#aktif" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-power-off mr-1 text-success"></i> Pengguna Aktif</a>
       </li>
-      <li class="nav-item text-dark">
-        <a class="nav-link text-dark" id="tab-tab-banned" data-toggle="pill" href="#banned" role="tab" aria-controls="aktif" aria-selected="true"><i class="fas fa-power-off mr-1 text-danger"></i> Pengguna Banned</a>
-      </li>
     </ul>
   </div>
   <div class="card-body">
     <div class="tab-content" id="custom-tabs-four-tabContent">
-      <!-- tab Toko baru -->
+      <!-- tab rider baru -->
       <div class="tab-pane fade show active" id="baru" role="tabpanel" aria-labelledby="tab-baru">
-        <table id="posBaru" class="table table-bordered table-hover table-striped w-100">
+        <table id="mpBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
-              <th>Nama Usaha</th>
-              <th>Kategori Usaha</th>
-              <th>No. Hp</th>
+              <th>Kode User</th>
+              <th>Nama User</th>
+              <th>No Telpn</th>
               <th>Email</th>
-              <th>Nama Pemilik</th>
-              <th>Provinsi</th>
-              <th>Date Add</th>
+              <th>Tanggal Daftar</th>
+              <th>Status</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -36,39 +32,18 @@
           </tbody>
         </table>
       </div>
-      <!-- tab Toko aktif -->
+      <!-- tab rider aktif -->
       <div class="tab-pane fade" id="aktif" role="tabpanel" aria-labelledby="tab-aktif">
-        <table id="posaktif" class="table table-bordered table-hover table-striped w-100">
+        <table id="mp-aktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
-            <th>No</th>
-              <th>Nama Usaha</th>
-              <th>Kategori Usaha</th>
-              <th>No. Hp</th>
+              <th>No</th>
+              <th>Kode User</th>
+              <th>Nama User</th>
+              <th>No Telpn</th>
               <th>Email</th>
-              <th>Nama Pemilik</th>
-              <th>Provinsi</th>
-              <th>Date Add</th>
-              <th>Detail</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-      <!-- tab Toko Banned -->
-      <div class="tab-pane fade" id="banned" role="tabpanel" aria-labelledby="tab-banned">
-        <table id="posbaned" class="table table-bordered table-hover table-striped w-100">
-          <thead class="align-middle text-center">
-            <tr>
-            <th>No</th>
-              <th>Nama Usaha</th>
-              <th>Kategori Usaha</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Nama Pemilik</th>
-              <th>Provinsi</th>
-              <th>Date Add</th>
+              <th>Tanggal Daftar</th>
+              <th>Status</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -81,7 +56,53 @@
 
 <script>
   $(function() {
-    $('#posBaru').DataTable({
+    $('#mpBaru').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "responsive": true,
+      "order": [],
+      "ajax": {
+        "url": `<?= base_url() ?>/Marketplace/getmpUser/nonaktif`,
+        "type": "POST",
+        'data': {}
+      },
+      "columnDefs": [{
+          "targets": [0, 1, 4, 5, 6, 7],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
+    });
+
+    $('#mp-aktif').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
+      "ajax": {
+        "url": `<?= base_url() ?>/Marketplace/getmpUser/aktif`,
+        "type": "POST",
+        'data': {}
+      },
+      "columnDefs": [{
+          "targets": [0, 1, 4, 5, 6, 7],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
+    });
+
+  });
+</script>
+<!-- <script>
+  $(function() {
+    $('#mpBaru').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -102,7 +123,7 @@
       ],
     });
 
-    $('#posaktif').DataTable({
+    $('#mp-aktif').DataTable({
       processing: true,
       serverSide: true,
       responsive: true,
@@ -122,28 +143,6 @@
         }
       ],
     });
-
-    $('#posbaned').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "responsive": true,
-      "order": [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/banned`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
-        }
-      ],
-    });
-
   });
-</script>
+</script> -->
 <?= $this->endSection() ?>

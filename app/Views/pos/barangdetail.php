@@ -2,17 +2,19 @@
 <?= $this->section('content'); ?>
 <div class="card">
   <div class="card-header d-flex align-items-center">
-    <h3 class="card-title">Data Lengkap Company (<?= $pos['Nama Usaha'] ?>)</h3>
+    <h3 class="card-title">Data Lengkap Toko (<?= $barang['Nama Toko'] ?>)</h3>
     <div class="ml-auto ">
     <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
-      <button class="btn btn-warning perbaikan <?= $status == 1 ? 'd-none' : '' ?>"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
-      <button class="btn btn-primary verifikasi <?= $status == 1 ? 'd-none' : '' ?>"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
-      <button class="btn btn-danger nonaktif <?= $status == 0 ? 'd-none' : '' ?>"><i class="fas fa-times-circle mr-1"></i> Banned</button>
+      <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
+      <button class="btn btn-primary aktif <?= $status_barang == -1 ? 'd-none' : '' ?>"><i class="fas fa-check-circle mr-1"></i> Aktif(Non Display)</button>
+      <button class="btn btn-success verifikasi <?= $status_barang == 1 ? 'd-none' : '' ?>"><i class="fas fa-check-circle mr-1"></i> Aktif(Display)</button>
+      <button class="btn btn-danger nonaktif <?= $status_barang == 0 ? 'd-none' : '' ?>"><i class="fas fa-times-circle mr-1"></i> Non Aktif</button>
+
     </div>
   </div>
   <div class="card-body">
     <table class="table table-bordered">
-      <?php foreach ($pos as $key => $value) : ?>
+      <?php foreach ($barang as $key => $value) : ?>
         <tr>
           <th><?= $key ?></th>
           <td><?= $value ?></td>
@@ -62,78 +64,13 @@
   </div>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEdu-jKgoBzPlCtin84i5W8fUb7dHE0Xs&callback=initMap&libraries=places&v=weekly" async></script>
+
 <script>
-  const position = {
-    lat: <?= $pos['Lat'] ?>,
-    lng: <?= $pos['Lng'] ?>
-  }
-
-  function initMap() {
-    currentPosition(position)
-    const map = new google.maps.Map(document.querySelector('#map'), {
-      zoom: 18,
-      center: position,
-      disableDefaultUI: true,
-      mapTypeControl: false,
-      streetViewControl: false,
-      zoomControl: false,
-      gestureHandling: 'auto',
-      mapTypeId: "roadmap",
-    })
-    const mapIcon = "<?= base_url() ?>/assets/dest-icon.svg"
-    const marker = new google.maps.Marker({
-      position: position,
-      map,
-      // draggable: true,
-      icon: mapIcon,
-      anchorPoint: position,
-      // animation: google.maps.Animation.DROP,
-    })
-
-    map.addListener('drag', function() {
-      marker.setPosition(this.getCenter())
-    })
-
-    map.addListener('dragend', function() {
-      currentPosition(this.getCenter())
-    })
-
-    initAutocomplete(map, marker)
-
-  }
-
-  function currentPosition(location) {
-    const geocoder = new google.maps.Geocoder();
-    geocoder
-      .geocode({
-        location
-      })
-      .catch((e) => window.alert("Geocoder failed due to: " + e));
-  }
-
-  function getDistance(destination) {
-    const origin = new google.maps.LatLng(-8.596052, 116.1057177)
-    let service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins: [origin],
-      destinations: [destination],
-      travelMode: 'DRIVING',
-      // transitOptions: TransitOptions,
-      // drivingOptions: DrivingOptions,
-      // unitSystem: UnitSystem,
-      // avoidHighways: Boolean,
-      // avoidTolls: Boolean,
-    }, (response, status) => {
-      $('#distance').val(response.rows[0].elements[0].distance.value)
-    });
-  }
-
   $('.verifikasi').on('click', () => {
-      console.log('<?= $company_id ?>')
+      console.log('<?= $code ?>')
       Swal.fire({
-        title: 'Verifikasi Yoko?',
-        text: "Pastikan sudah cek kelengkapan Data Toko",
+        title: 'Aktif(Display) Barang?',
+        text: "Pastikan sudah mengecek Barang",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -143,10 +80,95 @@
       }).then((result) => {
         if (result.isConfirmed) {
           $.ajax({
-            url: '<?= base_url('pos/verivikasiToko') ?>',
+            url: '<?= base_url('pos/verivikasiBarang') ?>',
             type: 'POST',
             data: {
-              company_id: '<?= $company_id ?>'
+              status: 'aktif',
+              kd_barang: '<?= $code ?>'
+            },
+            dataType: 'json',
+            // contentType: false,
+            // processData: false,
+            success: function(res) {
+              if (res.success) {
+                location.href = res.redirect
+              } else {
+                Swal.fire({
+                  title: 'Oops..',
+                  text: res.msg,
+                  icon: 'error',
+                })
+              }
+            },
+            error: function(e) {
+              console.log(e.response)
+            }
+          })
+        }
+      })
+    })
+
+    $('.aktif').on('click', () => {
+      console.log('<?= $code ?>')
+      Swal.fire({
+        title: 'aktif(Non Display) Barang?',
+        text: "Pastikan sudah mengecek Barang",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'aktif',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('pos/verivikasiBarang') ?>',
+            type: 'POST',
+            data: {
+              status: 'nondisplay',
+              kd_barang: '<?= $code ?>'
+            },
+            dataType: 'json',
+            // contentType: false,
+            // processData: false,
+            success: function(res) {
+              if (res.success) {
+                location.href = res.redirect
+              } else {
+                Swal.fire({
+                  title: 'Oops..',
+                  text: res.msg,
+                  icon: 'error',
+                })
+              }
+            },
+            error: function(e) {
+              console.log(e.response)
+            }
+          })
+        }
+      })
+    })
+
+    $('.nonaktif').on('click', () => {
+      console.log('<?= $code ?>')
+      Swal.fire({
+        title: 'nonaktif Barang?',
+        text: "Pastikan sudah mengecek Barang",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'nonaktif',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('pos/verivikasiBarang') ?>',
+            type: 'POST',
+            data: {
+              status: 'nonaktif',
+              kd_barang: '<?= $code ?>'
             },
             dataType: 'json',
             // contentType: false,
@@ -177,7 +199,7 @@
     $('form').on('submit', function(e) {
       e.preventDefault();
       const formData = new FormData($(this)[0]);
-      formData.append('company_id', '<?= $company_id ?>');
+      formData.append('kd_barang', '<?= $code ?>');
 
       $.ajax({
         url: $(this).attr('action'),
