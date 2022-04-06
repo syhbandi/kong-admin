@@ -25,6 +25,10 @@ class Pos extends BaseController
 		return view('pos/dataPos', $data);
 	}
 
+	public function barang()
+	{
+		return view('pos/databarang');
+	}
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// pencairan
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -49,14 +53,17 @@ class Pos extends BaseController
 		foreach ($result as $key => $value) {
 			switch ($value->status) {
 				case '0':
-					$status = 'Non Aktif';
+					$status = 'Banned';
 					$textColor = 'danger';
 					break;
 				case '1':
 					$status = 'Aktif';
 					$textColor = 'success';
 					break;
-
+				case '2' :
+					$status = 'Nonaktif';
+					$textColor = 'info';
+					break;
 				default:
 					$status = 'terjadi kesalahan';
 					$textColor = 'danger';
@@ -87,7 +94,6 @@ class Pos extends BaseController
 	public function detailPos($company_id)
 	{
 		$pos = $this->TokoModel->getToko(null, null, null, $company_id)->getRowArray();
-		// $version = $this->TokoModel->version()->getRowArray();
 		$data['pos'] = [
 			'Company Id' => $pos['company_id'],
 			'Nama Usaha' => $pos['nama_usaha'],
@@ -207,5 +213,111 @@ class Pos extends BaseController
 		return json_encode([
 			"isRejected" => false
 		]);
+	}
+
+	public function getBarang($jenis = null)
+	{
+		$search = $this->request->getPost('search')['value'];
+		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
+		$start = $this->request->getPost('start');
+		$limit = $this->request->getPost('length');
+
+		$result = $this->TokoModel->getbarang($search, $start, $limit, null, $jenis)->getResult();
+		$totalCount = count($this->TokoModel->getbarang($search, '', '', '', $jenis)->getResultArray());
+
+		$no = $start + 1;
+		$data = [];
+
+		foreach ($result as $key => $value) {
+			switch ($value->status_barang) {
+				case '0':
+					$status = 'Non Aktif';
+					$textColor = 'danger';
+					break;
+				case '1':
+					$status = 'Aktif';
+					$textColor = 'success';
+					break;
+				case '-1':
+					$status = 'Non Verification';
+					$textColor = 'warning';
+					break;
+
+				default:
+					$status = 'terjadi kesalahan';
+					$textColor = 'danger';
+					break;
+			}
+
+			$data[$key] = [
+				$no,
+				$value->kd_barang,
+				$value->nama,
+				$value->kategori,
+				$value->merk,
+				$value->nama_usaha,
+				$value->date_add,
+				$value->date_modif,
+				'<a href="' . base_url('pos/detailBarang/' . $value->code) . '" class="btn btn-'.$textColor.' btn-sm"><i class="fas fa-eye"></i></a>',
+			];
+			$no++;
+		}
+
+		return \json_encode([
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $totalCount,
+			"recordsFiltered" => $totalCount,
+			"data" => $data,
+		]);
+	}
+
+	public function detailBarang($kd_barang)
+	{
+		$barang = $this->TokoModel->getbarang(null, null, null, $kd_barang)->getRowArray();
+
+		// Foto Barang
+		$foto_barang = file_exists(FCPATH . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . 'barang.jpg') ? base_url() . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . 'barang.jpg' : base_url() . '/assets/file-not-found.png';
+		
+		$data['barang'] = [
+			'Kode Barang' => $barang['kd_barang'],
+			'Kategori  Barang' => $barang['kategori'],
+			'Model Barang' => $barang['model'],
+			'Merk Barang' => $barang['merk'],
+			'Bahan' => $barang['bahan'],
+			'Warna Barang' => $barang['warna'],
+			'Ukuran Barang' => $barang['ukuran'],
+			'Nama Toko'  => $barang['nama_usaha'],
+			'Keterangan' => $barang['keterangan'],
+			'Foto Barang' => 
+			'
+					<img class="img-thumbnail btn-dok" src="'.$foto_barang.'" data-title="Foto Barang" />
+			',
+		];
+
+		$data['code'] = $barang['code'];
+		$data['status_barang'] = $barang['status_barang'];
+		return view('pos/barangdetail', $data);
+	}
+
+	public function verivikasiBarang()
+	{
+		$kd_barang = $this->request->getVar('kd_barang');
+		$status = $this->request->getVar('status');
+		$setStatus = $this->TokoModel->verivikasiBarang($status, $kd_barang);
+
+		if ($setStatus == 'TRUE') {
+			$this->session->setFlashdata('sukses', 'Barang dengan kode ' . $kd_barang . ' telah diverifikasi'); 
+			$this->sendNotifToToko($kd_barang, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); 
+			return json_encode([
+				'success' => true,
+				'redirect' => base_url('pos/barang'),
+				'company' => $kd_barang
+			]);
+		}
+		return json_encode([
+			'success' => false,
+			'msg' => 'Gagal melakukan validasi'
+		]);
+
 	}
 }

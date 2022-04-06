@@ -4,31 +4,31 @@
   <div class="card-header p-0 border-bottom-0">
     <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
       <li class="nav-item text-dark">
-        <a class="nav-link active text-dark" id="tab-baru" data-toggle="pill" href="#baru" role="tab" aria-controls="aktif" aria-selected="true"><i class="fas fa-plus-circle mr-1 text-info"></i> Pengguna Baru</a>
+        <a class="nav-link active text-dark" id="tab-baru" data-toggle="pill" href="#baru" role="tab" aria-controls="aktif" aria-selected="true"><i class="fas fa-power-off mr-1 text-danger"></i> Nonaktif</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#aktif" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-power-off mr-1 text-success"></i> Pengguna Aktif</a>
+        <a class="nav-link text-dark" id="tab-verif" data-toggle="pill" href="#verif" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-power-off mr-1 text-warning"></i> Aktif (Non Display)</a>
       </li>
-      <li class="nav-item text-dark">
-        <a class="nav-link text-dark" id="tab-tab-banned" data-toggle="pill" href="#banned" role="tab" aria-controls="aktif" aria-selected="true"><i class="fas fa-power-off mr-1 text-danger"></i> Pengguna Banned</a>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#aktif" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-power-off mr-1 text-success"></i> Aktif (Display)</a>
       </li>
     </ul>
   </div>
   <div class="card-body">
     <div class="tab-content" id="custom-tabs-four-tabContent">
-      <!-- tab Toko baru -->
+      <!-- tab Barang baru -->
       <div class="tab-pane fade show active" id="baru" role="tabpanel" aria-labelledby="tab-baru">
-        <table id="posBaru" class="table table-bordered table-hover table-striped w-100">
+        <table id="barangBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
-              <th>Nama Usaha</th>
-              <th>Kategori Usaha</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Nama Pemilik</th>
-              <th>Provinsi</th>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Kategori</th>
+              <th>Merk</th>
+              <th>Nama Toko</th>
               <th>Date Add</th>
+              <th>Date Modif</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -36,19 +36,19 @@
           </tbody>
         </table>
       </div>
-      <!-- tab Toko aktif -->
+      <!-- tab Barang aktif -->
       <div class="tab-pane fade" id="aktif" role="tabpanel" aria-labelledby="tab-aktif">
-        <table id="posaktif" class="table table-bordered table-hover table-striped w-100">
+        <table id="barangaktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
-            <tr>
-            <th>No</th>
-              <th>Nama Usaha</th>
-              <th>Kategori Usaha</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Nama Pemilik</th>
-              <th>Provinsi</th>
+          <tr>
+              <th>No</th>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Kategori</th>
+              <th>Merk</th>
+              <th>Nama Toko</th>
               <th>Date Add</th>
+              <th>Date Modif</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -56,19 +56,19 @@
           </tbody>
         </table>
       </div>
-      <!-- tab Toko Banned -->
-      <div class="tab-pane fade" id="banned" role="tabpanel" aria-labelledby="tab-banned">
-        <table id="posbaned" class="table table-bordered table-hover table-striped w-100">
+      <!-- tab Barang Belum Verivikasi -->
+      <div class="tab-pane fade" id="verif" role="tabpanel" aria-labelledby="tab-verif">
+        <table id="barang-verif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
-            <tr>
-            <th>No</th>
-              <th>Nama Usaha</th>
-              <th>Kategori Usaha</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Nama Pemilik</th>
-              <th>Provinsi</th>
+          <tr>
+              <th>No</th>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Kategori</th>
+              <th>Merk</th>
+              <th>Nama Toko</th>
               <th>Date Add</th>
+              <th>Date Modif</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -81,13 +81,13 @@
 
 <script>
   $(function() {
-    $('#posBaru').DataTable({
+    $('#barangBaru').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/nonaktif`,
+        "url": `<?= base_url() ?>/pos/getBarang/nonaktif`,
         "type": "POST",
         'data': {}
       },
@@ -102,13 +102,13 @@
       ],
     });
 
-    $('#posaktif').DataTable({
+    $('#barang-verif').DataTable({
       processing: true,
       serverSide: true,
       responsive: true,
       order: [],
       "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/aktif`,
+        "url": `<?= base_url() ?>/pos/getBarang/nonverification`,
         "type": "POST",
         'data': {}
       },
@@ -123,13 +123,13 @@
       ],
     });
 
-    $('#posbaned').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "responsive": true,
-      "order": [],
+    $('#barangaktif').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
       "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/banned`,
+        "url": `<?= base_url() ?>/pos/getBarang/aktif`,
         "type": "POST",
         'data': {}
       },
@@ -143,7 +143,6 @@
         }
       ],
     });
-
   });
 </script>
 <?= $this->endSection() ?>
