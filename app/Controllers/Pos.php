@@ -276,8 +276,8 @@ class Pos extends BaseController
 		$barang = $this->TokoModel->getbarang(null, null, null, $kd_barang)->getRowArray();
 
 		// Foto Barang
-		$foto_barang = file_exists(FCPATH . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . 'barang.jpg') ? base_url() . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . 'barang.jpg' : base_url() . '/assets/file-not-found.png';
-		
+		$foto_barang = file_exists(FCPATH . '/../back_end_mp/'. $barang['company_id'] . '_config/images/' . $barang['gambar'] . ' ') ? base_url() . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . 'barang.jpg' : base_url() . '/../back_end_mp/'. $barang['company_id'] . '_config/images/' . $barang['gambar'] . ' ';
+		print_r($foto_barang);
 		$data['barang'] = [
 			'Kode Barang' => $barang['kd_barang'],
 			'Kategori  Barang' => $barang['kategori'],
@@ -288,10 +288,10 @@ class Pos extends BaseController
 			'Ukuran Barang' => $barang['ukuran'],
 			'Nama Toko'  => $barang['nama_usaha'],
 			'Keterangan' => $barang['keterangan'],
-			'Foto Barang' => 
-			'
-					<img class="img-thumbnail btn-dok" src="'.$foto_barang.'" data-title="Foto Barang" />
-			',
+			'Foto Barang' => $foto_barang,
+			// '
+			// 		<img class="img-thumbnail btn-dok" src="'.$foto_barang.'" data-title="Foto Barang" />
+			// ',
 		];
 
 		$data['code'] = $barang['code'];
