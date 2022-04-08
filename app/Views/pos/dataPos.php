@@ -10,7 +10,7 @@
         <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#aktif" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-power-off mr-1 text-success"></i> Pengguna Aktif</a>
       </li>
       <li class="nav-item text-dark">
-        <a class="nav-link text-dark" id="tab-tab-banned" data-toggle="pill" href="#banned" role="tab" aria-controls="aktif" aria-selected="true"><i class="fas fa-power-off mr-1 text-danger"></i> Pengguna Banned</a>
+        <a class="nav-link text-dark" id="tab-tab-banned" data-toggle="pill" href="#banned" role="tab" aria-controls="aktif" aria-selected="true"><i class="fas fa-ban mr-1 text-danger"></i> Pengguna Banned</a>
       </li>
     </ul>
   </div>
