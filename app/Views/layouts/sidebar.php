@@ -121,8 +121,8 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item <?= service('uri')->getSegment(1) == 'market' ? 'menu-open' : '' ?>">
-          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'market' ? 'active' : '' ?>">
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'transaksi' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
             <i class="nav-icon fas fa-shopping-cart"></i>
             <p>
               Transaksi
@@ -131,7 +131,7 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="<?= base_url('market') ?>" class="nav-link <?= service('uri')->getPath() == 'market' ? 'active' : '' ?>">
+              <a href="<?= base_url('transaksi') ?>" class="nav-link <?= service('uri')->getPath() == 'market' ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-handshake"></i>
                 <p>Data Transaksi</p>
               </a>

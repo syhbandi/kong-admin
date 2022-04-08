@@ -5,14 +5,17 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 // use App\Models\TokoModel;
 use App\Models\Pos\TokoModel;
+use App\Models\PencairanModel;
 
 class Pos extends BaseController
 {
+	private $TokoModel;
 	private $pencairanModel;
 
 	public function __construct()
 	{
 		$this->TokoModel = new TokoModel();
+		$this->pencairanModel = new PencairanModel();
 	}
 
 	public function index()
@@ -170,6 +173,57 @@ class Pos extends BaseController
 		curl_close($ch);
 	}
 
+	public function getPencairan($jenis, $status = null)
+	{
+		$search = $this->request->getPost('search')['value'];
+		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
+		$start = $this->request->getPost('start');
+		$limit = $this->request->getPost('length');
+
+		$result = $this->pencairanModel->getPencairan($search, $start, $limit, $jenis, $status)->getResult();
+		$totalCount = count($this->pencairanModel->getPencairan($search, '', '', $jenis, $status)->getResultArray());
+
+		$no = $start + 1;
+		$data = [];
+
+		foreach ($result as $key => $value) {
+			switch ($value->status) {
+				case '0':
+					$status = 'Belum Verifikasi';
+					$textColor = 'text-danger';
+					break;
+				case '1':
+					$status = 'Diterima';
+					$textColor = 'text-success';
+					break;
+
+				default:
+					$status = 'terjadi kesalahan';
+					$textColor = 'text-danger';
+					break;
+			}
+
+			$data[$key] = [
+				$no,
+				$value->no_transaksi,
+				$value->nama_depan,
+				'Rp ' . number_format($value->saldo, 0, ',', '.'),
+				'Rp ' . number_format($value->nominal, 0, ',', '.'),
+				$value->nama_bank,
+				$value->no_rek_tujuan . '<br> A.N ' . $value->atas_nama,
+				"<span class='$textColor font-weight-bold'>$status</span>",
+				'<a href="' . base_url('pos/pencairan/detail/' . $value->no_transaksi) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+			];
+			$no++;
+		}
+
+		return \json_encode([
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $totalCount,
+			"recordsFiltered" => $totalCount,
+			"data" => $data,
+		]);
+	}
 	public function detailPencairan($no_transaksi)
 	{
 		$pencairan = $this->TokoModel->getToko('', '', '', '1', '', $no_transaksi)->getRow();
@@ -289,7 +343,7 @@ class Pos extends BaseController
 			'Keterangan' => $barang['keterangan'],
 			'Foto Barang' => 
 			'
-					<img class="img-thumbnail btn-dok" src="'.$foto_barang.'" data-title="Foto Barang" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_barang . '" data-title="Foto Barang" />
 			',
 		];
 
