@@ -54,7 +54,7 @@ class TokoModel extends Model
 
         switch ($jenis) {
             case 'nonaktif':
-                $builder->where("a.`status`", 2);
+                $builder->where("a.`status`", -1);
                 break;
             
             case 'aktif':
