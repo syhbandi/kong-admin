@@ -43,7 +43,7 @@ $routes->add('rider', 'Rider::index');
 $routes->add('rider/top-up', 'Rider::topUp');
 $routes->add('rider/detail/(:num)', 'Rider::detail/$1');
 $routes->add('rider/pencairan', 'Rider::pencairan');
-$routes->add('rider/pengajuan-kendaraan', 'Rider::pengajuanKendaraan');
+$routes->add('rider/kendaraan', 'Rider::Kendaraan');
 $routes->add('rider/top-up/detail/(:segment)', 'Rider::detailTopUp/$1');
 $routes->add('rider/pencairan/detail/(:segment)', 'Rider::detailPencairan/$1');
 
@@ -58,6 +58,8 @@ $routes->add('pos/detailBarang/(:segment)', 'Pos::detailBarang/$1');
 // routing User marketplace
 $routes->add('market', 'Marketplace::index');
 
+// kontrak
+$routes->add('kontrak', 'KontrakController::index');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

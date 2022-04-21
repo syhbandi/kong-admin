@@ -85,9 +85,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?= base_url('rider/pengajuan-kendaraan') ?>" class="nav-link <?= service('uri')->getPath() == 'rider/pengajuan-kendaraan' ? 'active' : '' ?>">
+              <a href="<?= base_url('rider/kendaraan') ?>" class="nav-link <?= service('uri')->getPath() == 'rider/kendaraan' ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-motorcycle"></i>
-                <p>Pengajuan Kendaraan</p>
+                <p>Kendaraan</p>
               </a>
             </li>
           </ul>
@@ -134,6 +134,23 @@
               <a href="<?= base_url('transaksi') ?>" class="nav-link <?= service('uri')->getPath() == 'market' ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-handshake"></i>
                 <p>Data Transaksi</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'kontrak' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-file-signature"></i>
+            <p>
+              kontrak
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('kontrak') ?>" class="nav-link <?= service('uri')->getPath() == 'kontrak' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-dollar-sign"></i>
+                <p>Validasi Pembayaran</p>
               </a>
             </li>
           </ul>

@@ -33,19 +33,21 @@ class TokoModel extends Model
         $builder = $this->db->table("m_user_company a");
 
 		if ($cari != null) {
-			$builder->like("company_id", $cari);
+			$builder->like("a.company_id", $cari);
 			$builder->orLike($key);
 		}
 
 		$builder->select("a.company_id, a.nama_usaha, d.nama as usaha, 
         a.alamat, a.email_usaha, a.no_telepon, a.date_add, a.no_rek,
         a.status, b.province, c.nama, f.nama_bank, a.no_rek, a.nama_pemilik_rekening,
-        a.koordinat_lng, a.koordinat_lat");
+        a.koordinat_lng, a.koordinat_lat, g.jml_barang");
 
 		$builder->join("m_province b", "a.kd_provinsi = b.id", "INNER");
 		$builder->join("m_userx AS c", "a.kd_user = c.id", "INNER");
         $builder->join("m_kategori_usaha AS d", "a.kategori_usaha = d.kd_kategori_usaha", "INNER");
         $builder->join("m_bank AS f", "a.kd_bank = f.kd_bank", "INNER");
+        $builder->join("(SELECT company_id, COUNT(*) AS jml_barang FROM m_barang  group BY company_id) g", 
+        "ON a.id = g.company_id", "INNER");
 
 
         if($company_id != null){

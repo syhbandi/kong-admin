@@ -106,6 +106,7 @@ class Pos extends BaseController
 			'No. Hp' => $pos['no_telepon'],
 			'Rekening' =>$pos['nama_bank'].' <br> '. $pos['no_rek'] . ' - ' . $pos['nama_pemilik_rekening'],
 			'Province' => $pos['province'],
+			'Jumlah Barang' => '<a href="#">'.$pos['jml_barang'].' Barang</a>',
 			'Lat' => $pos['koordinat_lat'],
 			'Lng' => $pos ['koordinat_lng'],
 			'Location' => '<div id="map" class="border-2" style="width: 100%; height: 200px;"></div>',
