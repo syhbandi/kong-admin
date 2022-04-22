@@ -29,6 +29,11 @@ class Rider extends BaseController
 		return view('rider/dataRider');
 	}
 
+	public function kendaraan()
+	{
+		return view('rider/kendaraan');
+	}
+
 	public function getRider($jenis = null)
 	{
 		$search = $this->request->getPost('search')['value'];
@@ -150,9 +155,10 @@ class Rider extends BaseController
 		$kd_driver = $this->request->getPost('kd_driver'); // ambil kode driver dari request 
 		$setLocation = $this->riderModel->db->query("UPDATE m_driver_location_log SET driver_state=1 WHERE kd_driver='$kd_driver'"); // update driver location log
 		$setStatus = $this->riderModel->update($kd_driver, ['status' => '3']); // update status rider menjadi 3 (aktif)
-
 		if ($setStatus && $setLocation) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $kd_driver . ' telah diverifikasi'); // tampilkan toast ke aplikasi
+			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan, 
+			tanggal, aktivitas, pesan) VALUES('')");
 			$this->sendNotifToRider($kd_driver, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
@@ -480,5 +486,64 @@ class Rider extends BaseController
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 		$result = curl_exec($ch);
 		curl_close($ch);
+	}
+
+	public function getKendaraan($jenis = null)
+	{
+		$search = $this->request->getPost('search')['value'];
+		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
+		$start = $this->request->getPost('start');
+		$limit = $this->request->getPost('length');
+
+		$result = $this->riderModel->getKendaraan($search, $start, $limit, null, $jenis)->getResult();
+		$totalCount = count($this->riderModel->getRider($search, '', '', '', $jenis)->getResultArray());
+
+		$no = $start + 1;
+		$data = [];
+
+		foreach ($result as $key => $value) {
+			switch ($value->status) {
+				case '0':
+					$status = 'non aktif';
+					$text = 'dark';
+					break;
+				case '1':
+					$status = 'aktif';
+					$text = 'success';
+					break;
+				case '2':
+					$status = 'sedang digunakan';
+					$text = 'indigo';
+					break;
+				case '-1':
+					$status = 'Banned';
+					$text = 'warning';
+					break;
+
+				default:
+					$status = 'Nonaktif';
+					$text = 'gray';
+					break;
+			}
+
+			$data[$key] = [
+				$no,
+				$value->nomor_plat,
+				$value->merk_nama,
+				$value->model_nama,
+				$value->nama_depan,
+				$value->tahun_pembuatan,
+				'<span class="' . $text . ' font-weight-bold">' . $status . '</span>',
+				'<a href="' . base_url('rider/detail/' . $value->kd_kendaraan) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+			];
+			$no++;
+		}
+
+		return \json_encode([
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $totalCount,
+			"recordsFiltered" => $totalCount,
+			"data" => $data,
+		]);
 	}
 }

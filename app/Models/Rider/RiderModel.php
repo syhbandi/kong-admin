@@ -98,4 +98,59 @@ class RiderModel extends Model
 
 		return $builder->get();
 	}
+
+	public function getKendaraan($cari = null, $start = null, $limit = null, $kd_kedaraan = null, $jenis = null)
+	{
+		$key = [
+			"a.nama_depan" => $cari,
+			"b.nomor_plat" => $cari,
+			"c.merk_nama" => $cari,
+			"d.model_nama" => $cari,
+			"b.tahun_pembuatan" => $cari,
+		];
+
+		$builder = $this->db->table("m_driver a");
+
+		if ($cari != null) {
+			$builder->like("kd_kendaraan", $cari);
+			$builder->orLike($key);
+		}
+
+		$builder->select("a.nama_depan, b.nomor_plat, b.kd_kendaraan, b.tahun_pembuatan,
+		b.`status`, c.merk_nama, d.model_nama");
+		$builder->join("m_driver_kendaraan b", "a.kd_driver = b.kd_driver", "INNER");
+		$builder->join("m_merk_kendaraan c", "c.merk_id = b.kd_merk", "INNER");
+		$builder->join("m_model_kendaraan d", "d.model_id = b.kd_model", "INNER");
+
+		if ($kd_kedaraan != null) {
+			$builder->where('b.kd_kendaraan', $kd_kedaraan);
+		}
+
+		// seleksi rider berdasarkan jenis (baru, aktif, nonaktif, banned)
+		switch ($jenis) {
+			case 'baru':
+				$builder->where("b.`status`", 0);
+				break;
+			case 'aktif':
+				$builder->where("b.`status`", 1);
+				break;
+			case 'nonaktif':
+				$builder->where("b.`status`", 2);
+				break;
+			case 'banned':
+				$builder->where("b.`status`", -1);
+				break;
+
+			default:
+				break;
+		}
+		$builder->where("b.kd_kendaraan != ", '');
+		$builder->groupBy('b.kd_kendaraan');
+
+		if ($start != null && $limit != null) {
+			$builder->limit($limit, $start);
+		}
+
+		return $builder->get();
+	}
 }

@@ -33,19 +33,21 @@ class TokoModel extends Model
         $builder = $this->db->table("m_user_company a");
 
 		if ($cari != null) {
-			$builder->like("company_id", $cari);
+			$builder->like("a.company_id", $cari);
 			$builder->orLike($key);
 		}
 
 		$builder->select("a.company_id, a.nama_usaha, d.nama as usaha, 
         a.alamat, a.email_usaha, a.no_telepon, a.date_add, a.no_rek,
-        a.status, b.province, c.nama, f.nama_bank, a.no_rek, a.nama_pemilik_rekening,
-        a.koordinat_lng, a.koordinat_lat");
+        a.status, b.province, c.nama,  IFNULL(`f`.`nama_bank`, 0)AS bank, a.no_rek, a.nama_pemilik_rekening,
+        a.koordinat_lng, a.koordinat_lat, ifnull(g.jml_barang, 0) AS jml_barang");
 
 		$builder->join("m_province b", "a.kd_provinsi = b.id", "INNER");
 		$builder->join("m_userx AS c", "a.kd_user = c.id", "INNER");
         $builder->join("m_kategori_usaha AS d", "a.kategori_usaha = d.kd_kategori_usaha", "INNER");
-        $builder->join("m_bank AS f", "a.kd_bank = f.kd_bank", "INNER");
+        $builder->join("m_bank AS f", "a.kd_bank = f.kd_bank", "LEFT");
+        $builder->join("(SELECT company_id, COUNT(*) AS jml_barang FROM m_barang  group BY company_id) g", 
+        "ON a.id = g.company_id", "LEFT");
 
 
         if($company_id != null){
@@ -135,6 +137,66 @@ class TokoModel extends Model
         $builder->join("m_warna h", "a.warna_id = h.id", "INNER");
         $builder->join("m_barang_verifikasi i", "a.id = i.barang_id", "INNER");
         $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
+
+
+        if($kd_barang != null){
+            $builder->where('a.id', $kd_barang);
+        }
+
+        switch ($jenis) {
+            case 'nonaktif':
+                $builder->where("i.status_barang", 0);
+                break;
+            
+            case 'aktif':
+                $builder->where("i.status_barang", 1);
+                break;
+            case 'nonverification':
+                $builder->where("i.status_barang", -1);
+                break;
+
+            default:
+                break;
+        }
+        $builder->where("a.id != ", '');
+
+		if ($start != null && $limit != null) {
+			$builder->limit($limit, $start);
+		}
+        // echo $builder->getCompiledSelect();
+		return $builder->get();
+    }
+    public function getjmlbrng($cari = null, $start = null, $limit = null, $company_id = null, $kd_barang = null, $jenis = null, $id = null)
+    {
+        $key = [
+			"a.nama" => $cari,
+            "a.kd_barang" => $cari,
+            "a.id" => $cari,
+			"e.nama_usaha" => $cari,
+		];
+
+        $builder = $this->db->table("m_barang a");
+
+		if ($cari != null) {
+			$builder->like("a.id", $cari);
+			$builder->orLike($key);
+		}
+		$builder->select(" a.nama, a.`status`, b.nama AS kategori, c.nama AS model,
+        d.nama AS merk, e.nama_usaha, a.date_add, a.date_modif, 
+        a.kd_barang, f.gambar, a.keterangan, g.nama AS bahan, h.nama AS warna,
+        a.ukuran, e.company_id, i.status_barang, j.status_gambar, a.id AS code ");
+
+		$builder->join("m_kategori b", "a.kategori_id = b.id", "INNER");
+		$builder->join("m_model c", "a.model_id = c.id", "INNER");
+        $builder->join("m_merk d", "a.merk_id = d.id", "INNER");
+        $builder->join("m_user_company e", " a.company_id = e.id", "INNER");
+        $builder->join("m_barang_gambar f", "a.id = f.barang_id", "INNER");
+        $builder->join("m_jenis_bahan g", "a.jenis_bahan_id = g.id", "INNER");
+        $builder->join("m_warna h", "a.warna_id = h.id", "INNER");
+        $builder->join("m_barang_verifikasi i", "a.id = i.barang_id", "INNER");
+        $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
+        $builder->where("e.company_id = '$company_id'");
+        // echo $builder->getCompiledSelect(); 
 
 
         if($kd_barang != null){

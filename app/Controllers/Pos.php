@@ -32,6 +32,14 @@ class Pos extends BaseController
 	{
 		return view('pos/databarang');
 	}
+
+	public function barangc($company_id)
+	{
+		$data = [
+			'company_id' => $company_id
+		];
+		return view('pos/jml_barang', $data);
+	}
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// pencairan
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -104,8 +112,9 @@ class Pos extends BaseController
 			'Alamat' => $pos['alamat'],
 			'Email' => $pos['email_usaha'],
 			'No. Hp' => $pos['no_telepon'],
-			'Rekening' =>$pos['nama_bank'].' <br> '. $pos['no_rek'] . ' - ' . $pos['nama_pemilik_rekening'],
+			'Rekening' =>$pos['bank'].' <br> '. $pos['no_rek'] . ' - ' . $pos['nama_pemilik_rekening'],
 			'Province' => $pos['province'],
+			'Jumlah Barang' => '<a href="' . base_url('pos/barangc/' . $pos['company_id']) . '" class="btn btn-info btn-sm">'.$pos['jml_barang'].' Barang</a>',
 			'Lat' => $pos['koordinat_lat'],
 			'Lng' => $pos ['koordinat_lng'],
 			'Location' => '<div id="map" class="border-2" style="width: 100%; height: 200px;"></div>',
@@ -278,6 +287,62 @@ class Pos extends BaseController
 
 		$result = $this->TokoModel->getbarang($search, $start, $limit, null, $jenis)->getResult();
 		$totalCount = count($this->TokoModel->getbarang($search, '', '', '', $jenis)->getResultArray());
+
+		$no = $start + 1;
+		$data = [];
+
+		foreach ($result as $key => $value) {
+			switch ($value->status_barang) {
+				case '0':
+					$status = 'Non Aktif';
+					$textColor = 'danger';
+					break;
+				case '1':
+					$status = 'Aktif';
+					$textColor = 'success';
+					break;
+				case '-1':
+					$status = 'Non Verification';
+					$textColor = 'warning';
+					break;
+
+				default:
+					$status = 'terjadi kesalahan';
+					$textColor = 'danger';
+					break;
+			}
+
+			$data[$key] = [
+				$no,
+				$value->kd_barang,
+				$value->nama,
+				$value->kategori,
+				$value->merk,
+				$value->nama_usaha,
+				$value->date_add,
+				$value->date_modif,
+				'<a href="' . base_url('pos/detailBarang/' . $value->code) . '" class="btn btn-'.$textColor.' btn-sm"><i class="fas fa-eye"></i></a>',
+			];
+			$no++;
+		}
+
+		return \json_encode([
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $totalCount,
+			"recordsFiltered" => $totalCount,
+			"data" => $data,
+		]);
+	}
+	public function getjmlbrng($jenis = null, $company_id = null)
+	{
+		// echo $company_id;
+		$search = $this->request->getPost('search')['value'];
+		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
+		$start = $this->request->getPost('start');
+		$limit = $this->request->getPost('length');
+
+		$result = $this->TokoModel->getjmlbrng($search, $start, $limit, $company_id, null, $jenis)->getResult();
+		$totalCount = count($this->TokoModel->getjmlbrng($search, '', '', '', '', $jenis)->getResultArray());
 
 		$no = $start + 1;
 		$data = [];
