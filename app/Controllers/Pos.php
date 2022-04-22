@@ -90,7 +90,7 @@ class Pos extends BaseController
 				$value->nama,
 				$value->province,
 				$value->date_add,
-				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-'.$textColor.' btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
 		}
@@ -112,7 +112,7 @@ class Pos extends BaseController
 			'Alamat' => $pos['alamat'],
 			'Email' => $pos['email_usaha'],
 			'No. Hp' => $pos['no_telepon'],
-			'Rekening' =>$pos['nama_bank'].' <br> '. $pos['no_rek'] . ' - ' . $pos['nama_pemilik_rekening'],
+			'Rekening' =>$pos['bank'].' <br> '. $pos['no_rek'] . ' - ' . $pos['nama_pemilik_rekening'],
 			'Province' => $pos['province'],
 			'Jumlah Barang' => '<a href="' . base_url('pos/barangc/' . $pos['company_id']) . '" class="btn btn-info btn-sm">'.$pos['jml_barang'].' Barang</a>',
 			'Lat' => $pos['koordinat_lat'],

@@ -39,15 +39,15 @@ class TokoModel extends Model
 
 		$builder->select("a.company_id, a.nama_usaha, d.nama as usaha, 
         a.alamat, a.email_usaha, a.no_telepon, a.date_add, a.no_rek,
-        a.status, b.province, c.nama, f.nama_bank, a.no_rek, a.nama_pemilik_rekening,
-        a.koordinat_lng, a.koordinat_lat, g.jml_barang");
+        a.status, b.province, c.nama,  IFNULL(`f`.`nama_bank`, 0)AS bank, a.no_rek, a.nama_pemilik_rekening,
+        a.koordinat_lng, a.koordinat_lat, ifnull(g.jml_barang, 0) AS jml_barang");
 
 		$builder->join("m_province b", "a.kd_provinsi = b.id", "INNER");
 		$builder->join("m_userx AS c", "a.kd_user = c.id", "INNER");
         $builder->join("m_kategori_usaha AS d", "a.kategori_usaha = d.kd_kategori_usaha", "INNER");
-        $builder->join("m_bank AS f", "a.kd_bank = f.kd_bank", "INNER");
+        $builder->join("m_bank AS f", "a.kd_bank = f.kd_bank", "LEFT");
         $builder->join("(SELECT company_id, COUNT(*) AS jml_barang FROM m_barang  group BY company_id) g", 
-        "ON a.id = g.company_id", "INNER");
+        "ON a.id = g.company_id", "LEFT");
 
 
         if($company_id != null){
