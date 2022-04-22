@@ -128,7 +128,6 @@
       $('#distance').val(response.rows[0].elements[0].distance.value)
     });
   }
-
   $('.verifikasi').on('click', () => {
       console.log('<?= $company_id ?>')
       Swal.fire({
