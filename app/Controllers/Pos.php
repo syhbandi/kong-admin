@@ -91,6 +91,7 @@ class Pos extends BaseController
 				$value->province,
 				$value->date_add,
 				'<a href="' . base_url('pos/detailPos/' . $value->company_id) . '" class="btn btn-'.$textColor.' btn-sm"><i class="fas fa-eye"></i></a>',
+				
 			];
 			$no++;
 		}
@@ -133,10 +134,32 @@ class Pos extends BaseController
 		return redirect()->to('pos');
 	}
 
+	public function editkategori()
+	{
+		$company_id = $this->request->getVar('company_id');
+		$kategori = $this->request->getVar('kategori');
+		$setkategori = $this->TokoModel->editkategori($kategori, $company_id);
+
+		if ($setkategori == 'TRUE') {
+			$this->session->setFlashdata('sukses', 'Toko dengan Company id ' . $company_id . ' telah Berhasil Di Update'); 
+			$this->sendNotifToToko($company_id, 'Selamat, Kategori Usaha Anda Sudah di Update. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); 
+			return json_encode([
+				'success' => true,
+				'redirect' => base_url('pos'),
+				'company' => $company_id
+			]);
+		}
+		return json_encode([
+			'success' => false,
+			'msg' => 'Gagal melakukan validasi'
+		]);
+	}
+
 	public function verivikasiToko()
 	{
 		$company_id = $this->request->getVar('company_id');
-		$setStatus = $this->TokoModel->verivikasi($company_id);
+		$status = $this->request->getVar('status');
+		$setStatus = $this->TokoModel->verivikasi($status, $company_id);
 
 		if ($setStatus == 'TRUE') {
 			$this->session->setFlashdata('sukses', 'Toko dengan Company id ' . $company_id . ' telah diverifikasi'); 

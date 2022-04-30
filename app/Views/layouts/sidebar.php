@@ -136,6 +136,12 @@
                 <p>Data Transaksi</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?= base_url('tarif') ?>" class="nav-link <?= service('uri')->getPath() == 'tarif' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-donate"></i>
+                <p>Tarif Kendaraan</p>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'kontrak' ? 'menu-open' : '' ?>">

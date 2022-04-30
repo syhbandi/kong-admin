@@ -61,6 +61,8 @@ $routes->add('market', 'Marketplace::index');
 
 // kontrak
 $routes->add('kontrak', 'KontrakController::index');
+//tarif
+$routes->add('tarif', 'TransaksiController::index');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

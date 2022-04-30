@@ -88,12 +88,20 @@ class TokoModel extends Model
         return $update;
     }
 
-    public function verivikasi($company_id)
+    public function verivikasi($status, $company_id)
     {
-        $verivikasi = $this->db->query("UPDATE m_user_company SET status = '1' WHERE company_id = '$company_id'");
+        if ($status == 'aktif') {
+            $verivikasi = $this->db->query("UPDATE m_user_company SET status = '1' WHERE company_id = '$company_id'");
+        } else {
+            $verivikasi = $this->db->query("UPDATE m_user_company SET status = '0' WHERE company_id = '$company_id'");
+        }
         return $verivikasi;
     }
-
+    public function editkategori($kategori, $company_id)
+    {
+        $edit = $this->db->query("UPDATE m_user_company SET kategori_usaha = '$kategori' WHERE company_id = '$company_id'");
+        return $edit;
+    }
     public function verivikasiBarang($status, $kd_barang)
     {
         if ($status == 'aktif') {
