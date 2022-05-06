@@ -58,6 +58,7 @@ $routes->add('pos/detailBarang/(:segment)', 'Pos::detailBarang/$1');
 
 // routing User marketplace
 $routes->add('market', 'Marketplace::index');
+$routes->add('market/detailMp/(:segment)', 'Marketplace::detail_user/$1');
 
 // kontrak
 $routes->add('kontrak', 'KontrakController::index');

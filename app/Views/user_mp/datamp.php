@@ -23,6 +23,7 @@
               <th>Nama User</th>
               <th>No Telpn</th>
               <th>Email</th>
+              <th>No Rekening</th>
               <th>Tanggal Daftar</th>
               <th>Status</th>
               <th>Detail</th>
@@ -42,6 +43,7 @@
               <th>Nama User</th>
               <th>No Telpn</th>
               <th>Email</th>
+              <th>No Rekening</th>
               <th>Tanggal Daftar</th>
               <th>Status</th>
               <th>Detail</th>
