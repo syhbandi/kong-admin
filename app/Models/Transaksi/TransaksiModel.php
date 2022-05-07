@@ -39,11 +39,11 @@ class TransaksiModel extends Model
 			$builder->orLike($key);
 		}
 
-		$builder->select("t.deskripsi, t.batas_bawah, t.batas_atas, 
+		$builder->select("t.id, t.deskripsi, t.batas_bawah, t.batas_atas, 
         t.fee_minim_bawah, t.fee_minim_atas, t.jarak_pertama,
         u.lokasi,v.nama");
 
-		$builder->join("m_driver_zona_lokasi u", "t.zona_id = u.kd_zona", "INNER");
+		$builder->join("m_driver_zona_lokasi u", "t.zona_id = u.kd_lokasi", "INNER");
 		$builder->join("m_app_zona g", "t.app_id = g.id", "INNER");
         $builder->join("m_jenis_kendaraan v", "t.jenis_kendaraan_id = v.id", "INNER");
 
@@ -58,5 +58,10 @@ class TransaksiModel extends Model
 			$builder->limit($limit, $start);
 		}
 		return $builder->get();
+    }
+    
+    public function getlok()
+    {
+        
     }
 }

@@ -7,9 +7,27 @@ use App\Models\Transaksi\TransaksiModel;
 
 class TransaksiController extends BaseController
 {
-    public function index()
+    public function index($id = null)
     {
-        return view('transaksi/tarif');
+		$tarif = $this->TransaksiModel->tarif(null, null, null, $id)->getRowArray();
+		$provinsi = $this->TransaksiModel->query('SELECT kd_lokasi, lokasi AS lokasi1 FROM m_driver_zona_lokasi')->getResult();
+		foreach ($provinsi as $key => $value) {
+			$data['tarif'] = [
+				'lokasi' => $tarif['lokasi'],
+				'bawah' => $tarif['batas_bawah'],
+				'atas' => $tarif['batas_atas'],
+				'fee bawah' => $tarif['fee_minim_bawah'],
+				'fee atas' => $tarif['fee_minim_atas'],
+				'jarak' => $tarif['jarak_pertama'],
+				'deskripsi' => $tarif['deskripsi'],
+				'nama' => $tarif['nama'],
+				'code' => $this->TransaksiModel->query('SELECT kd_lokasi, lokasi AS lokasi1 FROM m_driver_zona_lokasi')->getResult(),
+				
+			];
+		}
+		
+		$data['id'] = $tarif['id'];
+		return view('transaksi/tarif', $data);
     }
 
     public function __construct()
@@ -41,7 +59,7 @@ class TransaksiController extends BaseController
                 $value->jarak_pertama,
 				$value->deskripsi,
 				$value->nama,
-				'<a href="#" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>',
+				'<a href="'.$value->id.'" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalEdit" id="edit"><i class="fas fa-edit mr-1"></i></a>',
 			];
 			$no++;
 		}
@@ -53,4 +71,5 @@ class TransaksiController extends BaseController
 			"data" => $data,
 		]);
     }
+
 }
