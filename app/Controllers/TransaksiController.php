@@ -10,8 +10,6 @@ class TransaksiController extends BaseController
     public function index($id = null)
     {
 		$tarif = $this->TransaksiModel->tarif(null, null, null, $id)->getRowArray();
-		$provinsi = $this->TransaksiModel->query('SELECT kd_lokasi, lokasi AS lokasi1 FROM m_driver_zona_lokasi')->getResult();
-		foreach ($provinsi as $key => $value) {
 			$data['tarif'] = [
 				'lokasi' => $tarif['lokasi'],
 				'bawah' => $tarif['batas_bawah'],
@@ -21,10 +19,9 @@ class TransaksiController extends BaseController
 				'jarak' => $tarif['jarak_pertama'],
 				'deskripsi' => $tarif['deskripsi'],
 				'nama' => $tarif['nama'],
-				'code' => $this->TransaksiModel->query('SELECT kd_lokasi, lokasi AS lokasi1 FROM m_driver_zona_lokasi')->getResult(),
+				'code' => $this->TransaksiModel->query('SELECT kd_lokasi, lokasi AS lokasi1 FROM m_driver_zona_lokasi')->getResult()
 				
 			];
-		}
 		
 		$data['id'] = $tarif['id'];
 		return view('transaksi/tarif', $data);

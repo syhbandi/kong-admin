@@ -62,6 +62,7 @@ class TransaksiModel extends Model
     
     public function getlok()
     {
-        
+        $builder = $this->db->query('SELECT kd_lokasi, lokasi FROM m_driver_zona_lokasi');
+        return $builder;
     }
 }
