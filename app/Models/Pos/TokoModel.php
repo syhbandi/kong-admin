@@ -58,12 +58,14 @@ class TokoModel extends Model
             case 'nonaktif':
                 $builder->where("a.`status`", -1);
                 break;
-            
             case 'aktif':
                 $builder->where("a.`status`", 1);
                 break;
-            case 'banned':
+            case 'tutup':
                 $builder->where("a.`status`", 0);
+                break;
+            case 'banned':
+                $builder->where("a.`status`", -2);
                 break;
             default:
                 break;
@@ -92,7 +94,9 @@ class TokoModel extends Model
     {
         if ($status == 'aktif') {
             $verivikasi = $this->db->query("UPDATE m_user_company SET status = '1' WHERE company_id = '$company_id'");
-        } else {
+        }elseif ($status == 'Banned') {
+           $verivikasi = $this->db->query("UPDATE m_user_company SET status = '-2' WHERE company_id = '$company_id'");
+        }else {
             $verivikasi = $this->db->query("UPDATE m_user_company SET status = '0' WHERE company_id = '$company_id'");
         }
         return $verivikasi;
