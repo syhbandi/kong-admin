@@ -63,7 +63,7 @@ class Pos extends BaseController
 
 		foreach ($result as $key => $value) {
 			switch ($value->status) {
-				case '0':
+				case '-2':
 					$status = 'Banned';
 					$textColor = 'danger';
 					break;
@@ -71,9 +71,13 @@ class Pos extends BaseController
 					$status = 'Aktif';
 					$textColor = 'success';
 					break;
-				case '2' :
+				case '-1' :
 					$status = 'Nonaktif';
 					$textColor = 'info';
+					break;
+				case '0' :
+					$status = 'Tutup';
+					$textColor = 'warning';
 					break;
 				default:
 					$status = 'terjadi kesalahan';

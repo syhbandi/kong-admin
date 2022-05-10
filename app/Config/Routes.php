@@ -63,7 +63,8 @@ $routes->add('market/detailMp/(:segment)', 'Marketplace::detail_user/$1');
 // kontrak
 $routes->add('kontrak', 'KontrakController::index');
 //tarif
-$routes->add('tarif', 'TransaksiController::index');
+$routes->add('tarif', 'Transaksi::index');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
