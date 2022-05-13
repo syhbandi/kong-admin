@@ -64,6 +64,8 @@ $routes->add('market/detailMp/(:segment)', 'Marketplace::detail_user/$1');
 $routes->add('kontrak', 'KontrakController::index');
 //tarif
 $routes->add('tarif', 'Transaksi::index');
+// bank
+$routes->add('bank', 'BankController::index');
 
 /*
  * --------------------------------------------------------------------

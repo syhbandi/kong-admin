@@ -84,4 +84,20 @@ class TransaksiModel extends Model
 		".$this->db->escape($deskripsi).", ".$this->db->escape($bawah).", ".$this->db->escape($atas).",
 		".$this->db->escape($feeb).", ".$this->db->escape($feea).",".$this->db->escape($jarak).")");
     }
+
+    public function getappzona()
+    {
+        $builder = $this->db->table('m_app_zona');
+        $builder->select('id, app_name');
+
+        return $builder->get();
+    }
+
+    public function getkendaraan()
+    {
+        $builder = $this->db->table('m_jenis_kendaraan');
+        $builder->select('id, nama, keterangan');
+
+        return $builder->get();
+    }
 }
