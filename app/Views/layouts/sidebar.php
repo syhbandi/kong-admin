@@ -144,6 +144,23 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'Bank' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-landmark"></i>
+            <p>
+              Bank
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('bank') ?>" class="nav-link <?= service('uri')->getPath() == 'bank' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-credit-card"></i>
+                <p>Data Bank</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'kontrak' ? 'menu-open' : '' ?>">
           <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
             <i class="nav-icon fas fa-file-signature"></i>

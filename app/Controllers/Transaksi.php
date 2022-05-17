@@ -11,7 +11,8 @@ class Transaksi extends BaseController
     { 
 			$data['lokasi'] = [
 				'code' => $this->TransaksiModel->getlokasi()->getResultArray(),
-				'app' => $this->TransaksiModel->query('SELECT id, app_name FROM m_app_zona')->getResult(),
+				'app' => $this->TransaksiModel->getappzona()->getResult(),
+				'kendaraan' => $this->TransaksiModel->getkendaraan()->getResult(),
 			];
 		return view('transaksi/tarif', $data);
     }

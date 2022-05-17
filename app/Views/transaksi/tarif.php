@@ -101,8 +101,9 @@
               <select class="custom-select" id="inputGroupSelect02" name="kendaraan">
                 <option id="kendaraan">--- Pilih Kendaraan ---</option>
                 <option value="1">Motor</option>
-                <option value="2">Mobil Kecil 2 - 4 penumpang</option>
-                <option value="3">Mobil Besar 4 - 6 penumpang</option>
+                <?php foreach($lokasi['kendaraan'] as $key => $value): ?>
+                <option value="<?= $value->id?>"><?= $value->nama?> - <?= $value->keterangan?></option>
+                <?php endforeach; ?>
               </select>
           </div>
           <div class="input-group">
