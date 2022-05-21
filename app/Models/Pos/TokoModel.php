@@ -175,7 +175,7 @@ class TokoModel extends Model
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
 		}
-        // echo $builder->getCompiledSelect();
+        
 		return $builder->get();
     }
     public function getjmlbrng($cari = null, $start = null, $limit = null, $company_id = null, $kd_barang = null, $jenis = null, $id = null)
