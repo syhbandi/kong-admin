@@ -47,7 +47,7 @@ class KontrakModel extends Model
 
 		switch ($jenis) {
 			case 'aktif':
-				$builder->where("a.`status`", 4);
+				$builder->where("a.`status`", 1);
 				break;
 			case 'nonaktif':
 				$builder->where("a.`status`", -2);
@@ -70,9 +70,9 @@ class KontrakModel extends Model
 			$this->db->transBegin();
 
 			$this->db->query("UPDATE misterkong_$sumber.m_customer_config SET status = 1 WHERE kd_customer = '$code_customer' AND customer_user_company_id = $comp_customer");
-			$this->db->query("UPDATE misterkong_$tujuan.m_supplier_config SET status = 2 WHERE kd_supplier = '$code_supplier' AND supplier_user_company_id =  $comp_suppiler");
+			$this->db->query("UPDATE misterkong_$tujuan.m_supplier_config SET status = 1 WHERE kd_supplier = '$code_supplier' AND supplier_user_company_id =  $comp_suppiler");
 			$this->db->query("UPDATE t_kontrak SET status = 1 WHERE id = $id");
-			$this->db->query("UPDATE h_kontrak_request SET status = 4 WHERE comp_id_sumber = '$sumber' AND comp_id_tujuan = $tujuan");
+			$this->db->query("UPDATE h_kontrak_request SET status = 1 WHERE comp_id_sumber = '$sumber' AND comp_id_tujuan = '$tujuan'");
 
 			$this->db->transCommit();
 			if ($this->db->transStatus() == false) {

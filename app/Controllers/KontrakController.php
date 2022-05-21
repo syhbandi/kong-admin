@@ -32,7 +32,7 @@ class KontrakController extends BaseController
 
 		foreach ($result as $key => $value) {
 			switch ($value->status) {
-				case '4':
+				case '1':
 					$status = 'aktif';
 					$textColor = 'success';
 					break;
