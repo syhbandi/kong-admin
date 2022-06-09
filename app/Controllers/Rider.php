@@ -102,11 +102,11 @@ class Rider extends BaseController
 	public function detail($kd_driver)
 	{
 		$rider = $this->riderModel->getRider(null, null, null, $kd_driver)->getRowArray();
+		$sim = $this->riderModel->getsim($kd_driver);
 		$tahun_lahir = substr($rider['no_ktp'], 10, 2);
 
 		// dokumen data diri
 		$foto_ktp = file_exists(FCPATH . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg') ? base_url() . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg' : base_url() . '/assets/file-not-found.png';
-		$foto_sim = file_exists(FCPATH . '/../kajek/images/sim/' . $rider['kd_driver'] . 'sim.jpg') ? base_url() . '/../kajek/images/sim/' . $rider['kd_driver'] . 'sim.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_skck = file_exists(FCPATH . '/../kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg') ? base_url() . '/../kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg' : base_url() . '/assets/file-not-found.png';
 
 		//dokumen kendaraan
@@ -115,7 +115,9 @@ class Rider extends BaseController
 		$foto_depan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_kanan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_belakang = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg' : base_url() . '/assets/file-not-found.png';
-
+	foreach ($sim as $key => $value) {
+		$data_sim[] = '<img class="img-thumbnail btn-dok" src="' . $value . '" data-title="Foto SIM" />';
+	}
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
 			'Nama Rider' => $rider['nama_depan'],
@@ -133,7 +135,7 @@ class Rider extends BaseController
 			'Dokumen Data Diri' =>
 			'
 					<img class="img-thumbnail btn-dok" src="' . $foto_ktp . '" data-title="Foto KTP" />
-					<img class="img-thumbnail btn-dok" src="' . $foto_sim . '" data-title="Foto SIM" />
+					'.implode($data_sim).'
 					<img class="img-thumbnail btn-dok" src="' . $foto_skck . '" data-title="Foto SKCK" />
 			',
 			'Dokumen Kendaraan' =>
@@ -405,6 +407,7 @@ class Rider extends BaseController
 
 		$data['no_transaksi'] = $pencairan->no_transaksi;
 		$data['kd_driver'] = $pencairan->id;
+		$data['nominal'] = $pencairan->nominal;
 		$data['approveAt'] = $pencairan->approveat;
 		$data['status'] = $pencairan->status;
 
@@ -428,11 +431,15 @@ class Rider extends BaseController
 	{
 		$no_transaksi = $this->request->getPost('no_transaksi');
 		$kd_driver = $this->request->getPost('kd_driver');
+		$nominal = $this->request->getVar('nominal');
 		$status = $this->request->getPost('status');
-		$pesan = $status == 1 ? 'Pengajuan pencairan saldo sudah diverifikasi' : 'Pengajuan pencairan saldo ditangguhkan karena ' . $this->request->getPost('pesan') . ', proses pencairan akan diproses apabila permohonan valid';
+		
 
+		$this->pencairanModel->transStart();
+		$pesan = $status == 1 ? 'Pengajuan pencairan saldo sudah diverifikasi' : 'Pengajuan pencairan saldo ditangguhkan karena ' . $this->request->getPost('pesan') . ', proses pencairan akan diproses apabila permohonan valid';
 		$approved = $this->pencairanModel->update($no_transaksi, ['approveat' => date('Y-m-d H:i:s'), 'status' => $status,]);
 		$pencairanValidasi = $this->pencairanModel->find($no_transaksi);
+		$updatestatus = $this->pencairanModel->db->query("UPDATE m_saldo_driver SET saldo = saldo - $nominal WHERE kd_driver = '$kd_driver'");
 		$insertPencairan = $this->pencairanModel->insertPenarikan([
 			'no_transaksi' => $pencairanValidasi["no_transaksi"],
 			'tanggal' => date('Y-m-d H:i:s'),
@@ -443,7 +450,12 @@ class Rider extends BaseController
 			'no_rek_tujuan' => $pencairanValidasi["no_rek_tujuan"],
 			'atas_nama' => strtoupper($pencairanValidasi["atas_nama"]),
 		]);
-		if ($approved && $insertPencairan) {
+		if ($this->pencairanModel->transStatus() === false) {
+			return json_encode([
+				'success' => false,
+				'msg' => 'Gagal melakukan verifikasi pencairan'
+			]);
+		}else {
 			$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
 			$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
 			return json_encode([
@@ -451,11 +463,7 @@ class Rider extends BaseController
 				'redirect' => base_url('rider/pencairan'),
 			]);
 		}
-
-		return json_encode([
-			'success' => false,
-			'msg' => 'Gagal melakukan verifikasi pencairan'
-		]);
+		
 	}
 
 
