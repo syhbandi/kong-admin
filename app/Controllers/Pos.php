@@ -245,7 +245,7 @@ class Pos extends BaseController
 				$value->nama_usaha,
 				'Rp ' . number_format($value->total_transfer, 0, ',', '.'),
 				"<span class='$textColor font-weight-bold'>$status</span>",
-				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) . '/'.$value->status.'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) . '/'.date('Y-m-d', strtotime('-1 days')).'/'.date('Y-m-d').' " class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
 		}
@@ -257,7 +257,7 @@ class Pos extends BaseController
 			"data" => $data,
 		]);
 	}
-	public function detailPencairan($company_id, $status)
+	public function detailPencairan($company_id, $awal, $akhir)
 	{
 		$pencairan['data'] = $this->pencairanModel->getdetail($company_id)->getResult();
 		return view('pos/detailPencairan', $pencairan);
@@ -266,8 +266,20 @@ class Pos extends BaseController
 
 	public function verifikasiPencairan()
 	{
-		$data = $this->request->getPost();
-		
+		$company_id = $this->request->getPost('company_id');
+		$awal = $this->request->getPost('awal');
+		$akhir = $this->request->getPost('akhir');
+		$data = $this->pencairanModel->verifpencairantoko($company_id, $awal, $akhir);
+
+		if ($data) {
+			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
+			$this->sendNotifToToko($company_id, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
+			return json_encode([
+				'success' => true,
+				'redirect' => base_url('pos/pencairan'),
+				'driver' => $company_id
+			]);
+		}
 		$pesan = $data['status'] == 1 ? "Pengajuan pencairan saldo telah diverifikasi" : "Pengajuan pencairan saldo ditangguhkan karena " . $data['pesan'] . ", mohon lengkapi persyaratan terlebih dahulu!";
 	}
 
@@ -448,4 +460,5 @@ class Pos extends BaseController
 		]);
 
 	}
+
 }
