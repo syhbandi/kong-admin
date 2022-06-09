@@ -139,9 +139,10 @@ class PencairanModel extends Model
         $builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
 		$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
         $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-		tanggal > CONCAT(DATE_ADD(DATE(NOW()), INTERVAL -5 DAY), ' 12:00:00') AND tanggal <= CONCAT(DATE(NOW()), ' 12:00:00')
+		tanggal > CONCAT(DATE_ADD(DATE(NOW()), INTERVAL -1 DAY), ' 12:00:00') AND tanggal <= CONCAT(DATE(NOW()), ' 12:00:00')
 		AND a.no_transaksi $test (SELECT no_transaksi FROM t_penarikan)");
 		$builder->groupBy('c.company_id, a.jenis_transaksi, c.nama_usaha');
+
 
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
@@ -171,7 +172,7 @@ class PencairanModel extends Model
 	 public function verifpencairantoko($company_id, $awal, $akhir)
 	 {
 		 $this->db->transStart();
-			$this->db->query("INSERT INTO t_penarikan(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama)
+			$insertp = "INSERT INTO t_penarikan(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama)
 			SELECT a.no_transaksi,NOW(),user_id_toko,2,
 			SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer,
 			kd_bank,no_rek,nama_pemilik_rekening
@@ -181,26 +182,27 @@ class PencairanModel extends Model
 			INNER JOIN t_pengiriman d ON a.no_transaksi = d.no_resi
 			INNER JOIN t_pengiriman_status e ON a.no_transaksi = e.no_resi
 			WHERE e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-			tanggal > CONCAT($awal, ' 12:00:00') AND tanggal <= CONCAT($akhir, ' 12:00:00')
+			tanggal > CONCAT('$awal', ' 12:00:00') AND tanggal <= CONCAT('$akhir', ' 12:00:00')
 			AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan) AND 
 			c.company_id = '$company_id'
-			GROUP BY a.no_transaksi, a.jenis_transaksi, c.nama_usaha");
-			$this->db->query("INSERT INTO t_penarikan_validasi(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama, status)
+			GROUP BY a.no_transaksi, a.jenis_transaksi, c.nama_usaha";
+			$this->db->query($insertp);
+			$insertVp = "INSERT INTO t_penarikan_validasi(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama,status)
 			SELECT a.no_transaksi,NOW(),user_id_toko,2,
 			SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer,
-			kd_bank,no_rek,nama_pemilik_rekening, 1
+			kd_bank,no_rek,nama_pemilik_rekening,1
 			FROM t_penjualan a
 			INNER JOIN t_penjualan_detail b ON a.no_transaksi = b.no_transaksi
 			INNER JOIN m_user_company c ON a.user_id_toko = c.id
 			INNER JOIN t_pengiriman d ON a.no_transaksi = d.no_resi
 			INNER JOIN t_pengiriman_status e ON a.no_transaksi = e.no_resi
 			WHERE e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-			tanggal > CONCAT($awal, ' 12:00:00') AND tanggal <= CONCAT($akhir, ' 12:00:00')
+			tanggal >  CONCAT('$awal', ' 12:00:00') AND tanggal <= CONCAT('$akhir', ' 12:00:00')
 			AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan_validasi) AND 
 			c.company_id = '$company_id'
-			GROUP BY a.no_transaksi, a.jenis_transaksi, c.nama_usaha");
+			GROUP BY a.no_transaksi, a.jenis_transaksi, c.nama_usaha";
+			$this->db->query($insertVp);
 		$this->db->transComplete();
-
 		if ($this->db->transStatus() === False ) {
 			return false;
 		}else {
