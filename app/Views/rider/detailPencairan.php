@@ -60,6 +60,7 @@
           <button type="submit" class="btn btn-primary"><i class="fab fa-telegram-plane mr-2"></i>Kirim</button>
           <input type="hidden" name="kd_driver" value="<?= $kd_driver ?>">
           <input type="hidden" name="no_transaksi" value="<?= $no_transaksi ?>">
+          <input type="hidden" name="nominal" value="<?= $nominal ?>">
           <input type="hidden" name="status" value="0">
         </div>
       </form>
@@ -93,6 +94,7 @@
             data: {
               no_transaksi: '<?= $no_transaksi ?>',
               kd_driver: '<?= $kd_driver ?>',
+              nominal : '<?= $nominal ?>',
               status: 1
             },
             dataType: 'json',

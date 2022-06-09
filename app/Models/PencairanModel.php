@@ -106,4 +106,66 @@ class PencairanModel extends Model
 		$builder = $this->db->table('t_penarikan');
 		return $builder->insert($data);
 	}
+
+	public function getpenarikantoko($cari = null, $start = null, $limit = null, $jenis = null)
+	{
+		$key = [
+			"c.nama_usaha," => $cari,
+            "c.company_id" => $cari,
+			"a.jenis_transaksi" => $cari,
+		];
+
+        $builder = $this->db->table("t_penjualan a");
+
+		if ($cari != null) {
+			$builder->like("a.id", $cari);
+			$builder->orLike($key);
+		}
+
+		if ($jenis == "unverif") {
+			$test = "NOT IN";
+			$select_status = "0 as status";
+		}else {
+			$test = "IN";
+			$select_status = "1 as status";
+		}
+
+		$builder->select("c.company_id, a.jenis_transaksi,
+		c.nama_usaha, $select_status,
+		SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer");
+
+		$builder->join("t_penjualan_detail b", "a.no_transaksi = b.no_transaksi", "INNER");
+		$builder->join("m_user_company c", "a.user_id_toko = c.id", "INNER");
+        $builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
+		$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
+        $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
+		tanggal > CONCAT(DATE_ADD(DATE(NOW()), INTERVAL -5 DAY), ' 12:00:00') AND tanggal <= CONCAT(DATE(NOW()), ' 12:00:00')
+		AND a.no_transaksi $test (SELECT no_transaksi FROM t_penarikan)");
+		$builder->groupBy('c.company_id, a.jenis_transaksi, c.nama_usaha');
+
+		if ($start != null && $limit != null) {
+			$builder->limit($limit, $start);
+		}
+		return $builder->get();
+	}
+
+	public function getdetail($company_id = null)
+	{
+		$builder = $this->db->table("t_penjualan a");
+
+		$builder->select("c.company_id, a.jenis_transaksi,
+		c.nama_usaha, a.no_transaksi, b.qty, COUNT(a.no_transaksi) AS jumlah_item,
+		SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer");
+		$builder->join("t_penjualan_detail b", "a.no_transaksi = b.no_transaksi", "INNER");
+		$builder->join("m_user_company c", "a.user_id_toko = c.id", "INNER");
+        $builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
+		$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
+        $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
+		tanggal > CONCAT(DATE_ADD(DATE(NOW()), INTERVAL -5 DAY), ' 12:00:00') AND tanggal <= CONCAT(DATE(NOW()), ' 12:00:00')
+		AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan) AND 
+		c.company_id = '$company_id'");
+		$builder->groupBy('a.no_transaksi, a.jenis_transaksi, c.nama_usaha');
+
+		return $builder->get();
+	}
 }

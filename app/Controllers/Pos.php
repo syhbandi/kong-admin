@@ -215,9 +215,10 @@ class Pos extends BaseController
 		$order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
 		$start = $this->request->getPost('start');
 		$limit = $this->request->getPost('length');
+		$jenis = $this->request->getVar('jenis');
 
-		$result = $this->pencairanModel->getPencairan($search, $start, $limit, $jenis, $status)->getResult();
-		$totalCount = count($this->pencairanModel->getPencairan($search, '', '', $jenis, $status)->getResultArray());
+		$result = $this->pencairanModel->getpenarikantoko($search, $start, $limit, $jenis)->getResult();
+		$totalCount = count($this->pencairanModel->getpenarikantoko($search, '',  $jenis)->getResultArray());
 
 		$no = $start + 1;
 		$data = [];
@@ -232,23 +233,19 @@ class Pos extends BaseController
 					$status = 'Diterima';
 					$textColor = 'text-success';
 					break;
-
 				default:
 					$status = 'terjadi kesalahan';
 					$textColor = 'text-danger';
 					break;
 			}
-
 			$data[$key] = [
 				$no,
-				$value->no_transaksi,
-				$value->nama_depan,
-				'Rp ' . number_format($value->saldo, 0, ',', '.'),
-				'Rp ' . number_format($value->nominal, 0, ',', '.'),
-				$value->nama_bank,
-				$value->no_rek_tujuan . '<br> A.N ' . $value->atas_nama,
+				$value->company_id,
+				$value->jenis_transaksi,
+				$value->nama_usaha,
+				'Rp ' . number_format($value->total_transfer, 0, ',', '.'),
 				"<span class='$textColor font-weight-bold'>$status</span>",
-				'<a href="' . base_url('pos/pencairan/detail/' . $value->no_transaksi) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) . '/'.$value->status.'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
 		}
@@ -260,31 +257,17 @@ class Pos extends BaseController
 			"data" => $data,
 		]);
 	}
-	public function detailPencairan($no_transaksi)
+	public function detailPencairan($company_id, $status)
 	{
-		$pencairan = $this->TokoModel->getToko('', '', '', '1', '', $no_transaksi)->getRow();
+		$pencairan['data'] = $this->pencairanModel->getdetail($company_id)->getResult();
+		return view('pos/detailPencairan', $pencairan);
 
-		$data['dataPencairan'] = $pencairan;
-		// hanya utk tampilan
-		$data['pencairan'] = [
-			'no transaksi' => $pencairan->no_transaksi,
-			'nama usaha' => $pencairan->nama_depan,
-			'jumlah penarikan' => 'Rp ' . number_format($pencairan->nominal, 0, ',', '.'),
-			'bank tujuan' => $pencairan->nama_bank,
-			'rekening tujuan' => $pencairan->no_rek_tujuan . ' atas nama ' . strtoupper($pencairan->atas_nama),
-			'tanggal pengajuan pencairan' => date('d/m/Y', strtotime($pencairan->tanggal)),
-			'status' => $pencairan->status == 0 ? 'Belum diverifikasi' : 'Diterima',
-			'keterangan' => $pencairan->keterangan ?? '-',
-		];
-
-
-		return view('rider/detailPencairan', $data);
 	}
 
 	public function verifikasiPencairan()
 	{
 		$data = $this->request->getPost();
-
+		
 		$pesan = $data['status'] == 1 ? "Pengajuan pencairan saldo telah diverifikasi" : "Pengajuan pencairan saldo ditangguhkan karena " . $data['pesan'] . ", mohon lengkapi persyaratan terlebih dahulu!";
 	}
 

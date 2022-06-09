@@ -2,28 +2,41 @@
 <?= $this->section('content'); ?>
 <div class="card">
   <div class="card-header d-flex align-items-center">
-    <h3 class="card-title">Pengajuan Pencairan (<?= $pencairan['nama usaha'] ?>) : <strong><?= $pencairan['jumlah penarikan'] ?></strong></h3>
-    <div class="ml-auto <?= $status == 1 ? 'd-none' : '' ?>">
+    <h3 class="card-title">Pengajuan Pencairan</h3>
+    <div class="ml-auto ">
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
       <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
     </div>
-    <div class="ml-auto <?= $status == 0 ? 'd-none' : '' ?>">
-      <strong>Tanggal Verifikasi: </strong> <?= date('d/m/Y', strtotime($dataPencairan['approveat'])) ?>
-    </div>
+    
   </div>
   <div class="card-body">
-    <table class="table table-bordered">
-      <?php foreach ($pencairan as $key => $value) : ?>
-        <tr>
-          <th class="text-capitalize"><?= $key ?></th>
-          <td class="text-capitalize"><?= $value ?></td>
-        </tr>
-      <?php endforeach ?>
-    </table>
-  </div>
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="belum-verifikasi-content" role="tabpanel" aria-labelledby="belum-verifikasi">
+        <table id="table-belum-verifikasi" class="table table-bordered table-hover table-striped w-100">
+          <thead class="align-middle text-center">
+            <tr>
+              <th>No</th>
+              <th>Nomor Transaksi</th>
+              <th>Jenis Transaksi</th>
+              <th>Jumlah Item</th>
+              <th>Jumlah Pencairan</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php foreach ($data as $key => $value) : ?>
+            <tr>
+              <td><?= $key+1 ?></td>
+              <td><?= $value->no_transaksi ?></td>
+              <td><?= $value->jenis_transaksi ?></td>
+              <td><?= $value->jumlah_item ?></td>
+              <td><?= $value->total_transfer ?></td>
+            </tr>
+            <?php endforeach ?>
+          </tbody>
+        </table>
+      </div>
 </div>
-
 <div class="modal fade" id="modalImage" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -88,9 +101,7 @@
             url: '<?= base_url('pos/verifikasiPencairan') ?>',
             type: 'POST',
             data: {
-              no_transaksi: '<?= $dataPenarikan->no_transaksi ?>',
-              id: '<?= $dataPenarikan->id ?>',
-              status: 1
+             
             },
             dataType: 'json',
             success: function(res) {

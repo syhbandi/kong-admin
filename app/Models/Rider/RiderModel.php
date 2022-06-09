@@ -153,4 +153,10 @@ class RiderModel extends Model
 
 		return $builder->get();
 	}
+
+	public function getsim($kd_driver)
+	{
+		$builder = $this->db->query("SELECT * FROM m_driver_sim WHERE kd_driver = '$kd_driver'");
+		return $builder->getResult();
+	}
 }

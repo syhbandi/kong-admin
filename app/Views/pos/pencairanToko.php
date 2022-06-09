@@ -18,12 +18,10 @@
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
-              <th>N0. Transaksi</th>
-              <th>Nama</th>
-              <th>Saldo</th>
+              <th>Company Id</th>
+              <th>Jenis Transaksi</th>
+              <th>Nama Usaha</th>
               <th>Jumlah Pencairan</th>
-              <th>Bank Tujuan</th>
-              <th>No. Rekening</th>
               <th>Status</th>
               <th>Aksi</th>
             </tr>
@@ -37,12 +35,10 @@
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
-              <th>N0. Transaksi</th>
-              <th>Nama</th>
-              <th>Saldo</th>
+              <th>Company Id</th>
+              <th>Jenis Transaksi</th>
+              <th>Nama Usaha</th>
               <th>Jumlah Pencairan</th>
-              <th>Bank Tujuan</th>
-              <th>No. Rekening</th>
               <th>Status</th>
               <th>Aksi</th>
             </tr>
@@ -63,12 +59,15 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/pos/getPencairan/1/unverif`,
+        "url": `<?= base_url() ?>/pos/getPencairan/unverif`,
         "type": "POST",
-        'data': {}
+        'data': {
+          jenis: "unverif",
+          status : 0,
+        }
       },
       "columnDefs": [{
-          "targets": [0, 1, 5, 6, 7, 8],
+          "targets": [0, 1, 2, 3, 4, 5, 6],
           "className": "text-center",
         },
         {
@@ -85,10 +84,13 @@
       "ajax": {
         "url": `<?= base_url() ?>/pos/getPencairan/1`,
         "type": "POST",
-        'data': {}
+        'data': {
+          jenis: "verif",
+          status : 1,
+        }
       },
       "columnDefs": [{
-          "targets": [0, 1, 5, 6, 7, 8],
+          "targets": [0, 1, 2, 3, 4, 5, 6],
           "className": "text-center",
         },
         {
