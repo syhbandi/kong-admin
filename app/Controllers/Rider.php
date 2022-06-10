@@ -116,7 +116,8 @@ class Rider extends BaseController
 		$foto_kanan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_belakang = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg' : base_url() . '/assets/file-not-found.png';
 	foreach ($sim as $key => $value) {
-		$data_sim[] = '<img class="img-thumbnail btn-dok" src="' . $value . '" data-title="Foto SIM" />';
+		$foto_sim = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $value->sim_path . '') ? base_url() . '/../kajek/images/sim/' .$value->sim_path . '' : base_url() . '/assets/file-not-found.png';
+		$data_sim[] = '<img class="img-thumbnail btn-dok" src="'.$foto_sim.'" data-title="Foto SIM" />';
 	}
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
