@@ -160,8 +160,10 @@ class Rider extends BaseController
 		$setStatus = $this->riderModel->update($kd_driver, ['status' => '3']); // update status rider menjadi 3 (aktif)
 		if ($setStatus && $setLocation) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $kd_driver . ' telah diverifikasi'); // tampilkan toast ke aplikasi
-			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan, 
-			tanggal, aktivitas, pesan) VALUES('')");
+			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan,tanggal,aktivitas,pesan)
+			SELECT kd_kendaraan,NOW(),'Verifikasi Kendaraan Rider','sukses'
+			FROM m_driver_kendaraan 
+			WHERE kd_driver='$kd_driver' AND status=2");
 			$this->sendNotifToRider($kd_driver, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
@@ -451,6 +453,7 @@ class Rider extends BaseController
 			'no_rek_tujuan' => $pencairanValidasi["no_rek_tujuan"],
 			'atas_nama' => strtoupper($pencairanValidasi["atas_nama"]),
 		]);
+		$this->pencairanModel->transCommit();
 		if ($this->pencairanModel->transStatus() === false) {
 			return json_encode([
 				'success' => false,
