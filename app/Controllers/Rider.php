@@ -116,7 +116,8 @@ class Rider extends BaseController
 		$foto_kanan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_belakang = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg' : base_url() . '/assets/file-not-found.png';
 	foreach ($sim as $key => $value) {
-		$data_sim[] = '<img class="img-thumbnail btn-dok" src="' . $value . '" data-title="Foto SIM" />';
+		$foto_sim = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $value->sim_path . '') ? base_url() . '/../kajek/images/sim/' .$value->sim_path . '' : base_url() . '/assets/file-not-found.png';
+		$data_sim[] = '<img class="img-thumbnail btn-dok" src="'.$foto_sim.'" data-title="Foto SIM" />';
 	}
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
@@ -159,8 +160,10 @@ class Rider extends BaseController
 		$setStatus = $this->riderModel->update($kd_driver, ['status' => '3']); // update status rider menjadi 3 (aktif)
 		if ($setStatus && $setLocation) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $kd_driver . ' telah diverifikasi'); // tampilkan toast ke aplikasi
-			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan, 
-			tanggal, aktivitas, pesan) VALUES('')");
+			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan,tanggal,aktivitas,pesan)
+			SELECT kd_kendaraan,NOW(),'Verifikasi Kendaraan Rider','sukses'
+			FROM m_driver_kendaraan 
+			WHERE kd_driver='$kd_driver' AND status=2");
 			$this->sendNotifToRider($kd_driver, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
@@ -450,6 +453,7 @@ class Rider extends BaseController
 			'no_rek_tujuan' => $pencairanValidasi["no_rek_tujuan"],
 			'atas_nama' => strtoupper($pencairanValidasi["atas_nama"]),
 		]);
+		$this->pencairanModel->transCommit();
 		if ($this->pencairanModel->transStatus() === false) {
 			return json_encode([
 				'success' => false,
