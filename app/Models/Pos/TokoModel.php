@@ -147,9 +147,10 @@ class TokoModel extends Model
         $builder->join("m_barang_gambar f", "a.id = f.barang_id", "INNER");
         $builder->join("m_jenis_bahan g", "a.jenis_bahan_id = g.id", "INNER");
         $builder->join("m_warna h", "a.warna_id = h.id", "INNER");
-        $builder->join("m_barang_verifikasi i", "a.id = i.barang_id", "INNER");
+        $builder->join("m_barang_satuan mbs", "mbs.barang_id=a.id", "INNER");
+        $builder->join("m_barang_verifikasi i", "mbs.id= i.barang_id", "INNER");
         $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
-
+        
 
         if($kd_barang != null){
             $builder->where('a.id', $kd_barang);
@@ -174,8 +175,7 @@ class TokoModel extends Model
 
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
-		}
-        
+		}        
 		return $builder->get();
     }
     public function getjmlbrng($cari = null, $start = null, $limit = null, $company_id = null, $kd_barang = null, $jenis = null, $id = null)
@@ -205,8 +205,10 @@ class TokoModel extends Model
         $builder->join("m_barang_gambar f", "a.id = f.barang_id", "INNER");
         $builder->join("m_jenis_bahan g", "a.jenis_bahan_id = g.id", "INNER");
         $builder->join("m_warna h", "a.warna_id = h.id", "INNER");
-        $builder->join("m_barang_verifikasi i", "a.id = i.barang_id", "INNER");
+        $builder->join("m_barang_satuan mbs", "mbs.barang_id=a.id", "INNER");
+        $builder->join("m_barang_verifikasi i", "mbs.id = i.barang_id", "INNER");
         $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
+        
         $builder->where("e.company_id = '$company_id'");
         // echo $builder->getCompiledSelect(); 
 
