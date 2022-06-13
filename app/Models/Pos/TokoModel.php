@@ -208,6 +208,7 @@ class TokoModel extends Model
         $builder->join("m_barang_satuan mbs", "mbs.barang_id=a.id", "INNER");
         $builder->join("m_barang_verifikasi i", "mbs.id = i.barang_id", "INNER");
         $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
+        
         $builder->where("e.company_id = '$company_id'");
         // echo $builder->getCompiledSelect(); 
 
