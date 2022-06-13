@@ -206,7 +206,10 @@ class Rider extends BaseController
 	// ==========================================================================================================================================
 	// Fitur verifikasi top up rider
 	// ==========================================================================================================================================
+	public function tolak()
+	{
 
+	}
 	public function topUp()
 	{
 		// dd($this->topUpModel->getData('', '', '', '2')->getResult());
@@ -375,6 +378,10 @@ class Rider extends BaseController
 					$status = 'Diterima';
 					$textColor = 'text-success';
 					break;
+				case '-1':
+					$status = 'Ditilak';
+					$textColor = 'text-danger';
+					break;
 
 				default:
 					$status = 'terjadi kesalahan';
@@ -441,7 +448,8 @@ class Rider extends BaseController
 		$this->pencairanModel->transStart();
 		$pesan = $status == 1 ? 'Pengajuan pencairan saldo sudah diverifikasi' : 'Pengajuan pencairan saldo ditangguhkan karena ' . $this->request->getPost('pesan') . ', proses pencairan akan diproses apabila permohonan valid';
 		$approved = $this->pencairanModel->update($no_transaksi, ['approveat' => date('Y-m-d H:i:s'), 'status' => $status,]);
-		$pencairanValidasi = $this->pencairanModel->find($no_transaksi);
+		if ($status == 1) {
+			$pencairanValidasi = $this->pencairanModel->find($no_transaksi);
 		$updatestatus = $this->pencairanModel->db->query("UPDATE m_saldo_driver SET saldo = saldo - $nominal WHERE kd_driver = '$kd_driver'");
 		$insertPencairan = $this->pencairanModel->insertPenarikan([
 			'no_transaksi' => $pencairanValidasi["no_transaksi"],
@@ -460,6 +468,15 @@ class Rider extends BaseController
 				'msg' => 'Gagal melakukan verifikasi pencairan'
 			]);
 		}else {
+			$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
+			$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
+			return json_encode([
+				'success' => true,
+				'redirect' => base_url('rider/pencairan'),
+			]);
+		}
+		}else {
+			$update = $this->pencairanModel->query("UPDATE t_penarikan_validasi SET status = -1 WHERE no_transaksi = '$no_transaksi'");
 			$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
 			$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
 			return json_encode([
