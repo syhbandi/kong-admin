@@ -426,12 +426,13 @@ class Pos extends BaseController
 			'Bahan' => $barang['bahan'],
 			'Warna Barang' => $barang['warna'],
 			'Ukuran Barang' => $barang['ukuran'],
+			'Satuan' =>$barang['satuan'],
 			'Nama Toko'  => $barang['nama_usaha'],
 			'Keterangan' => $barang['keterangan'],
 			'Foto Barang' => 
 			'
 					<img class="img-thumbnail btn-dok" src="' . $foto_barang . '" data-title="Foto Barang" />
-			',
+			'
 		];
 
 		$data['code'] = $barang['code'];
