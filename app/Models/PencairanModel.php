@@ -107,10 +107,10 @@ class PencairanModel extends Model
 		return $builder->insert($data);
 	}
 
-	public function getpenarikantoko($cari = null, $start = null, $limit = null, $jenis = null, $akhir = null,)
+	public function getpenarikantoko($cari = null, $start = null, $limit = null, $jenis = null, $akhir = null)
 	{
 		$key = [
-			"c.nama_usaha," => $cari,
+			"c.nama_usaha" => $cari,
             "c.company_id" => $cari,
 			"a.jenis_transaksi" => $cari,
 		];

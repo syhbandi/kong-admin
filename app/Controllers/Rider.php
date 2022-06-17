@@ -83,7 +83,7 @@ class Rider extends BaseController
 				$value->alamat_tinggal,
 				$value->hp1 . "<br>" . $value->hp2,
 				$value->email,
-				"Rp " . number_format($value->saldo, 0, "", "."),
+				"Rp " . number_format((int)$value->saldo,0,',','.'),
 				'<span class="' . $text . ' font-weight-bold">' . $status . '</span>',
 				'<a href="' . base_url('rider/detail/' . $value->kd_driver) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 				$jenis == 'baru' ? '<button class="btn btn-primary btn-sm verifikasi" data-driver="' . $value->kd_driver . '"><i class="fas fa-check mr-1"></i> Verifikasi</button>' : '',

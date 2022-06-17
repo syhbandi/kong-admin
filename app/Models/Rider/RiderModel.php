@@ -28,15 +28,13 @@ class RiderModel extends Model
 			"a.hp2" => $cari,
 			"a.no_ktp" => $cari,
 			"b.nomor_plat" => $cari,
-			"b.merk_nama" => $cari,
-			"b.model_nama" => $cari,
 			"b.tahun_pembuatan" => $cari,
 		];
 
 		$builder = $this->db->table("m_driver a");
 
 		if ($cari != null) {
-			$builder->like("kd_driver", $cari);
+			$builder->like("a.kd_driver", $cari);
 			$builder->orLike($key);
 		}
 
