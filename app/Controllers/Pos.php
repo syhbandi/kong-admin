@@ -420,18 +420,20 @@ class Pos extends BaseController
 		$foto_barang = file_exists(FCPATH . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . '') ? base_url() . '/../back_end_mp/'.$barang['company_id'].'_config/images/' . $barang['gambar'] . '' : base_url() . '/assets/file-not-found.png';
 		$data['barang'] = [
 			'Kode Barang' => $barang['kd_barang'],
+			'Nama Produk' => $barang['nama'],
 			'Kategori  Barang' => $barang['kategori'],
 			'Model Barang' => $barang['model'],
 			'Merk Barang' => $barang['merk'],
 			'Bahan' => $barang['bahan'],
 			'Warna Barang' => $barang['warna'],
 			'Ukuran Barang' => $barang['ukuran'],
+			'Satuan' =>$barang['satuan'],
 			'Nama Toko'  => $barang['nama_usaha'],
 			'Keterangan' => $barang['keterangan'],
 			'Foto Barang' => 
 			'
 					<img class="img-thumbnail btn-dok" src="' . $foto_barang . '" data-title="Foto Barang" />
-			',
+			'
 		];
 
 		$data['code'] = $barang['code'];
