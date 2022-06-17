@@ -50,8 +50,8 @@ class PencairanModel extends Model
 		$key = [
 			'id' => $cari,
 			'nominal' => $cari,
-			'atas_nama' => $cari,
-			'status' => $cari,
+			't_penarikan_validasi.atas_nama' => $cari,
+			't_penarikan_validasi.status' => $cari,
 			'keterangan' => $cari,
 		];
 

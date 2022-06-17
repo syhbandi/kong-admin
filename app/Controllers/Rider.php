@@ -119,6 +119,7 @@ class Rider extends BaseController
 		$foto_sim = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $value->sim_path . '') ? base_url() . '/../kajek/images/sim/' .$value->sim_path . '' : base_url() . '/assets/file-not-found.png';
 		$data_sim[] = '<img class="img-thumbnail btn-dok" src="'.$foto_sim.'" data-title="Foto SIM" />';
 	}
+	$tanggal_lahir =(interval(substr($rider["no_ktp"], 6, 2)) > 40)?interval(substr($reider["no_ktp"], 6, 2))-40:interval(substr($rider["no_ktp"], 6, 2));
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
 			'Nama Rider' => $rider['nama_depan'],

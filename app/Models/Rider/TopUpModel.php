@@ -67,7 +67,7 @@ class TopUpModel extends Model
         }
 
         if ($cari != null) {
-            $builder->like("top_id", $cari);
+            $builder->like("no_transaksi", $cari);
             $builder->orLike($key);
         }
 
