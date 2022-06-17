@@ -14,6 +14,24 @@
   <div class="card-body">
     <div class="tab-content">
       <div class="tab-pane fade show active" id="belum-verifikasi-content" role="tabpanel" aria-labelledby="belum-verifikasi">
+      <form class="pb-3" id="search">
+        <fieldset>
+          <div class="row">
+            <div class="col-3">
+              <div class="input-group date" id="datepicker">
+                <input type="date" class="form-control" id="date" value="<?= date("Y-m-d")?>"/>
+                <span class="input-group-append">
+                  <span class="input-group-text bg-light d-block">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+              </div>
+            </div>
+            <div class="col-sm-1 text-center">
+              <!-- <button id="btnSearch" class="btn btn-primary btn-md center-block" >Submit</button> -->
+              <button type="submit" id="btnsearch" class="btn btn-primary btn-md center-block">Search</button>
+            </div>
+        </fieldset>
+      </form>
         <table id="table-belum-verifikasi" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
@@ -52,11 +70,12 @@
 </div>
 
 <script>
-  $(function() {
+  function pernarikan(param_akhir){
     $('#table-belum-verifikasi').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
+      "bDestroy": true,
       "order": [],
       "ajax": {
         "url": `<?= base_url() ?>/pos/getPencairan/unverif`,
@@ -64,6 +83,7 @@
         'data': {
           jenis: "unverif",
           status : 0,
+          akhir: param_akhir,
         }
       },
       "columnDefs": [{
@@ -76,6 +96,9 @@
         }
       ],
     });
+  }
+  $(function() {
+    pernarikan(`<?= date('Y-m-d')?>`)
     $('#table-riwayat').DataTable({
       "processing": true,
       "serverSide": true,
@@ -100,5 +123,13 @@
       ],
     });
   })
+</script>
+<script>
+  $(function(){
+    $('#search').submit(function(e){
+      e.preventDefault()
+      pernarikan($("#date").val())
+    })
+  });
 </script>
 <?= $this->EndSection() ?>

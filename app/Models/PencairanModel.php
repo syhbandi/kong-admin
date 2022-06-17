@@ -107,7 +107,7 @@ class PencairanModel extends Model
 		return $builder->insert($data);
 	}
 
-	public function getpenarikantoko($cari = null, $start = null, $limit = null, $jenis = null)
+	public function getpenarikantoko($cari = null, $start = null, $limit = null, $jenis = null, $akhir = null,)
 	{
 		$key = [
 			"c.nama_usaha," => $cari,
@@ -129,28 +129,24 @@ class PencairanModel extends Model
 			$test = "IN";
 			$select_status = "1 as status";
 		}
-
-		$builder->select("c.company_id, a.jenis_transaksi,
-		c.nama_usaha, $select_status,
-		SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer");
-
-		$builder->join("t_penjualan_detail b", "a.no_transaksi = b.no_transaksi", "INNER");
-		$builder->join("m_user_company c", "a.user_id_toko = c.id", "INNER");
-        $builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
-		$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
-        $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-		tanggal > CONCAT(DATE_ADD(DATE(NOW()), INTERVAL -1 DAY), ' 12:00:00') AND tanggal <= CONCAT(DATE(NOW()), ' 12:00:00')
-		AND a.no_transaksi $test (SELECT no_transaksi FROM t_penarikan)");
-		$builder->groupBy('c.company_id, a.jenis_transaksi, c.nama_usaha');
-
-
+			$builder->select("c.company_id, a.jenis_transaksi,
+			c.nama_usaha, $select_status,
+			SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer");
+			$builder->join("t_penjualan_detail b", "a.no_transaksi = b.no_transaksi", "INNER");
+			$builder->join("m_user_company c", "a.user_id_toko = c.id", "INNER");
+			$builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
+			$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
+			$builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
+			tanggal <= CONCAT('$akhir', ' 12:00:00')
+			AND a.no_transaksi $test (SELECT no_transaksi FROM t_penarikan)");
+			$builder->groupBy('c.company_id, a.jenis_transaksi, c.nama_usaha');
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
 		}
 		return $builder->get();
 	}
 
-	public function getdetail($company_id = null)
+	public function getdetail($company_id = null, $akhir = null)
 	{
 		$builder = $this->db->table("t_penjualan a");
 
@@ -161,12 +157,10 @@ class PencairanModel extends Model
 		$builder->join("m_user_company c", "a.user_id_toko = c.id", "INNER");
         $builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
 		$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
-        $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-		tanggal > CONCAT(DATE_ADD(DATE(NOW()), INTERVAL -5 DAY), ' 12:00:00') AND tanggal <= CONCAT(DATE(NOW()), ' 12:00:00')
+        $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND tanggal <= CONCAT('$akhir', ' 12:00:00')
 		AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan) AND 
 		c.company_id = '$company_id'");
 		$builder->groupBy('a.no_transaksi, a.jenis_transaksi, c.nama_usaha');
-
 		return $builder->get();
 	}
 	 public function verifpencairantoko($company_id, $awal, $akhir)

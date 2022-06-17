@@ -216,9 +216,9 @@ class Pos extends BaseController
 		$start = $this->request->getPost('start');
 		$limit = $this->request->getPost('length');
 		$jenis = $this->request->getVar('jenis');
-
-		$result = $this->pencairanModel->getpenarikantoko($search, $start, $limit, $jenis)->getResult();
-		$totalCount = count($this->pencairanModel->getpenarikantoko($search, '',  $jenis)->getResultArray());
+		$akhir = $this->request->getVar('akhir');
+		$result = $this->pencairanModel->getpenarikantoko($search, $start, $limit, $jenis, $akhir)->getResult();
+		$totalCount = count($this->pencairanModel->getpenarikantoko($search, '',  $jenis, $akhir)->getResultArray());
 
 		$no = $start + 1;
 		$data = [];
@@ -245,7 +245,7 @@ class Pos extends BaseController
 				$value->nama_usaha,
 				'Rp ' . number_format($value->total_transfer, 0, ',', '.'),
 				"<span class='$textColor font-weight-bold'>$status</span>",
-				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) . '/'.date('Y-m-d', strtotime('-1 days')).'/'.date('Y-m-d').' " class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) .'/'.$akhir.' " class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
 		}
@@ -257,9 +257,9 @@ class Pos extends BaseController
 			"data" => $data,
 		]);
 	}
-	public function detailPencairan($company_id, $awal, $akhir)
+	public function detailPencairan($company_id, $akhir)
 	{
-		$pencairan['data'] = $this->pencairanModel->getdetail($company_id)->getResult();
+		$pencairan['data'] = $this->pencairanModel->getdetail($company_id, $akhir)->getResult();
 		return view('pos/detailPencairan', $pencairan);
 
 	}
