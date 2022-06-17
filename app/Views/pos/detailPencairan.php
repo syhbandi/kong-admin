@@ -101,9 +101,8 @@
             url: '<?= base_url('pos/verifikasiPencairan') ?>',
             type: 'POST',
             data: {
-            company_id : '<?= service('uri')->getsegment(3)?>',
-             awal : '<?= service('uri')->getsegment(4)?>',
-             akhir : '<?= service('uri')->getsegment(5)?>'
+              company_id : '<?= service('uri')->getsegment(3)?>',
+              akhir : '<?= service('uri')->getsegment(4)?>'
             },
             dataType: 'json',
             success: function(res) {
