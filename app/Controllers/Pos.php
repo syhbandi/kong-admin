@@ -266,6 +266,7 @@ class Pos extends BaseController
 
 	public function verifikasiPencairan()
 	{
+		
 		$company_id = $this->request->getPost('company_id');
 		$akhir = $this->request->getPost('akhir');
 		$data = $this->pencairanModel->verifpencairantoko($company_id, $akhir);

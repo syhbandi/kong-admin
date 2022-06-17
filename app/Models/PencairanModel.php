@@ -165,6 +165,7 @@ class PencairanModel extends Model
 	}
 	 public function verifpencairantoko($company_id, $akhir)
 	 {
+		
 		 $this->db->transStart();
 			$insertp = "INSERT INTO t_penarikan(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama)
 			SELECT a.no_transaksi,NOW(),user_id_toko,2,

@@ -69,6 +69,7 @@
   </div>
 </div>
 
+
 <script>
   function pernarikan(param_akhir){
     $('#table-belum-verifikasi').DataTable({
