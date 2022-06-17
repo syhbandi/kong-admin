@@ -163,7 +163,7 @@ class PencairanModel extends Model
 		$builder->groupBy('a.no_transaksi, a.jenis_transaksi, c.nama_usaha');
 		return $builder->get();
 	}
-	 public function verifpencairantoko($company_id, $awal, $akhir)
+	 public function verifpencairantoko($company_id, $akhir)
 	 {
 		 $this->db->transStart();
 			$insertp = "INSERT INTO t_penarikan(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama)
@@ -190,8 +190,7 @@ class PencairanModel extends Model
 			INNER JOIN m_user_company c ON a.user_id_toko = c.id
 			INNER JOIN t_pengiriman d ON a.no_transaksi = d.no_resi
 			INNER JOIN t_pengiriman_status e ON a.no_transaksi = e.no_resi
-			WHERE e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-			tanggal >  CONCAT('$awal', ' 12:00:00') AND tanggal <= CONCAT('$akhir', ' 12:00:00')
+			WHERE e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND tanggal <= CONCAT('$akhir', ' 12:00:00')
 			AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan_validasi) AND 
 			c.company_id = '$company_id'
 			GROUP BY a.no_transaksi, a.jenis_transaksi, c.nama_usaha";

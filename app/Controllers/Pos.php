@@ -267,9 +267,8 @@ class Pos extends BaseController
 	public function verifikasiPencairan()
 	{
 		$company_id = $this->request->getPost('company_id');
-		$awal = $this->request->getPost('awal');
 		$akhir = $this->request->getPost('akhir');
-		$data = $this->pencairanModel->verifpencairantoko($company_id, $awal, $akhir);
+		$data = $this->pencairanModel->verifpencairantoko($company_id, $akhir);
 
 		if ($data) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
