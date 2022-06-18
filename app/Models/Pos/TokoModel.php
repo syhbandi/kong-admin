@@ -174,7 +174,7 @@ class TokoModel extends Model
             INNER JOIN m_satuan s ON s.id=mbs.satuan_id
             INNER JOIN m_barang_verifikasi i ON brg.id = i.barang_id
             INNER JOIN m_barang_gambar_verifikasi j ON f.id = j.barang_gambar_id
-            GROUP BY brg.kd_barang
+            GROUP BY brg.kd_barang, brg.company_id
         ) a" , "a.company_id = e.id", "INNER");
         $builder->join("m_kategori b", "a.kategori_id = b.id", "INNER");
 		$builder->join("m_model c", "a.model_id = c.id", "INNER");
@@ -223,30 +223,70 @@ class TokoModel extends Model
             "e.nama_usaha" => $cari,
         ];
 
-        $builder = $this->db->table("m_barang a");
+        $key = [
+            "a.nama" => $cari,
+            "a.kd_barang" => $cari,
+            "a.id" => $cari,
+            "e.nama_usaha" => $cari,
+        ];
+
+        $builder = $this->db->table("m_user_company e");
 
         if ($cari != null) {
             $builder->like("a.id", $cari);
             $builder->orLike($key);
         }
-        $builder->select(" a.nama, a.`status`, b.nama AS kategori, c.nama AS model,
-            d.nama AS merk, e.nama_usaha, a.date_add, a.date_modif, 
-            a.kd_barang, f.gambar, a.keterangan, g.nama AS bahan, h.nama AS warna,
-            a.ukuran, e.company_id, i.status_barang, j.status_gambar, a.id AS code ");
+        $builder->select("a.nama,
+            a.status,
+            b.nama AS kategori,
+            c.nama AS model,
+            d.nama AS merk,
+            e.nama_usaha,
+            a.date_add,
+            a.date_modif,
+            a.kd_barang,
+            a.gambar,
+            a.keterangan,
+            g.nama AS bahan,
+            h.nama AS warna,
+            a.ukuran,
+            e.company_id,
+            a.status_barang,
+            a.status_gambar,
+            a.id AS code,
+            a.kd_satuan,
+            a.satuan"
+        );
 
+        // $builder->select(" a.nama, a.`status`, b.nama AS kategori, c.nama AS model,
+        // d.nama AS merk, e.nama_usaha, a.date_add, a.date_modif, 
+        // a.kd_barang, f.gambar, a.keterangan, g.nama AS bahan, h.nama AS warna,
+        // a.ukuran, e.company_id, i.status_barang, j.status_gambar, a.id AS code ");
+
+
+        $builder->join(
+            "(
+            SELECT brg.*,GROUP_CONCAT(f.gambar) AS gambar,
+            GROUP_CONCAT(s.kd_satuan) AS kd_satuan,
+            GROUP_CONCAT(s.nama) AS satuan,status_barang,status_gambar
+            FROM m_barang brg
+            INNER JOIN m_barang_satuan mbs ON brg.id=mbs.barang_id
+            INNER JOIN m_barang_gambar f ON brg.id=f.barang_id
+            INNER JOIN m_satuan s ON s.id=mbs.satuan_id
+            INNER JOIN m_barang_verifikasi i ON brg.id = i.barang_id
+            INNER JOIN m_barang_gambar_verifikasi j ON f.id = j.barang_gambar_id
+            GROUP BY brg.kd_barang, brg.company_id
+        ) a" , "a.company_id = e.id", "INNER");
         $builder->join("m_kategori b", "a.kategori_id = b.id", "INNER");
-        $builder->join("m_model c", "a.model_id = c.id", "INNER");
+		$builder->join("m_model c", "a.model_id = c.id", "INNER");
         $builder->join("m_merk d", "a.merk_id = d.id", "INNER");
-        $builder->join("m_user_company e", " a.company_id = e.id", "INNER");
-        $builder->join("m_barang_gambar f", "a.id = f.barang_id", "INNER");
+  //       $builder->join("m_user_company e", " a.company_id = e.id", "INNER");
+  //       $builder->join("m_barang_gambar f", "a.id = f.barang_id", "INNER");
         $builder->join("m_jenis_bahan g", "a.jenis_bahan_id = g.id", "INNER");
         $builder->join("m_warna h", "a.warna_id = h.id", "INNER");
-        $builder->join("m_barang_satuan mbs", "mbs.barang_id=a.id", "INNER");
-        $builder->join("m_barang_verifikasi i", "mbs.id = i.barang_id", "INNER");
-        $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
-
+  //       $builder->join("m_barang_verifikasi i", "a.id= i.barang_id", "INNER");
+  //       $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
         $builder->where("e.company_id = '$company_id'");
-        // echo $builder->getCompiledSelect(); 
 
 
         if($kd_barang != null){
@@ -255,25 +295,22 @@ class TokoModel extends Model
 
         switch ($jenis) {
             case 'nonaktif':
-            $builder->where("i.status_barang", 0);
-            break;
+                $builder->where("a.status_barang", 0);
+                break;
+    
+                case 'aktif':
+                $builder->where("a.status_barang", 1);
+                break;
 
-            case 'aktif':
-            $builder->where("i.status_barang", 1);
-            break;
-            case 'nonverification':
-            $builder->where("i.status_barang", -1);
-            break;
-
-            default:
-            break;
+                case 'nonverification':
+                $builder->where("a.status_barang", -1);
+                break;
         }
         $builder->where("a.id != ", '');
 
         if ($start != null && $limit != null) {
             $builder->limit($limit, $start);
         }
-        // echo $builder->getCompiledSelect();
         return $builder->get();
     }
 }

@@ -369,6 +369,7 @@ class Pos extends BaseController
 		$no = $start + 1;
 		$data = [];
 
+		
 		foreach ($result as $key => $value) {
 			switch ($value->status_barang) {
 				case '0':
