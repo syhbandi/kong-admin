@@ -5,7 +5,7 @@
     <h3 class="card-title">Data Lengkap Toko (<?= $barang['Nama Toko'] ?>)</h3>
     <div class="ml-auto ">
     <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
-      <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
+      <!-- <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button> -->
       <button class="btn btn-primary aktif <?= $status_barang == -1 ? 'd-none' : '' ?>"><i class="fas fa-check-circle mr-1"></i> Aktif(Non Display)</button>
       <button class="btn btn-success verifikasi <?= $status_barang == 1 ? 'd-none' : '' ?>"><i class="fas fa-check-circle mr-1"></i> Aktif(Display)</button>
       <button class="btn btn-danger nonaktif <?= $status_barang == 0 ? 'd-none' : '' ?>"><i class="fas fa-times-circle mr-1"></i> Non Aktif</button>
