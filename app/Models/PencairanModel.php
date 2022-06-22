@@ -147,10 +147,14 @@ class PencairanModel extends Model
 		return $builder->get();
 	}
 
-	public function getdetail($company_id = null, $akhir = null)
+	public function getdetail($company_id = null, $akhir = null, $jenis = null)
 	{
 		$builder = $this->db->table("t_penjualan a");
-
+		if ($jenis == "unverif") {
+			$test = "NOT IN";
+		}else {
+			$test = "IN";
+		}
 		$builder->select("c.company_id, a.jenis_transaksi,
 		c.nama_usaha, a.no_transaksi, b.qty, COUNT(a.no_transaksi) AS jumlah_item,
 		SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer");
@@ -159,7 +163,7 @@ class PencairanModel extends Model
         $builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
 		$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
         $builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND tanggal <= CONCAT('$akhir', ' 12:00:00')
-		AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan) AND 
+		AND a.no_transaksi $test (SELECT no_transaksi FROM t_penarikan) AND 
 		c.company_id = '$company_id'");
 		$builder->groupBy('a.no_transaksi, a.jenis_transaksi, c.nama_usaha');
 		return $builder->get();

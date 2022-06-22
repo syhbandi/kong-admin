@@ -3,6 +3,7 @@
 <div class="card">
   <div class="card-header d-flex align-items-center">
     <h3 class="card-title">Pengajuan Pencairan</h3>
+    <h4></h4>
     <div class="ml-auto ">
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <!-- <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button> -->
@@ -34,6 +35,12 @@
             </tr>
             <?php endforeach ?>
           </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="4" style="text-align: right;padding-right: 10px">Total:</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </tfoot>
         </table>
       </div>
 </div>
@@ -160,5 +167,66 @@
 
 
   })
+</script>
+<script>
+$(document).ready(function() {
+    $('#table-belum-verifikasi').dataTable({
+    	"footerCallback": function ( row, data, start, end, display ) {
+					var api = this.api(), data;
+					footer_data_table(api,4,'currency');
+				}
+    });
+    function currencyFormat(num) {
+        return (num
+            .toFixed(0)
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+            );
+    }
+    function footer_data_table(api,col,jenis){
+			let str;
+			if (jenis=='currency') {
+				str=/[\Rp.]/g;
+			}else if(jenis=='nota'){
+				str=/[\Nota]/g;
+			}else if(jenis=='item'){
+				str=/[\Item]/g;
+			}else{
+				str=/[\'']/g;
+			}
+			// Remove the formatting to get integer data for summation
+			var intVal = function ( i ) {
+				return typeof i === 'string' ?
+				i.replace(str, '')*1 :
+				typeof i === 'number' ?
+				i : 0;
+			};
+ 			// Total over all pages
+ 			total = api
+ 			.column( col )
+ 			.data()
+ 			.reduce( function (a, b) {
+ 				return intVal(a) + intVal(b);
+ 			}, 0 );
+            // Total over this page
+            pageTotal = api
+            .column( col, { page: 'current'} )
+            .data()
+            .reduce( function (a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0 );
+
+            if (jenis=='currency') {
+            	html_total='Rp '+currencyFormat(pageTotal) +' <br>(Total Rp '+ currencyFormat(total) +')';
+            }else if(jenis=='nota'){
+            	html_total=pageTotal +' <br>(Total '+ total +' Nota)';
+            }else if(jenis=='item'){
+            	html_total=pageTotal +' <br>(Total '+ total +' Item)';
+            }else{
+            	html_total=pageTotal +' <br>(Total '+ total +')';
+            }
+        	//update total
+        	$( api.column( col ).footer() ).html(html_total);            
+        }
+} );
 </script>
 <?= $this->endSection(); ?>

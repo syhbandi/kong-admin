@@ -111,6 +111,7 @@
         'data': {
           jenis: "verif",
           status : 1,
+          akhir:`<?= date('Y-m-d')?>`
         }
       },
       "columnDefs": [{

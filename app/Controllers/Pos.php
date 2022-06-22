@@ -259,7 +259,8 @@ class Pos extends BaseController
 	}
 	public function detailPencairan($company_id, $akhir)
 	{
-		$pencairan['data'] = $this->pencairanModel->getdetail($company_id, $akhir)->getResult();
+		$jenis = $this->request->getVar('jenis');
+		$pencairan['data'] = $this->pencairanModel->getdetail($company_id, $akhir, $jenis)->getResult();
 		return view('pos/detailPencairan', $pencairan);
 
 	}
