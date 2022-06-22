@@ -272,7 +272,7 @@ class Pos extends BaseController
 		$data = $this->pencairanModel->verifpencairantoko($company_id, $akhir);
 
 		if ($data) {
-			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
+			$this->session->setFlashdata('sukses', 'Toko dengan Company_id ' . $company_id . ' telah diverifikasi'); // tampilkan toast ke aplikasi
 			$this->sendNotifToToko($company_id, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
 			return json_encode([
 				'success' => true,

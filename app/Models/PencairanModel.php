@@ -109,6 +109,7 @@ class PencairanModel extends Model
 
 	public function getpenarikantoko($cari = null, $start = null, $limit = null, $jenis = null, $akhir = null)
 	{
+		$akhir = is_null($akhir) ? date("Y-m-d") : $akhir;
 		$key = [
 			"c.nama_usaha" => $cari,
             "c.company_id" => $cari,
@@ -176,14 +177,13 @@ class PencairanModel extends Model
 			INNER JOIN m_user_company c ON a.user_id_toko = c.id
 			INNER JOIN t_pengiriman d ON a.no_transaksi = d.no_resi
 			INNER JOIN t_pengiriman_status e ON a.no_transaksi = e.no_resi
-			WHERE e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-			tanggal > CONCAT('$awal', ' 12:00:00') AND tanggal <= CONCAT('$akhir', ' 12:00:00')
+			WHERE e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND tanggal <= CONCAT('$akhir', ' 12:00:00')
 			AND a.no_transaksi NOT IN (SELECT no_transaksi FROM t_penarikan) AND 
 			c.company_id = '$company_id'
 			GROUP BY a.no_transaksi, a.jenis_transaksi, c.nama_usaha";
 			$this->db->query($insertp);
 			$insertVp = "INSERT INTO t_penarikan_validasi(no_transaksi,tanggal,id,jenis_user,nominal,kd_bank,no_rek_tujuan,atas_nama,status)
-			SELECT a.no_transaksi,NOW(),user_id_toko,2,
+			SELECT a.no_transaksi,NOW(),user_id_toko,1,
 			SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer,
 			kd_bank,no_rek,nama_pemilik_rekening,1
 			FROM t_penjualan a
