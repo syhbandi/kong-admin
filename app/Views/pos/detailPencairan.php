@@ -2,12 +2,12 @@
 <?= $this->section('content'); ?>
 <div class="card">
   <div class="card-header d-flex align-items-center">
-    <h3 class="card-title">Pengajuan Pencairan</h3>
+    <h3 class="card-title">Pengajuan Pencairan </h3>
     <h4></h4>
     <div class="ml-auto ">
-      <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
+      <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Kembali</button>
       <!-- <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button> -->
-      <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
+      <button class="btn btn-primary verifikasi <?= service('uri')->getsegment(5) == "verif" ? 'd-none' : ''?>"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
     </div>
     
   </div>

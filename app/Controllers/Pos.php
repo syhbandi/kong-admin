@@ -245,7 +245,7 @@ class Pos extends BaseController
 				$value->nama_usaha,
 				'Rp ' . number_format($value->total_transfer, 0, ',', '.'),
 				"<span class='$textColor font-weight-bold'>$status</span>",
-				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) .'/'.$akhir.' " class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
+				'<a href="' . base_url('pos/detailPencairan/' . $value->company_id) .'/'.$akhir.'/'.$jenis.'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
 		}
@@ -257,12 +257,10 @@ class Pos extends BaseController
 			"data" => $data,
 		]);
 	}
-	public function detailPencairan($company_id, $akhir)
+	public function detailPencairan($company_id, $akhir, $jenis)
 	{
-		$jenis = $this->request->getVar('jenis');
 		$pencairan['data'] = $this->pencairanModel->getdetail($company_id, $akhir, $jenis)->getResult();
 		return view('pos/detailPencairan', $pencairan);
-
 	}
 
 	public function verifikasiPencairan()
