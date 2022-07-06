@@ -24,7 +24,7 @@
         <table id="riderBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
-            <th>No</th>
+              <th>No</th>
               <th>No.Plat</th>
               <th>Merk</th>
               <th>Model Kendaraan</th>
@@ -43,7 +43,7 @@
         <table id="rider-aktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
-            <th>No</th>
+              <th>No</th>
               <th>No.Plat</th>
               <th>Merk</th>
               <th>Model Kendaraan</th>
@@ -62,7 +62,7 @@
         <table id="riderNonaktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
-            <th>No</th>
+              <th>No</th>
               <th>No.Plat</th>
               <th>Merk</th>
               <th>Model Kendaraan</th>
@@ -81,7 +81,7 @@
         <table id="riderBanned" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
-            <th>No</th>
+              <th>No</th>
               <th>No.Plat</th>
               <th>Merk</th>
               <th>Model Kendaraan</th>
