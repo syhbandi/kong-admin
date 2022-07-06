@@ -1,5 +1,5 @@
-<?= $this->extend('layouts/index') ?>
-<?= $this->section('content') ?>
+<?=$this->extend('layouts/index')?>
+<?=$this->section('content')?>
 <div class="card card-primary card-outline card-outline-tabs">
     <div class="card-header p-0 border-bottom-0">
         <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
@@ -26,7 +26,6 @@
     <div class="card-body">
         <div class="tab-content" id="custom-tabs-four-tabContent">
             <!-- tab rider baru -->
-
             <div class="tab-pane fade show active" id="baru" role="tabpanel" aria-labelledby="tab-baru">
                 <table id="riderBaru" class="table table-bordered table-hover table-striped w-100">
                     <thead class="align-middle text-center">
@@ -115,7 +114,7 @@ $(function() {
         "responsive": true,
         "order": [],
         "ajax": {
-            "url": `<?= base_url() ?>/rider/getKendaraan/baru`,
+            "url": `<?=base_url()?>/rider/getKendaraan/baru`,
             "type": "POST",
             'data': {}
         },
@@ -136,7 +135,7 @@ $(function() {
         responsive: true,
         order: [],
         "ajax": {
-            "url": `<?= base_url() ?>/rider/getKendaraan/aktif`,
+            "url": `<?=base_url()?>/rider/getKendaraan/aktif`,
             "type": "POST",
             'data': {}
         },
@@ -156,7 +155,7 @@ $(function() {
         responsive: true,
         order: [],
         "ajax": {
-            "url": `<?= base_url() ?>/rider/getKendaraan/nonaktif`,
+            "url": `<?=base_url()?>/rider/getKendaraan/nonaktif`,
             "type": "POST",
             'data': {}
         },
@@ -176,7 +175,7 @@ $(function() {
         responsive: true,
         order: [],
         "ajax": {
-            "url": `<?= base_url() ?>/rider/getKendaraan/banned`,
+            "url": `<?=base_url()?>/rider/getKendaraan/banned`,
             "type": "POST",
             'data': {}
         },
@@ -208,7 +207,7 @@ $(function() {
     //   }).then((result) => {
     //     if (result.isConfirmed) {
     //       $.ajax({
-    //         url: '<?= base_url('rider/verifikasi') ?>',
+    //         url: '<?=base_url('rider/verifikasi')?>',
     //         type: 'POST',
     //         data: {
     //           kd_driver
@@ -237,4 +236,4 @@ $(function() {
 
 });
 </script>
-<?= $this->endSection() ?>
+<?=$this->endSection()?>
