@@ -24,14 +24,14 @@
         <table id="riderBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
-              <th>No</th>
-              <th>No.Ktp</th>
-              <th>Nama</th>
-              <th>Alamat</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Saldo</th>
+            <th>No</th>
+              <th>No.Plat</th>
+              <th>Merk</th>
+              <th>Model Kendaraan</th>
+              <th>Nama Driver</th>
+              <th>Tahun Pembuatan</th>
               <th>Status</th>
+              <th>Detail</th>
             </tr>
           </thead>
           <tbody>
@@ -44,13 +44,13 @@
           <thead class="align-middle text-center">
             <tr>
             <th>No</th>
-              <th>No.Ktp</th>
-              <th>Nama</th>
-              <th>Alamat</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Saldo</th>
+              <th>No.Plat</th>
+              <th>Merk</th>
+              <th>Model Kendaraan</th>
+              <th>Nama Driver</th>
+              <th>Tahun Pembuatan</th>
               <th>Status</th>
+              <th>Detail</th>
             </tr>
           </thead>
           <tbody>
@@ -63,13 +63,13 @@
           <thead class="align-middle text-center">
             <tr>
             <th>No</th>
-              <th>No.Ktp</th>
-              <th>Nama</th>
-              <th>Alamat</th>
-              <th>No. Hp</th>
-              <th>Email</th>
-              <th>Saldo</th>
+              <th>No.Plat</th>
+              <th>Merk</th>
+              <th>Model Kendaraan</th>
+              <th>Nama Driver</th>
+              <th>Tahun Pembuatan</th>
               <th>Status</th>
+              <th>Detail</th>
             </tr>
           </thead>
           <tbody>
