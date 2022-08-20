@@ -37,7 +37,6 @@
           </tbody>
         </table>
       </div>
-  <!-- /.card -->
   <!-- modal EDIT -->
   <div class="modal fade modaledit" id="modalEdit" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
