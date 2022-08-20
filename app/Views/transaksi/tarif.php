@@ -57,7 +57,6 @@
               <label class="input-group-text" for="inputGroupSelect03">Provinsi</label>
             </div>
               <select class="custom-select" id="inputGroupSelect01" name="Provinsi">
-                <option id="code">--- Pilih Lokasi ---</option>
                 <?php foreach($lokasi['code'] as $key => $value): ?>
                 <option value="<?= $value['kd_lokasi']?>"><?= $value['lokasi']?></option>
                 <?php endforeach; ?>
@@ -68,7 +67,6 @@
               <label class="input-group-text" for="inputGroupSelect01">App Name</label>
             </div>
               <select class="custom-select" id="inputGroupSelect03" name="Provinsi">
-                <option id="code_app">--- Pilih App ---</option>
                 <?php foreach($lokasi['app'] as $key => $value): ?>
                 <option value="<?= $value->id?>"><?= $value->app_name?></option>
                 <?php endforeach; ?>
@@ -99,10 +97,8 @@
               <label class="input-group-text" for="inputGroupSelect01">Kendaraan</label>
             </div>
               <select class="custom-select" id="inputGroupSelect02" name="kendaraan">
-                <option id="kendaraan">--- Pilih Kendaraan ---</option>
-                <option value="1">Motor</option>
                 <?php foreach($lokasi['kendaraan'] as $key => $value): ?>
-                <option value="<?= $value->id?>"><?= $value->nama?> - <?= $value->keterangan?></option>
+                <option value="<?= $value->id?>"><?= $value->nama?> <?= $value->keterangan?></option>
                 <?php endforeach; ?>
               </select>
           </div>
@@ -211,14 +207,14 @@
           dataType: 'json',
           success: function(data){
             $('#idlokasi').val(data[0].id);
-            $('#code').val(data[0].zona_id);
-            $('#code_app').val(data[0].app_id);
+            $('#inputGroupSelect01').val(data[0].zona_id);
+            $('#inputGroupSelect03').val(data[0].app_id);
             $('#bawah').val(data[0].batas_bawah);
             $('#atas').val(data[0].batas_atas);
             $('#feeb').val(data[0].fee_minim_bawah);
             $('#feea').val(data[0].fee_minim_atas);
             $('#jarak').val(data[0].jarak_pertama);
-            $('#kendaraan').val(data[0].jenis_kendaraan_id);
+            $('#inputGroupSelect02').val(data[0].jenis_kendaraan_id);
             $('#deskripsi').val(data[0].deskripsi);
               $("#modalEdit").modal('show');
                     console.log(data[0].zona_id)

@@ -65,6 +65,7 @@ $routes->add('kontrak', 'KontrakController::index');
 $routes->add('kontrak/detailkontrak/(:segment)', 'KontrakController::detailkontrak/$1');
 //tarif
 $routes->add('tarif', 'Transaksi::index');
+$routes->add('transaksi', 'Alltransaksi::index');
 // bank
 $routes->add('bank', 'BankController::index');
 

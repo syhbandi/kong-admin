@@ -462,5 +462,10 @@ class Pos extends BaseController
 		]);
 
 	}
+	public function induk($company_id, $akhir, $jenis)
+	{
+		$pencairan['data'] = $this->pencairanModel->induk($company_id, $akhir)->getResult();
+		return view('pos/detailriwayat', $pencairan);
+	}
 
 }

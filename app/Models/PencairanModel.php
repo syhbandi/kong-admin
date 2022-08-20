@@ -207,4 +207,20 @@ class PencairanModel extends Model
 			return true;
 		}
 	 }
+	 public function induk($company_id, $akhir)
+	 {
+			$builder = $this->db->query("SELECT c.company_id, a.jenis_transaksi, c.nama_usaha, c.status,
+			b.qty, COUNT(a.no_transaksi) AS jumlah_item, DATE(o.tanggal) AS tanggal,
+			SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer 
+			FROM t_penjualan a
+			INNER JOIN t_penjualan_detail b ON a.no_transaksi = b.no_transaksi
+			INNER JOIN m_user_company c ON a.user_id_toko = c.id
+			INNER JOIN t_pengiriman d ON a.no_transaksi = d.no_resi 
+			INNER JOIN t_pengiriman_status e ON a.no_transaksi = e.no_resi 
+			INNER JOIN t_penarikan o ON a.no_transaksi = o.no_transaksi
+			WHERE e.status = 2 AND a.jenis_transaksi = 'FOOD' AND o.tanggal < CONCAT('$akhir', ' 12:00:00') 
+			AND c.company_id = '$company_id'
+			GROUP BY a.jenis_transaksi, c.nama_usaha, date(o.tanggal)");
+	   		return $builder->get();
+	 }
 }

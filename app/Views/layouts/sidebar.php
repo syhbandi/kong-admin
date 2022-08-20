@@ -145,7 +145,7 @@
           </ul>
         </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'Bank' ? 'menu-open' : '' ?>">
-          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'Bank' ? 'active' : '' ?>">
             <i class="nav-icon fas fa-landmark"></i>
             <p>
               Bank
@@ -162,7 +162,7 @@
           </ul>
         </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'kontrak' ? 'menu-open' : '' ?>">
-          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'Kontrak' ? 'active' : '' ?>">
             <i class="nav-icon fas fa-file-signature"></i>
             <p>
               kontrak
