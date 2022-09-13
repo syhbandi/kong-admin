@@ -31,8 +31,8 @@
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
-              <th>No.Ktp</th>
-              <th>Nama</th>
+              <th>Nama Atribut</th>
+              <th>harga atribut</th>
               <th>Alamat</th>
               <th>No. Hp</th>
               <th>Email</th>

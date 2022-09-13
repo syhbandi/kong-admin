@@ -165,8 +165,9 @@ class Rider extends BaseController
 			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan,tanggal,aktivitas,pesan)
 			SELECT kd_kendaraan,NOW(),'Verifikasi Kendaraan Rider','sukses'
 			FROM m_driver_kendaraan 
-			WHERE kd_driver='$kd_driver' AND status=2");
-			$this->sendNotifToRider($kd_driver, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); //kirim notif ke rider
+			WHERE kd_driver='$kd_driver' AND status=2"); 
+			$status_n = -1;
+			$this->sendNotifToRider($kd_driver, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.', $status_n); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('rider'),
@@ -491,7 +492,7 @@ class Rider extends BaseController
 
 
 	// fungsi utk kirim notif ke aplikasi rider
-	public function sendNotifToRider($kd_driver, $pesan, $jenis = 0)
+	public function sendNotifToRider($kd_driver, $pesan, $status_n, $jenis = 0,)
 	{
 		$payload = array(
 			'to' => '/topics/kongVal',
@@ -501,7 +502,8 @@ class Rider extends BaseController
 				"id_dr" => $kd_driver,
 				"psn" => $pesan,
 				"mode" => '1',
-				"jenis_notif" => $jenis
+				"jenis_notif" => $jenis,
+				"status" => $status_n
 			),
 		);
 		$headers = array(

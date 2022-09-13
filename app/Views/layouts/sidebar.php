@@ -121,6 +121,29 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'atribut' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'atribut' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-tshirt"></i>
+            <p>
+              Atribut
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('atribut') ?>" class="nav-link <?= service('uri')->getPath() == 'atribut' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-tasks"></i>
+                <p>Data atribut</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?= base_url('atribut/transaksi') ?>" class="nav-link <?= service('uri')->getPath() == 'atribut/transaksi' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-scroll"></i>
+                <p>Transaksi Atribut</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'transaksi' ? 'menu-open' : '' ?>">
           <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'transaksi' ? 'active' : '' ?>">
             <i class="nav-icon fas fa-shopping-cart"></i>

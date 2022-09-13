@@ -6,6 +6,7 @@
     <div class="ml-auto <?= $status == 3 ? 'd-none' : '' ?>">
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
+      <button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button>                                                                                                                                                                                                                    
       <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
     </div>
   </div>
