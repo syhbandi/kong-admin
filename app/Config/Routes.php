@@ -69,6 +69,8 @@ $routes->add('transaksi', 'Alltransaksi::index');
 // bank
 $routes->add('bank', 'BankController::index');
 
+$routes->add('atribut', 'AtributController::index');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
