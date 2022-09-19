@@ -68,7 +68,7 @@ $routes->add('tarif', 'Transaksi::index');
 $routes->add('transaksi', 'Alltransaksi::index');
 // bank
 $routes->add('bank', 'BankController::index');
-
+//atribut
 $routes->add('atribut', 'AtributController::index');
 
 /*
