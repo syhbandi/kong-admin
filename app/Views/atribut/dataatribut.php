@@ -61,11 +61,11 @@
             <input type="hidden" id="kd">
           <div class="input-group mb-3" >
             <span class="input-group-text" id="addon-wrapping">Nama</span>
-            <input type="text" class="form-control" id="nama" placeholder="Nama Atribut" aria-label="Batas Bawah" aria-describedby="addon-wrapping" >
+            <input type="text" class="form-control" id="nama" placeholder="Nama Atribut" aria-label="Batas Bawah" aria-describedby="addon-wrapping" readonly>
           </div>
           <div class="input-group mb-3" >
             <span class="input-group-text" id="addon-wrapping">Keterangan</span>
-            <input type="text" class="form-control" id="keterangan" placeholder="Code Bank" aria-label="Batas Bawah" aria-describedby="addon-wrapping" >
+            <input type="text" class="form-control" id="keterangan" placeholder="Code Bank" aria-label="Batas Bawah" aria-describedby="addon-wrapping" readonly>
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="addon-wrapping">Harga Atribut</span>
