@@ -50,11 +50,11 @@ class Rider extends BaseController
 		foreach ($result as $key => $value) {
 			switch ($value->status) {
 				case '-1':
-					$status = 'Pre Registrasi';
+					$status = 'Registrasi';
 					$text = 'text-dark';
 					break;
 				case '0':
-					$status = 'Telah Registrasi';
+					$status = 'Validasi Data';
 					$text = 'text-danger';
 					break;
 				case '1':
@@ -69,7 +69,14 @@ class Rider extends BaseController
 					$status = 'Aktif';
 					$text = 'text-success';
 					break;
-
+				case '4':
+					$status = 'Validasi Pembayaran';
+					$text = 'text-success';
+					break;
+				case '5':
+					$status = 'Perbaikan';
+					$text = 'text-warning';
+					break;
 				default:
 					$status = 'Nonaktif';
 					$text = 'text-gray';

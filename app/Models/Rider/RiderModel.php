@@ -51,17 +51,29 @@ class RiderModel extends Model
 
 		// seleksi rider berdasarkan jenis (baru, aktif, nonaktif, banned)
 		switch ($jenis) {
-			case 'baru':
-				$builder->where("a.`status`", 0)->orWhere("a.`status`", -1)->orWhere("a.`status`", 2);
+			case 'registrasi':
+				$builder->where("a.`status`", -1);
+				break;
+			case 'validasid':
+				$builder->where("a.`status`", 0);
+				break;
+			case 'pengajuan':
+				$builder->where("a.`status`", 1);
+				break;
+			case 'pengembalian':
+				$builder->where("a.`status`", 2);
 				break;
 			case 'aktif':
 				$builder->where("a.`status`", 3);
 				break;
-			case 'nonaktif':
-				$builder->where("a.`status`", -2);
+			case 'validasip':
+				$builder->where("a.`status`", 4);
+				break;
+			case 'sperbaikan':
+				$builder->where("a.`status`", 5);
 				break;
 			case 'banned':
-				$builder->where("a.`status`", -3);
+				$builder->where("a.`status`", 99);
 				break;
 
 			default:
