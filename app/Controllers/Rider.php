@@ -503,7 +503,7 @@ class Rider extends BaseController
 
 
 	// fungsi utk kirim notif ke aplikasi rider
-	public function sendNotifToRider($kd_driver, $pesan, $status_n, $jenis = 0,)
+	public function sendNotifToRider($kd_driver, $pesan, $status_n, $jenis = 0)
 	{
 		$payload = array(
 			'to' => '/topics/kongVal',
