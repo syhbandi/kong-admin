@@ -77,6 +77,10 @@ class Rider extends BaseController
 					$status = 'Perbaikan';
 					$text = 'text-warning';
 					break;
+				case '6':
+					$status = 'Atribut Lengkap';
+					$text = 'text-warning';
+					break;
 				default:
 					$status = 'Nonaktif';
 					$text = 'text-gray';

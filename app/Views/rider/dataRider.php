@@ -39,7 +39,7 @@
               <th>Saldo</th>
               <th>Status</th>
               <th>Detail</th>
-              <th>Aksi</th>
+              <!-- <th>Aksi</th> -->
             </tr>
           </thead>
           <tbody>
@@ -90,6 +90,27 @@
        <!-- tab rider pembayaran -->
        <div class="tab-pane fade" id="vpembayaran" role="tabpanel" aria-labelledby="tab-nonaktif">
         <table id="riderpembayaran" class="table table-bordered table-hover table-striped w-100">
+          <thead class="align-middle text-center">
+            <tr>
+              <th>No</th>
+              <th>No.Ktp</th>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>No. Hp</th>
+              <th>Email</th>
+              <th>Saldo</th>
+              <th>Status</th>
+              <th>Detail</th>
+              <!-- <th>Aksi</th> -->
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+       <!-- tab rider pembayaran -->
+       <div class="tab-pane fade" id="vatribut" role="tabpanel" aria-labelledby="tab-nonaktif">
+        <table id="attr" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
               <th>No</th>
@@ -163,7 +184,7 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/rider/getRider/baru`,
+        "url": `<?= base_url() ?>/rider/getRider/registrasi`,
         "type": "POST",
         'data': {}
       },
@@ -185,6 +206,66 @@
       order: [],
       "ajax": {
         "url": `<?= base_url() ?>/rider/getRider/aktif`,
+        "type": "POST",
+        'data': {}
+      },
+      "columnDefs": [{
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
+    });
+    $('#riderdata').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
+      "ajax": {
+        "url": `<?= base_url() ?>/rider/getRider/validasid`,
+        "type": "POST",
+        'data': {}
+      },
+      "columnDefs": [{
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
+    });
+    $('#riderpembayaran').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
+      "ajax": {
+        "url": `<?= base_url() ?>/rider/getRider/validasip`,
+        "type": "POST",
+        'data': {}
+      },
+      "columnDefs": [{
+          "targets": [0, 1, 4, 5, 7, 8],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
+    });
+    $('#attr').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
+      "ajax": {
+        "url": `<?= base_url() ?>/rider/getRider/vattr`,
         "type": "POST",
         'data': {}
       },

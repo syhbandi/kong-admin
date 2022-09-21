@@ -3,11 +3,12 @@
 <div class="card">
   <div class="card-header d-flex align-items-center">
     <h3 class="card-title">Data Lengkap Rider (<?= $rider['Nama Rider'] ?>)</h3>
-    <div class="ml-auto <?= $status == 3 ? 'd-none' : '' ?>">
+    <div class="ml-auto">
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
-      <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
+      <button class="btn btn-danger Banned"><i class="fas fa-check-circle mr-1"></i> Banned</button>
+      <button class="btn btn-warning <?= $status == 3 ? 'd-none' : '' ?> perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
       <button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button>                                                                                                                                                                                                                    
-      <button class="btn btn-primary verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
+      <button class="btn btn-primary <?= $status == 3 ? 'd-none' : '' ?> verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
     </div>
   </div>
   <div class="card-body">
