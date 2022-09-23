@@ -5,10 +5,13 @@
     <h3 class="card-title">Data Lengkap Rider (<?= $rider['Nama Rider'] ?>)</h3>
     <div class="ml-auto">
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
-      <button class="btn btn-danger Banned"><i class="fas fa-check-circle mr-1"></i> Banned</button>
+      <button class="btn btn-danger verifikasi" id="verivikasi" data-status="99"><i class="fas fa-check-circle mr-1"></i> Banned</button>
       <button class="btn btn-warning <?= $status == 3 ? 'd-none' : '' ?> perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
       <button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button>                                                                                                                                                                                                                    
-      <button class="btn btn-primary <?= $status == 3 ? 'd-none' : '' ?> verifikasi"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
+      <button class="btn btn-primary <?= $status == 3 || $status == 0 || $status == 4 || $status == 6 ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="0"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
+      <button class="btn btn-warning <?= $status == 3 || $status == -1 || $status == 4 || $status == 6 ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="4"><i class="fas fa-check-circle mr-1"></i> Verifikasi Data</button>
+      <button class="btn btn-success <?= $status == 3 || $status == -1 || $status == 0 || $status == 6  ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="6"><i class="fas fa-check-circle mr-1"></i> Verifikasi Pembayaran</button>
+      <button class="btn btn-dark <?= $status == 3 || $status == -1 || $status == 0 || $status == 4 ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="3"><i class="fas fa-check-circle mr-1"></i> Verifikasi Atribut</button>
     </div>
   </div>
   <div class="card-body">
@@ -72,9 +75,9 @@
       $('#modalImageLabel').text($(this).data('title'));
     })
 
-    $('.verifikasi').on('click', () => {
-      console.log('<?= $kd_driver ?>')
-      Swal.fire({
+  $('.verifikasi').on('click',function(){
+    let data_status=$(this).attr('data-status')
+    Swal.fire({
         title: 'Verifikasi Rider?',
         text: "Pastikan sudah cek kelengkapan Rider",
         icon: 'warning',
@@ -89,7 +92,8 @@
             url: '<?= base_url('rider/verifikasi') ?>',
             type: 'POST',
             data: {
-              kd_driver: '<?= $kd_driver ?>'
+              kd_driver: '<?= $kd_driver ?>',
+              status : data_status
             },
             dataType: 'json',
             // contentType: false,
@@ -111,8 +115,7 @@
           })
         }
       })
-    })
-
+  });
     $('.perbaikan').on('click', () => {
       $('#modalPerbaikan').modal('show');
     })

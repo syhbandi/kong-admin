@@ -169,16 +169,27 @@ class Rider extends BaseController
 	public function verifikasi()
 	{
 		$kd_driver = $this->request->getPost('kd_driver'); // ambil kode driver dari request 
+		$status = $this->request->getpost('status');
 		$setLocation = $this->riderModel->db->query("UPDATE m_driver_location_log SET driver_state=1 WHERE kd_driver='$kd_driver'"); // update driver location log
-		$setStatus = $this->riderModel->update($kd_driver, ['status' => '3']); // update status rider menjadi 3 (aktif)
+		$setStatus = $this->riderModel->update($kd_driver, ['status' => $status]); // update status rider menjadi 3 (aktif)
 		if ($setStatus && $setLocation) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $kd_driver . ' telah diverifikasi'); // tampilkan toast ke aplikasi
 			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan,tanggal,aktivitas,pesan)
 			SELECT kd_kendaraan,NOW(),'Verifikasi Kendaraan Rider','sukses'
 			FROM m_driver_kendaraan 
 			WHERE kd_driver='$kd_driver' AND status=2"); 
-			$status_n = -1;
-			$this->sendNotifToRider($kd_driver, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.', $status_n); //kirim notif ke rider
+			$status_n = $status;
+			if ($status_n == 0) {
+				$this->sendNotifToRider($kd_driver, 'Selamat, Anda telah terdaftar. mohon menunggu untuk teswawancara', $status_n); //kirim notif ke rider
+			}
+			elseif ($status_n == 4) {
+				$this->sendNotifToRider($kd_driver, 'Selamat, Data diri anada telah di validasi. Silahkan untuk melakukan pembayaran atribut', $status_n); //kirim notif ke rider
+			}
+			elseif ($status_n == 6) {
+				$this->sendNotifToRider($kd_driver, 'Selamat, Pembayaran Anda Telah diterima. Nomor resi anda akan dikirim oleh admin.', $status_n);
+			}elseif ($status_n == 3) {
+				$this->sendNotifToRider($kd_driver, 'Selamat, Anda Sudah Bisa Bekerja. Silahkan Loug Out Aplikasi dan Login Kembali untuk melanjutkan aktivitas anda.', $status_n);
+			}
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('rider'),
