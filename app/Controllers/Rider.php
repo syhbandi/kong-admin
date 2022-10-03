@@ -232,9 +232,7 @@ class Rider extends BaseController
 	// Fitur verifikasi top up rider
 	// ==========================================================================================================================================
 	public function tolak()
-	{
-
-	}
+	{}	
 	public function topUp()
 	{
 		// dd($this->topUpModel->getData('', '', '', '2')->getResult());
