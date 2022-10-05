@@ -318,7 +318,7 @@ class Rider extends BaseController
 
 
 		$pesan = $data['status'] == 1 ? 'Top Up sudah diverifikasi, selamat bekerja!' : 'Top Up ditolak dengan pesan: ' . $data['pesan'];
-
+		$jenis = $data['status'] == 1 ? 3 : 2;
 		$approved = $this->topUpModel->update($data['no_transaksi'], ['approveat' => date('Y-m-d H:i:s'), 'status' => $data['status'], 'kd_admin' => '1']);
 		if ($approved) {
 
@@ -333,7 +333,7 @@ class Rider extends BaseController
 
 					if ($updateSaldo) {
 						$this->session->setFlashdata('sukses', 'Top Up diverifikasi'); // tampilkan toast ke aplikasi
-						$this->sendNotifToRider($data['id'], $pesan, 3); //kirim notif ke rider
+						$this->sendNotifToRider($data['id'], $pesan, 3, $jenis); //kirim notif ke rider
 						return json_encode([
 							'success' => true,
 							'redirect' => base_url('rider/top-up'),
@@ -356,7 +356,7 @@ class Rider extends BaseController
 
 			// jika topup ditolak
 			$this->session->setFlashdata('sukses', 'Top Up ditolak'); // tampilkan toast ke aplikasi
-			$this->sendNotifToRider($data['id'], $pesan, 2); //kirim notif ke rider
+			$this->sendNotifToRider($data['id'], $pesan, 2, $jenis); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
 				'redirect' => base_url('rider/top-up'),
