@@ -11,13 +11,13 @@
         <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#aktif" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-power-off mr-1 text-success"></i> Aktif</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-vdata" data-toggle="pill" href="#vdata" role="tab" aria-controls="vdata" aria-selected="false"><i class="fas fa-power-off mr-1 text-warning"></i> Verivikasi Data</a>
+        <a class="nav-link text-dark" id="tab-vdata" data-toggle="pill" href="#vdata" role="tab" aria-controls="vdata" aria-selected="false"><i class="fas fa-power-off mr-1 text-warning"></i> Verifikasi Data</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-vpembayaran" data-toggle="pill" href="#vpembayaran" role="tab" aria-controls="vpembayaran" aria-selected="false"><i class="fas fa-money-bill mr-1 text-success"></i> Verivikasi Pembayaran</a>
+        <a class="nav-link text-dark" id="tab-vpembayaran" data-toggle="pill" href="#vpembayaran" role="tab" aria-controls="vpembayaran" aria-selected="false"><i class="fas fa-money-bill mr-1 text-success"></i> Verifikasi Pembayaran</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-vatribut" data-toggle="pill" href="#vatribut" role="tab" aria-controls="vatribut" aria-selected="false"><i class="fas fa-power-off mr-1 text-info"></i> Verivikasi Atribut</a>
+        <a class="nav-link text-dark" id="tab-vatribut" data-toggle="pill" href="#vatribut" role="tab" aria-controls="vatribut" aria-selected="false"><i class="fas fa-power-off mr-1 text-info"></i> Verifikasi Atribut</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-dark" id="tab-banned" data-toggle="pill" href="#banned" role="tab" aria-controls="banned" aria-selected="false"><i class="fas fa-ban mr-1 text-danger"></i> Banned</a>

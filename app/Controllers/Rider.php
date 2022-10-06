@@ -180,13 +180,13 @@ class Rider extends BaseController
 			WHERE kd_driver='$kd_driver' AND status=2"); 
 			$status_n = $status;
 			if ($status_n == 0) {
-				$this->sendNotifToRider($kd_driver, 'Selamat, Anda telah terdaftar. mohon menunggu untuk teswawancara', $status_n); //kirim notif ke rider
+				$this->sendNotifToRider($kd_driver, 'Selamat! Anda telah berhasil melakukan pendaftaran menjadi Mitra Driver MisterKong. Mohon menunggu untuk validasi berkas, data diri, dan jadwal interview online.', $status_n); //kirim notif ke rider
 			}
 			elseif ($status_n == 4) {
-				$this->sendNotifToRider($kd_driver, 'Selamat, Data diri anada telah di validasi. Silahkan untuk melakukan pembayaran atribut', $status_n); //kirim notif ke rider
+				$this->sendNotifToRider($kd_driver, 'Selamat! Berkas Anda telah di verifikasi dan Anda LOLOS interview online. Silahkan untuk melanjutkan ke pembelian atribut driver.', $status_n); //kirim notif ke rider
 			}
 			elseif ($status_n == 6) {
-				$this->sendNotifToRider($kd_driver, 'Selamat, Pembayaran Anda Telah diterima. Nomor resi anda akan dikirim oleh admin.', $status_n);
+				$this->sendNotifToRider($kd_driver, 'Pembayaran atribut Anda telah diterima. Nomor resi pengiriman atribut akan dikirimkan oleh admin.', $status_n);
 			}elseif ($status_n == 3) {
 				$this->sendNotifToRider($kd_driver, 'Selamat, Anda Sudah Bisa Bekerja. Silahkan Loug Out Aplikasi dan Login Kembali untuk melanjutkan aktivitas anda.', $status_n);
 			}
