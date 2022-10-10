@@ -208,13 +208,14 @@ class Rider extends BaseController
 		$kd_driver = $this->request->getPost('kd_driver');
 		$pesan = $this->request->getPost('pesan'); //pesan perbaikan
 		$updateStatus = $this->riderModel->update($kd_driver, ['status' => '2']);
-
+		$jenis = 8;
 		if ($updateStatus) {
 			$this->session->setFlashdata('sukses', 'Rider dengan id ' . $kd_driver . ' telah dikirimi pengajuan perbaikan data'); // tampilkan toast ke aplikasi
 			$this->sendNotifToRider(
 				$kd_driver,
 				$pesan,
-				8
+				2,
+				$jenis
 			); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
