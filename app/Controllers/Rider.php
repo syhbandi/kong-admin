@@ -214,8 +214,8 @@ class Rider extends BaseController
 			$this->sendNotifToRider(
 				$kd_driver,
 				$pesan,
-				2,
-				$jenis
+				$jenis,
+				2
 			); //kirim notif ke rider
 			return json_encode([
 				'success' => true,
