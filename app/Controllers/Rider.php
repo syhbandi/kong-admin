@@ -74,7 +74,7 @@ class Rider extends BaseController
 					$text = 'text-success';
 					break;
 				case '5':
-					$status = 'Perbaikan';
+					$status = 'Sudah Perbaikan';
 					$text = 'text-warning';
 					break;
 				case '6':
