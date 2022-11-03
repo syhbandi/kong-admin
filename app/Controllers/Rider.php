@@ -136,7 +136,7 @@ class Rider extends BaseController
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
 			'Nama Rider' => $rider['nama_depan'],
-			'Tgl. Lahir' => substr($rider["no_ktp"], 6, 2) . '-' . substr($rider["no_ktp"], 8, 2) . '-' . (date('y') - intval($tahun_lahir) <= 0 ? '19' . $tahun_lahir : '20' . $tahun_lahir),
+			'Tgl. Lahir' => substr($rider["no_ktp"], 6, 2) . '' . substr($rider["no_ktp"], 8, 2) . '' . (date('y') - intval($tahun_lahir) <= 0 ? '19' . $tahun_lahir : '20' . $tahun_lahir),
 			'Jenis Kelamin' => intval(substr($rider['no_ktp'], 6, 2)) > 40 ? 'Perempuan' : 'Laki-laki',
 			'Alamat' => $rider['alamat_tinggal'],
 			'No. Hp' => $rider['hp1'] . ' - ' . $rider['hp2'],
