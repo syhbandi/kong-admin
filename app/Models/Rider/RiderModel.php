@@ -38,14 +38,16 @@ class RiderModel extends Model
 			$builder->orLike($key);
 		}
 
-		$builder->select("a.kd_driver,a.nama_depan,a.alamat_tinggal,a.hp1,a.hp2,a.email,a.no_ktp,a.kd_zona,a.status,c.merk_nama,d.model_nama, b.nomor_plat,b.tahun_pembuatan,b.STNK_expired,b.kd_kendaraan,e.deskripsi, f.saldo, g.bukti_bayar");
+		$builder->select("a.kd_driver,a.nama_depan,a.alamat_tinggal,a.hp1,a.hp2,
+		a.email,a.no_ktp,a.kd_zona,a.status,c.merk_nama,d.model_nama, 
+		b.nomor_plat,b.tahun_pembuatan,b.STNK_expired,b.kd_kendaraan,
+		e.deskripsi, f.saldo, GROUP_CONCAT(g.bukti_bayar ORDER BY g.tanggal DESC LIMIT 1) AS bukti_bayar");
 		$builder->join("m_driver_kendaraan b", "a.kd_driver = b.kd_driver", "INNER");
 		$builder->join("m_merk_kendaraan AS c", "c.merk_id = b.kd_merk", "INNER");
 		$builder->join("m_model_kendaraan AS d", "d.model_id = b.kd_model", "INNER");
 		$builder->join("m_driver_zona AS e", "d.model_id = b.kd_model", "INNER");
 		$builder->join("m_saldo_driver f", "a.kd_driver = f.kd_driver", 'LEFT');
-		$builder->join(" t_penjualan_attr g", "a.kd_driver = g.driver_id", "INNER");
-
+		$builder->join("t_penjualan_attr g", "a.kd_driver = g.driver_id", "INNER");
 		if ($kd_driver != null) {
 			$builder->where('a.kd_driver', $kd_driver);
 		}
@@ -83,7 +85,7 @@ class RiderModel extends Model
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
 		}
-
+		// echo $sql = $builder->getCompiledSelect();
 		return $builder->get();
 	}
 
