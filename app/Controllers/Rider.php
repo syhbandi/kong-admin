@@ -127,7 +127,8 @@ class Rider extends BaseController
 		$foto_depan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_kanan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_belakang = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg' : base_url() . '/assets/file-not-found.png';
-		$bukti_attr = file_exists(FCPATH . '/../kajek/images/topup/' . $rider['bukti_bayar'] . 'bukti_bayar.jpg') ? base_url() . '/../kajek/images/topup/' . $rider['bukti_bayar'] . 'bukti_bayar' : base_url() . '/assets/file-not-found.png'; 
+		$bukti_attr = file_exists(FCPATH . '/../kajek/images/topup/' . $rider['bukti_bayar'] ) ? base_url() . '/../kajek/images/topup/' . $rider['bukti_bayar'] : base_url() . '/assets/file-not-found.png'; 
+		$profile = file_exists(FCPATH. '/../kajek/images/avatar/' . $rider['avatar_path']) ? base_url() . '/../kajek/images/avatar' .$rider['avatar_path'] : base_url() . '/assets/file-not-found.png';
 	foreach ($sim as $key => $value) {
 		$foto_sim = file_exists(FCPATH . '/../kajek/images/sim/' . $value->sim_path . '') ? base_url() . '/../kajek/images/sim/' .$value->sim_path . '' : base_url() . '/assets/file-not-found.png';
 		$data_sim[] = '<img class="img-thumbnail btn-dok" src="'.$foto_sim.'" data-title="Foto SIM" />';
@@ -145,6 +146,7 @@ class Rider extends BaseController
 			'Merk Kendaraan' => $rider['merk_nama'],
 			'Model' => $rider['model_nama'],
 			'Plat Nomor' => $rider['nomor_plat'],
+			'bukti bayar' => $rider['bukti_bayar'],
 			'Tahun Pembuatan' => $rider['tahun_pembuatan'],
 			'Tgl Kadaluarsa STNK' => date('d/m/Y', strtotime($rider['STNK_expired'])),
 			'Dokumen Data Diri' =>
@@ -161,6 +163,8 @@ class Rider extends BaseController
 					<img class="img-thumbnail btn-dok" src="' . $foto_kanan . '" data-title="Foto tampak kanan" />
 					<img class="img-thumbnail btn-dok" src="' . $foto_belakang . '" data-title="Foto tampak belakang" />
 			',
+			'Profile Rider'	 => 
+			'<img class="img-thumbnail btn-dok" src="' . $profile . '" data-title="Bukti Pembayaran Atribut" />',
 			'Bukti Pembayaran Atribut' =>
 			'
 				<img class="img-thumbnail btn-dok" src="' . $bukti_attr . '" data-title="Bukti Pembayaran Atribut" />
