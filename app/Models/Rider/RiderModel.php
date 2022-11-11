@@ -40,7 +40,7 @@ class RiderModel extends Model
 
 		$builder->select("a.kd_driver,a.nama_depan,a.alamat_tinggal,a.hp1,a.hp2,
 		a.email,a.no_ktp,a.kd_zona,a.status,c.merk_nama,d.model_nama, 
-		b.nomor_plat,b.tahun_pembuatan,b.STNK_expired,b.kd_kendaraan,
+		b.nomor_plat,b.tahun_pembuatan,b.STNK_expired,b.kd_kendaraan, g.tanggal, i.nama AS nama_attr, h.harga_jual, j.nama as ukuran,
 		e.deskripsi, f.saldo, a.avatar_path, GROUP_CONCAT(g.bukti_bayar ORDER BY g.tanggal DESC LIMIT 1) AS bukti_bayar");
 		$builder->join("m_driver_kendaraan b", "a.kd_driver = b.kd_driver", "INNER");
 		$builder->join("m_merk_kendaraan AS c", "c.merk_id = b.kd_merk", "INNER");
@@ -48,6 +48,9 @@ class RiderModel extends Model
 		$builder->join("m_driver_zona AS e", "d.model_id = b.kd_model", "INNER");
 		$builder->join("m_saldo_driver f", "a.kd_driver = f.kd_driver", 'LEFT');
 		$builder->join("t_penjualan_attr g", "a.kd_driver = g.driver_id", "INNER");
+		$builder->join("t_penjualan_attr_detail h", "g.id = h.penjualan_attr_id", "INNER");
+		$builder->join("m_driver_attr i", "h.driver_attr_id = i.id", "INNER");
+		$builder->join("m_satuan_driver_attr j", "h.satuan_driver_attr_id = j.id", "INNER");
 		if ($kd_driver != null) {
 			$builder->where('a.kd_driver', $kd_driver);
 		}
