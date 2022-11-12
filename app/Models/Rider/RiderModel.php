@@ -47,10 +47,10 @@ class RiderModel extends Model
 		$builder->join("m_model_kendaraan AS d", "d.model_id = b.kd_model", "INNER");
 		$builder->join("m_driver_zona AS e", "d.model_id = b.kd_model", "INNER");
 		$builder->join("m_saldo_driver f", "a.kd_driver = f.kd_driver", 'LEFT');
-		$builder->join("t_penjualan_attr g", "a.kd_driver = g.driver_id", "INNER");
-		$builder->join("t_penjualan_attr_detail h", "g.id = h.penjualan_attr_id", "INNER");
+		$builder->join("t_penjualan_attr g", "a.kd_driver = g.driver_id", "LEFT");
+		$builder->join("t_penjualan_attr_detail h", "g.id = h.penjualan_attr_id", "LEFT");
 		$builder->join("m_driver_attr i", "h.driver_attr_id = i.id", "INNER");
-		$builder->join("m_satuan_driver_attr j", "h.satuan_driver_attr_id = j.id", "INNER");
+		$builder->join("m_satuan_driver_attr j", "h.satuan_driver_attr_id = j.id", "LEFT");
 		if ($kd_driver != null) {
 			$builder->where('a.kd_driver', $kd_driver);
 		}
