@@ -49,7 +49,7 @@ class RiderModel extends Model
 		$builder->join("m_saldo_driver f", "a.kd_driver = f.kd_driver", 'LEFT');
 		$builder->join("t_penjualan_attr g", "a.kd_driver = g.driver_id", "LEFT");
 		$builder->join("t_penjualan_attr_detail h", "g.id = h.penjualan_attr_id", "LEFT");
-		$builder->join("m_driver_attr i", "h.driver_attr_id = i.id", "INNER");
+		$builder->join("m_driver_attr i", "h.driver_attr_id = i.id", "LEFT");
 		$builder->join("m_satuan_driver_attr j", "h.satuan_driver_attr_id = j.id", "LEFT");
 		if ($kd_driver != null) {
 			$builder->where('a.kd_driver', $kd_driver);
@@ -172,4 +172,13 @@ class RiderModel extends Model
 		$builder = $this->db->query("SELECT * FROM m_driver_sim WHERE kd_driver = '$kd_driver'");
 		return $builder->getResult();
 	}
+
+	public function get_att_rider($kd_rider = null)
+    {
+        $query = $this->db->query("SELECT a.id,a.tanggal, (b.qty + b.harga_jual) AS total, a.bukti_bayar FROM t_penjualan_attr a
+        INNER JOIN t_penjualan_attr_detail b ON a.id = b.penjualan_attr_id
+        WHERE a.driver_id = $kd_rider AND tanggal IN (SELECT MAX(tanggal) FROM t_penjualan_attr)");
+
+        return $query;
+    }
 }
