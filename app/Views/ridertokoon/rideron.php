@@ -29,6 +29,7 @@
               <th>Terakhir Online</th>
               <th>Status</th>
               <th>Jumlah Transaksi</th>
+              <th>Chat Rider</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +48,7 @@
               <th>Terakhir Online</th>
               <th>Status</th>
               <th>Jumlah Transaksi</th>
+              <th>Chat Rider</th>
             </tr>
           </thead>
           <tbody>
@@ -64,7 +66,7 @@
               <th>Terakhir Online</th>
               <th>Status</th>
               <th>Jumlah Transaksi</th>
-              <!-- <th>Aksi</th> -->
+              <th>Chat Rider</th>
             </tr>
           </thead>
           <tbody>
@@ -89,7 +91,7 @@
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 1, 4, 5, 6],
+          "targets": [0, 1, 4, 5, 6, 7],
           "className": "text-center",
         },
         {
@@ -110,7 +112,7 @@
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 1, 4, 5, 6],
+          "targets": [0, 1, 4, 5, 6, 7],
           "className": "text-center",
         },
         {
@@ -130,7 +132,7 @@
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 1, 4, 5, 6],
+          "targets": [0, 1, 4, 5, 6, 7],
           "className": "text-center",
         },
         {
