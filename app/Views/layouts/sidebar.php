@@ -132,7 +132,7 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="<?= base_url('atribut') ?>" class="nav-link <?= service('uri')->getPath() == 'atribut' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-tasks"></i>
+                <i class="nav-icon fas fa-tasks"></i>
                 <p>Data atribut</p>
               </a>
             </li>
@@ -197,6 +197,31 @@
               <a href="<?= base_url('kontrak') ?>" class="nav-link <?= service('uri')->getPath() == 'kontrak' ? 'active' : '' ?>">
                 <i class="nav-icon fas fa-dollar-sign"></i>
                 <p>Validasi Pembayaran</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <?= service('uri')->getSegment(1) == 'cek_rider' ? 'menu-open' : '' ?>">
+          <a href="#" class="nav-link <?= service('uri')->getSegment(1) == 'cek_rider' ? 'active' : '' ?>">
+            <i class="nav-icon fas fa-chart-line"></i>
+            <p>
+              Analisis
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('cek_rider  ') ?>" class="nav-link <?= service('uri')->getPath() == 'cek_rider' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-user-shield"></i>
+                <p>Analisis Rider</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('cek_toko') ?>" class="nav-link <?= service('uri')->getPath() == 'cek_toko' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-store-alt-slash"></i>
+                <p>Analisis Toko</p>
               </a>
             </li>
           </ul>
