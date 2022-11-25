@@ -56,7 +56,7 @@ class Ridertokoon extends BaseController
                 $value->terakhir_online,
                 '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
                 '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
-                '<button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button>'
+                '<a href="https://wa.me/'.$value->hp2.'?text=Selmat%20pagi/siang/sore,%20hei%20mitra%20kong%20kamu%20jarang%20aktif%20nih%20ada%20banyak%20transaksi%20menunggumu"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
             ];
             $no++;
         }
