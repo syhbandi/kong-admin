@@ -37,11 +37,10 @@ class Ridertoko extends Model
 		}
 
 		$builder->select("a.nama_depan, a.alamat_tinggal, a.hp2, case when ISNULL(b.jml_transaksi) then 0 ELSE b.jml_transaksi 
-		END AS jml_transaksi_rider, c.terakhir_online, c.driver_state");
+		END AS jml_transaksi_rider, c.date_modif, c.driver_state");
 		$builder->join("(SELECT id_driver, COUNT(no_resi) AS jml_transaksi 
 		FROM t_pengiriman GROUP BY id_driver) AS b", "a.kd_driver = b.id_driver", "LEFT");
-		$builder->join("(SELECT driver_state, kd_driver, DATE_ADD(NOW(), INTERVAL -5 DAY) AS terakhir_online FROM m_driver_location_log GROUP BY kd_driver)
-		AS c", "a.kd_driver = c.kd_driver", "LEFT")->where('a.status', 3)->orderBy('a.kd_driver');
+		$builder->join("m_driver_location_log c", "a.kd_driver = c.kd_driver", "LEFT")->where('a.status', 3)->orderBy('a.kd_driver');
 
 		// if ($kd_driver != null) {
 		// 	$builder->where('a.kd_driver', $kd_driver);

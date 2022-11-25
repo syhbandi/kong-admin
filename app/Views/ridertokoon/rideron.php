@@ -27,7 +27,6 @@
               <th>Alamat</th>
               <th>WhatsApp</th>
               <th>Terakhir Online</th>
-              <th>Status</th>
               <th>Jumlah Transaksi</th>
               <th>Chat Rider</th>
             </tr>
@@ -46,7 +45,6 @@
               <th>Alamat</th>
               <th>WhatsApp</th>
               <th>Terakhir Online</th>
-              <th>Status</th>
               <th>Jumlah Transaksi</th>
               <th>Chat Rider</th>
             </tr>
@@ -64,7 +62,6 @@
               <th>Alamat</th>
               <th>WhatsApp</th>
               <th>Terakhir Online</th>
-              <th>Status</th>
               <th>Jumlah Transaksi</th>
               <th>Chat Rider</th>
             </tr>
@@ -91,7 +88,7 @@
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 1, 4, 5, 6, 7],
+          "targets": [0, 1, 4, 5, 6],
           "className": "text-center",
         },
         {
@@ -112,7 +109,7 @@
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 1, 4, 5, 6, 7],
+          "targets": [0, 1, 4, 5, 6],
           "className": "text-center",
         },
         {
@@ -132,7 +129,7 @@
         'data': {}
       },
       "columnDefs": [{
-          "targets": [0, 1, 4, 5, 6, 7],
+          "targets": [0, 1, 4, 5, 6],
           "className": "text-center",
         },
         {
