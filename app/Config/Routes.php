@@ -70,7 +70,9 @@ $routes->add('transaksi', 'Alltransaksi::index');
 $routes->add('bank', 'BankController::index');
 //atribut
 $routes->add('atribut', 'AtributController::index');
-
+$routes->add('atribut/transaksi', 'AtributController::transaksi');
+// analisis toko dan rider
+$routes->add('cek_rider', 'Ridertokoon::index');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
