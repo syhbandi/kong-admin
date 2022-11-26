@@ -7,7 +7,11 @@
       <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <button class="btn btn-danger verifikasi" id="verivikasi" data-status="99"><i class="fas fa-check-circle mr-1"></i> Banned</button>
       <button class="btn btn-warning <?= $status == 3 ? 'd-none' : '' ?> perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button>
-      <button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button>                                                                                                                                                                                                                    
+      <a class="<?= $status == 0 ? 'd-none' : ''?>" href="https://wa.me/62<?= substr($rider['No. WhatsApp'], 1) ?>?text=Hallo%20selamat%20pagi/siang/sore.%20Saya%20Asty%20dari%20MisterKong.%20Mengenai%20administrasi%20Anda,%20ada%20beberapa%20dokumen%20yang%20masih%20salah,%20mohon%20untuk%20perbaiki%20data%20berikut:%20-Foto%20KTP%20-SKCK%20Terima%20kasih"><button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button></a>    
+      <a class="<?= $status == 3 || $status == 2 || $status == 5 || $status == -1 || $status == 4 || $status == 6 ? 'd-none' : ''?>" href="https://wa.me/62<?= substr($rider['No. WhatsApp'], 1) ?>?text=Hallo%20selamat%20pagi/siang/sore.%20Selamat%Anda%20telah%20lulus%20administrasi%20pendataran%20mitra%20rider%20MisterKong.%20Untuk%20tahap%20selanjutnya%20proses%20interview%20melalui%20video%20call%20WA.%20Kami%20akan%20jadwalkan%20waktu%20interview%20Anda%20dengan%20waktu%20sebagai%20berikut:%20
+            Hari/Tanggal:%20<?= date('Y-m-d') ?>%20
+            Jam:%20<?= date("h:i:sa") ?>%20
+            Jika%20Anda%20tidak%20ada%20waktu%20di%20tanggal%20dan%20jam%20tersebut,%20bisa%20mengajukan%20perubahan.%20Terima%20kasih"><button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button></a>                                                                                                                                                                                                                                                                                                                                                                                                                                  
       <button class="btn btn-primary <?= $status == 3 || $status == 0 || $status == 4 || $status == 6 ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="0"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
       <button class="btn btn-warning <?= $status == 3 || $status == -1 || $status == 4 || $status == 6 ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="4"><i class="fas fa-check-circle mr-1"></i> Verifikasi Data</button>
       <button class="btn btn-success <?= $status == 3 || $status == -1 || $status == 0 || $status == 6  ? 'd-none' : '' ?> verifikasi" id="verivikasi" data-status="6"><i class="fas fa-check-circle mr-1"></i> Verifikasi Pembayaran</button>
@@ -93,7 +97,7 @@
             type: 'POST',
             data: {
               kd_driver: '<?= $kd_driver ?>',
-              status : data_status
+              status : data_status,
             },
             dataType: 'json',
             // contentType: false,
