@@ -68,4 +68,50 @@ class Ridertoko extends Model
 		// echo $sql = $builder->getCompiledSelect();
 		return $builder->get();
 	}
+	public function getToko($cari = null, $start = null, $limit = null, $jenis = null)
+    {
+        $key = [
+            "a.nama_usaha" => $cari,
+            "a.kategori_usaha" => $cari,
+            "a.alamat" => $cari,
+            "a.email_usaha" => $cari,
+            "a.no_telepon" => $cari,
+            "a.date_add" => $cari,
+            "a.no_rek" => $cari,
+        ];
+
+        $builder = $this->db->table("m_user_company a");
+
+        if ($cari != null) {
+            $builder->like("a.company_id", $cari);
+            $builder->orLike($key);
+        }
+
+        $builder->select("a.company_id, a.nama_usaha, a.alamat, a.no_telepon,a.status,a.date_modif,
+		case
+		when 
+		ISNULL(b.transaksi) then 0 ELSE b.transaksi
+		END AS jml_transaksi");
+        $builder->join("(SELECT COUNT(no_transaksi) AS transaksi, user_id_toko FROM t_penjualan WHERE status_barang = 1 GROUP BY user_id_toko) b", "a.id = b.user_id_toko", "LEFT");
+
+        switch ($jenis) {
+            case 'aktif':
+                $builder->where("a.`status`", 1)->where("b.transaksi IS NOT NULL");;
+                break;
+            case 'offline':
+                $builder->where("a.`status`", 0);
+                break;
+            case 'transaksi':
+                $builder->where("b.transaksi", Null)->where('a.`status`', 1);
+                break;
+            default:
+                break;
+        }
+
+        if ($start != null && $limit != null) {
+            $builder->limit($limit, $start);
+        }
+        // echo $sql = $builder->getCompiledSelect();
+        return $builder->get();
+    }
 }

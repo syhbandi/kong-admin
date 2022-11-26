@@ -20,6 +20,11 @@ class Ridertokoon extends BaseController
         return view('ridertokoon/rideron');
     }
 
+    public function toko()
+    {
+        return view('ridertokoon/tokoon');
+    }
+
     public function getRider($jenis = null)
     {
         $search = $this->request->getPost('search')['value'];
@@ -40,9 +45,9 @@ class Ridertokoon extends BaseController
             } else {
                 if (date('Y-m-d', strtotime($value->date_modif)) == date('Y-m-d')) {
                     $tanggal = date_diff(date_create($value->date_modif), date_create());
-                    $online = '' . $tanggal->h . ' jam, '. $tanggal->i .' menit yang lalu';
+                    $online = '' . $tanggal->h . ' jam, ' . $tanggal->i . ' menit yang lalu';
                     $text = 'text-danger';
-                }else  {
+                } else {
                     $tanggal = (new DateTime($value->date_modif))->diff(new DateTime(date('Y-m-d')))->days + 1;
                     $online = '' . $tanggal . ' hari yang lalu';
                     $text = 'text-danger';
@@ -63,6 +68,60 @@ class Ridertokoon extends BaseController
                 '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
                 '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
                 '<a href="https://wa.me/' . $value->hp2 . '?text=Selmat%20pagi/siang/sore,%20hei%20mitra%20kong%20kamu%20jarang%20aktif%20nih%20ada%20banyak%20transaksi%20menunggumu"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
+            ];
+            $no++;
+        }
+
+        return \json_encode([
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $totalCount,
+            "recordsFiltered" => $totalCount,
+            "data" => $data,
+        ]);
+    }
+    public function getToko($jenis = null)
+    {
+        $search = $this->request->getPost('search')['value'];
+        $order = !empty($this->request->getPost('order')) ? $this->request->getPost('order') : '';
+        $start = $this->request->getPost('start');
+        $limit = $this->request->getPost('length');
+
+        $result = $this->ridertokoModel->getToko($search, $start, $limit, $jenis)->getResult();
+        $totalCount = count($this->ridertokoModel->getToko($search, '', '', $jenis)->getResultArray());
+
+        $no = $start + 1;
+        $data = [];
+        foreach ($result as $key => $value) {
+            if ($value->status == 1) {
+                $online = 'Online';
+                $text = 'text-success';
+            } else {
+                if (date('Y-m-d', strtotime($value->date_modif)) == date('Y-m-d')) {
+                    $tanggal = date_diff(date_create($value->date_modif), date_create());
+                    $online = '' . $tanggal->h . ' jam, ' . $tanggal->i . ' menit yang lalu';
+                    $text = 'text-danger';
+                } else {
+                    $tanggal = (new DateTime($value->date_modif))->diff(new DateTime(date('Y-m-d')))->days + 1;
+                    $online = '' . $tanggal . ' hari yang lalu';
+                    $text = 'text-danger';
+                }
+            }
+            if ($value->jml_transaksi == 0) {
+                $transaksi = 'belum ada transaksi';
+                $warna = 'text-warning';
+            } else {
+                $transaksi = $value->jml_transaksi;
+                $warna = 'text-dark';
+            }
+            $data[$key] = [
+                $no,
+                $value->company_id,
+                $value->nama_usaha,
+                $value->alamat,
+                $value->no_telepon,
+                '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
+                '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
+                '<a href="https://wa.me/' . $value->no_telepon . '?text=Selmat%20pagi/siang/sore,%20hei%20mitra%20kong%20kamu%20jarang%20aktif%20nih%20ada%20banyak%20transaksi%20menunggumu"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
             ];
             $no++;
         }
