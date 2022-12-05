@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\PencairanModel;
 use App\Models\Rider\RiderModel;
 use App\Models\Rider\TopUpModel;
+use App\Models\Atribut\AtributModel;
 
 class Rider extends BaseController
 {
@@ -120,7 +121,7 @@ class Rider extends BaseController
 		// dokumen data diri
 		$foto_ktp = file_exists(FCPATH . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg') ? base_url() . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'ktp.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_skck = file_exists(FCPATH . '/../kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg') ? base_url() . '/../kajek/images/skck/' . $rider['kd_driver'] . 'skck.jpg' : base_url() . '/assets/file-not-found.png';
-
+		$foto_diri_ktp = file_exists(FCPATH . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'diridenganktp.jpg') ? base_url() . '/../kajek/images/ktp/' . $rider['kd_driver'] . 'diridenganktp.jpg' : base_url() . '/assets/file-not-found.png';
 		//dokumen kendaraan
 		$foto_stnk = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'stnk.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'stnk.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_pajak = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'pajak.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'pajak.jpg' : base_url() . '/assets/file-not-found.png';
@@ -141,6 +142,7 @@ class Rider extends BaseController
 			'Jenis Kelamin' => intval(substr($rider['no_ktp'], 6, 2)) > 40 ? 'Perempuan' : 'Laki-laki',
 			'Alamat' => $rider['alamat_tinggal'],
 			'No. Hp' => $rider['hp1'] . ' - ' . $rider['hp2'],
+			'No. WhatsApp' => $rider['hp2'],
 			'Email' => $rider['email'],
 			'Zona' => $rider['deskripsi'],
 			'Merk Kendaraan' => $rider['merk_nama'],
@@ -157,6 +159,7 @@ class Rider extends BaseController
 					<img class="img-thumbnail btn-dok" src="' . $foto_ktp . '" data-title="Foto KTP" />
 					'.implode($data_sim).'
 					<img class="img-thumbnail btn-dok" src="' . $foto_skck . '" data-title="Foto SKCK" />
+					<img class="img-thumbnail btn-dok" src="' . $foto_diri_ktp . '" data-title="Foto Dengan KTP" />
 			',
 			'Dokumen Kendaraan' =>
 			'
@@ -200,6 +203,13 @@ class Rider extends BaseController
 				$this->sendNotifToRider($kd_driver, 'Selamat! Berkas Anda telah di verifikasi dan Anda LOLOS interview online. Silahkan untuk melanjutkan ke pembelian atribut driver.', $status_n); //kirim notif ke rider
 			}
 			elseif ($status_n == 6) {
+				// verifikasi pembayaran untuk atribut driver
+				$data_attr = $this->riderModel->get_att_rider($kd_driver)->getRowArray();
+				// print_r($data_attr);
+				if (!empty($data_attr)) {
+					$insert = $this->riderModel->query("INSERT INTO t_penjualan_attr_ver(penjualan_attr_id, tanggal, nominal, `status`, keterangan, jenis, bukti_bayar, admin_id)
+															VALUES('".$data_attr['id']."', '".$data_attr['tanggal']."', ".$data_attr['total'].", 1, '-', 0, '".$data_attr['bukti_bayar']."', 1)");
+				}
 				$this->sendNotifToRider($kd_driver, 'Pembayaran atribut Anda telah diterima. Nomor resi pengiriman atribut akan dikirimkan oleh admin.', $status_n);
 			}elseif ($status_n == 3) {
 				$this->sendNotifToRider($kd_driver, 'Selamat, Anda Sudah Bisa Bekerja. Silahkan Loug Out Aplikasi dan Login Kembali untuk melanjutkan aktivitas anda.', $status_n);
@@ -241,6 +251,11 @@ class Rider extends BaseController
 			'success' => false,
 			'msg' => 'Gagal melakukan pengajuan perbaikan'
 		]);
+	}
+
+	public function verifikasi_pembayaran()
+	{
+
 	}
 
 	// ==========================================================================================================================================

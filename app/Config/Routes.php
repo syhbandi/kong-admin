@@ -74,6 +74,7 @@ $routes->add('atribut/transaksi', 'AtributController::transaksi');
 // analisis toko dan rider
 $routes->add('cek_rider', 'Ridertokoon::index');
 $routes->add('cek_toko', 'Ridertokoon::toko');
+$routes->add('cek_driver', 'Ridertokoon::driver');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

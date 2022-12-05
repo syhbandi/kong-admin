@@ -5,13 +5,13 @@
   <div class="card-header p-0 border-bottom-0">
     <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#baru" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-biking mr-1 text-success"></i> Aktif Berteransaksi</a>
+        <a class="nav-link text-dark" id="tab-aktif" data-toggle="pill" href="#baru" role="tab" aria-controls="aktif" aria-selected="false"><i class="fas fa-car mr-1 text-success"></i> Aktif Berteransaksi</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-vdata" data-toggle="pill" href="#aktif" role="tab" aria-controls="vdata" aria-selected="false"><i class="fas fa-biking mr-1 text-warning"></i> Tidak Aktif Berteransaksi</a>
+        <a class="nav-link text-dark" id="tab-vdata" data-toggle="pill" href="#aktif" role="tab" aria-controls="vdata" aria-selected="false"><i class="fas fa-car mr-1 text-warning"></i> Tidak Aktif Berteransaksi</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" id="tab-vatribut" data-toggle="pill" href="#banned" role="tab" aria-controls="vatribut" aria-selected="false"><i class="fas fa-biking mr-1 text-danger"></i> Offline</a>
+        <a class="nav-link text-dark" id="tab-vatribut" data-toggle="pill" href="#banned" role="tab" aria-controls="vatribut" aria-selected="false"><i class="fas fa-car mr-1 text-danger"></i> Offline</a>
       </li>
     </ul>
   </div>
@@ -83,7 +83,7 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/Ridertokoon/getRider/aktif`,
+        "url": `<?= base_url() ?>/Ridertokoon/getDriver/aktif`,
         "type": "POST",
         'data': {}
       },
@@ -104,7 +104,7 @@
       responsive: true,
       order: [],
       "ajax": {
-        "url": `<?= base_url() ?>/Ridertokoon/getRider/transaksi`,
+        "url": `<?= base_url() ?>/Ridertokoon/getDriver/transaksi`,
         "type": "POST",
         'data': {}
       },
@@ -124,7 +124,7 @@
       responsive: true,
       order: [],
       "ajax": {
-        "url": `<?= base_url() ?>/Ridertokoon/getRider/offline`,
+        "url": `<?= base_url() ?>/Ridertokoon/getDriver/offline`,
         "type": "POST",
         'data': {}
       },

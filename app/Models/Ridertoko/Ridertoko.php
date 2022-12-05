@@ -37,10 +37,13 @@ class Ridertoko extends Model
 		}
 
 		$builder->select("a.nama_depan, a.alamat_tinggal, a.hp2, case when ISNULL(b.jml_transaksi) then 0 ELSE b.jml_transaksi 
-		END AS jml_transaksi_rider, c.date_modif, c.driver_state");
+		END AS jml_transaksi_rider, c.date_modif, c.driver_state, e.nama");
 		$builder->join("(SELECT id_driver, COUNT(no_resi) AS jml_transaksi 
 		FROM t_pengiriman GROUP BY id_driver) AS b", "a.kd_driver = b.id_driver", "LEFT");
 		$builder->join("m_driver_location_log c", "a.kd_driver = c.kd_driver", "LEFT")->where('a.status', 3)->orderBy('a.kd_driver');
+		$builder->join("(SELECT kd_jenis_kendaraan, kd_driver FROM m_driver_kendaraan GROUP BY kd_driver) d", "a.kd_driver = d.kd_driver", 'INNER');
+		$builder->join("m_jenis_kendaraan e", "d.kd_jenis_kendaraan = e.id", "INNER");
+		$builder->where('e.id', 1);
 
 		// if ($kd_driver != null) {
 		// 	$builder->where('a.kd_driver', $kd_driver);
@@ -62,6 +65,59 @@ class Ridertoko extends Model
 		// $builder->where("a. != ", '');
 		// $builder->groupBy('a.kd_driver');
 
+		if ($start != null && $limit != null) {
+			$builder->limit($limit, $start);
+		}
+		// echo $sql = $builder->getCompiledSelect();
+		return $builder->get();
+	}
+	public function getDriver($cari = null, $start = null, $limit = null,  $jenis = null)
+	{
+		$key = [
+			"a.nama_depan" => $cari,
+			"a.alamat_tinggal" => $cari,
+			"a.email" => $cari,
+			"a.hp1" => $cari,
+			"a.hp2" => $cari,
+			"a.no_ktp" => $cari,
+			"b.nomor_plat" => $cari,
+			"b.tahun_pembuatan" => $cari,
+		];
+
+		$builder = $this->db->table("m_driver a");
+
+		if ($cari != null) {
+			$builder->like("a.kd_driver", $cari);
+			$builder->orLike($key);
+		}
+
+		$builder->select("a.nama_depan, a.alamat_tinggal, a.hp2, case when ISNULL(b.jml_transaksi) then 0 ELSE b.jml_transaksi 
+		END AS jml_transaksi_rider, c.date_modif, c.driver_state, e.nama");
+		$builder->join("(SELECT id_driver, COUNT(no_resi) AS jml_transaksi 
+		FROM t_pengiriman GROUP BY id_driver) AS b", "a.kd_driver = b.id_driver", "LEFT");
+		$builder->join("m_driver_location_log c", "a.kd_driver = c.kd_driver", "LEFT")->where('a.status', 3)->orderBy('a.kd_driver');
+		$builder->join("(SELECT kd_jenis_kendaraan, kd_driver FROM m_driver_kendaraan GROUP BY kd_driver) d", "a.kd_driver = d.kd_driver", 'INNER');
+		$builder->join("(SELECT nama, id FROM m_jenis_kendaraan WHERE id = 3 OR id = 2) e", "d.kd_jenis_kendaraan = e.id", "INNER");
+
+		// if ($kd_driver != null) {
+		// 	$builder->where('a.kd_driver', $kd_driver);
+		// }
+		switch ($jenis) {
+			case 'aktif':
+				$builder->where("c.driver_state", 1)->where("b.jml_transaksi IS NOT NULL");
+				break;
+			case 'offline':
+				$builder->where("c.driver_state", 0);
+				break;
+			case 'transaksi':
+				$builder->where("b.jml_transaksi", Null)->where("c.driver_state", 1);
+				break;
+			default:
+				break;
+		}
+		// seleksi rider berdasarkan jenis (baru, aktif, nonaktif, banned)
+		// $builder->where("a. != ", '');
+		// $builder->groupBy('a.kd_driver');
 		if ($start != null && $limit != null) {
 			$builder->limit($limit, $start);
 		}

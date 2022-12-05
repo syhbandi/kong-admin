@@ -20,6 +20,8 @@
               <th>No</th>
               <th>Nomor Transaksi</th>
               <th>Jenis Transaksi</th>
+              <th>Bank Tujuan</th>
+              <th>Rekening Tjuan</th>
               <th>Jumlah Item</th>
               <th>Jumlah Pencairan</th>
             </tr>
@@ -30,6 +32,8 @@
               <td><?= $key+1 ?></td>
               <td><?= $value->no_transaksi ?></td>
               <td><?= $value->jenis_transaksi ?></td>
+              <td><?= $value->nama_bank ?></td>
+              <td><?= $value->no_rek?> A/n <?= $value->nama_pemilik_rekening ?></td>
               <td><?= $value->jumlah_item ?></td>
               <td><?= $value->total_transfer ?></td>
             </tr>
@@ -37,7 +41,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="4" style="text-align: right;padding-right: 10px">Total:</th>
+              <th colspan="6" style="text-align: right;padding-right: 10px">Total:</th>
               <th style="text-align: right;"></th>
             </tr>
           </tfoot>
@@ -173,7 +177,7 @@ $(document).ready(function() {
     $('#table-belum-verifikasi').dataTable({
     	"footerCallback": function ( row, data, start, end, display ) {
 					var api = this.api(), data;
-					footer_data_table(api,4,'currency');
+					footer_data_table(api,6,'currency');
 				}
     });
     function currencyFormat(num) {

@@ -212,8 +212,16 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="<?= base_url('cek_rider  ') ?>" class="nav-link <?= service('uri')->getPath() == 'cek_rider' ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-user-shield"></i>
+                <i class="nav-icon fas fa-biking"></i>
                 <p>Analisis Rider</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?= base_url('cek_driver') ?>" class="nav-link <?= service('uri')->getPath() == 'cek_driver' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-car"></i>
+                <p>Analisis Driver</p>
               </a>
             </li>
           </ul>
