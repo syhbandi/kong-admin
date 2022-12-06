@@ -71,7 +71,8 @@ class Ridertokoon extends BaseController
                 $value->hp2,
                 '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
                 '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
-                '<a href="https://wa.me/' . $value->hp2 . '?text=Selmat%20pagi/siang/sore,%20hei%20mitra%20kong%20kamu%20jarang%20aktif%20nih%20ada%20banyak%20transaksi%20menunggumu"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
+                '<a href="https://wa.me/' . $value->hp2 . '?text=Selamat%20pagi/siang/sore/malam.%20Halo%20Kak%20'.$value->nama_depan.',%20kamu%20terlihat%20sudah%20'.$online.'%20hari%20tidak%20online%20nih%20di%20KongRider.
+                Hayuk%20sekarang%20juga%20online%20kan%20aplikasi%20KongRider%20untuk%20mendapatkan%20orderan"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
             ];
             $no++;
         }
@@ -125,7 +126,8 @@ class Ridertokoon extends BaseController
                 $value->hp2,
                 '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
                 '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
-                '<a href="https://wa.me/' . $value->hp2 . '?text=Selmat%20pagi/siang/sore,%20hei%20mitra%20kong%20kamu%20jarang%20aktif%20nih%20ada%20banyak%20transaksi%20menunggumu"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
+                '<a href="https://wa.me/' . $value->hp2 . '?text=Selamat%20pagi/siang/sore/malam.%20Halo%20Kak%20'.$value->nama_depan.',%20kamu%20terlihat%20sudah%20'.$online.'%20hari%20tidak%20online%20nih%20di%20KongRider.
+                Hayuk%20sekarang%20juga%20online%20kan%20aplikasi%20KongRider%20untuk%20mendapatkan%20orderan"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
             ];
             $no++;
         }
@@ -179,7 +181,7 @@ class Ridertokoon extends BaseController
                 $value->no_telepon,
                 '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
                 '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
-                '<a href="https://wa.me/' . $value->no_telepon . '?text=Selmat%20pagi/siang/sore,%20hei%20mitra%20kong%20kamu%20jarang%20aktif%20nih%20ada%20banyak%20transaksi%20menunggumu"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
+                '<a href="https://wa.me/' . $value->no_telepon . '?text=Selamat%20pagi/siang/sore/malam%20halo%20mitra%20POS%20'.$value->nama_usaha.',%20terpantau%20tokomu%20'.$online.'%20ini%20tutup%20terus%20:(%20Yuk%20buka%20tokomu%20kembali%20agar%20omsetmu%20bertambah%20dan%20pelangganmu%20tidak%20sedih"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
             ];
             $no++;
         }
