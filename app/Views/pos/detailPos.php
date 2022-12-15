@@ -9,7 +9,7 @@
       <button class="btn btn-primary verifikasi <?= $status == 1 ? 'd-none' : '' ?>"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
       <button class="btn btn-warning tutup <?= $status == 0 ? 'd-none' : '' ?>"><i class="fas fa-eye-slash mr-1"></i> Tutup</button>
       <button class="btn btn-danger nonaktif <?= $status == -2 ? 'd-none' : '' ?>"><i class="fas fa-times-circle mr-1"></i> Banned</button>
-      <button class="btn btn-info edit <?= $status == 0 ? 'd-none' : '' ?>"><i class="fas fa-edit mr-1"></i> Edit Kategori Toko</button>
+      <button class="btn btn-info edit <?= $status == 0 ? 'd-none' : '' ?>"><i class="fas fa-edit mr-1"></i> Edit Toko</button>
     </div>
   </div>
   <div class="card-body">
