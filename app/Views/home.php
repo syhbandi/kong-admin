@@ -5,14 +5,14 @@
     <!-- small box -->
     <div class="small-box bg-warning">
       <div class="inner">
-        <h3><?= $user['user mp']?> User</h3>
+        <h3><?= $user['user mp'] ?> User</h3>
 
         <p>User MisterKong</p>
       </div>
       <div class="icon">
         <i class="ion ion-person-add"></i>
       </div>
-      <a href="<?= base_url('market')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="<?= base_url('market') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <!-- ./col -->
@@ -20,14 +20,14 @@
     <!-- small box -->
     <div class="small-box bg-success">
       <div class="inner">
-        <h3><?= $user['user pos']?> User</h3>
+        <h3><?= $user['user pos'] ?> User</h3>
 
         <p>User KongPos</p>
       </div>
       <div class="icon">
         <i class="ion ion-bag"></i>
       </div>
-      <a href="<?= base_url('pos')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="<?= base_url('pos') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <!-- ./col -->
@@ -35,14 +35,14 @@
     <!-- small box -->
     <div class="small-box bg-info">
       <div class="inner">
-        <h3><?= $user['user rider']?> User</h3>
+        <h3><?= $user['user rider'] ?> User</h3>
 
         <p>User KongRider</p>
       </div>
       <div class="icon">
         <i class="ion ion-speedometer"></i>
       </div>
-      <a href="<?= base_url('rider')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="<?= base_url('rider') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <!-- ./col -->
@@ -50,21 +50,21 @@
     <!-- small box -->
     <div class="small-box bg-danger">
       <div class="inner">
-        <h3><?= $user['barang']?></h3>
+        <h3><?= $user['barang'] ?></h3>
 
         <p>Jumlah Produk</p>
       </div>
       <div class="icon">
         <i class="ion ion-pie-graph"></i>
       </div>
-      <a href="<?= base_url('pos/barang')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="<?= base_url('pos/barang') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <!-- ./col -->
 </div>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-12">
     <div class="card">
       <div class="card-body">
         <div class="mb-3">
@@ -84,9 +84,13 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEdu-jKgoBzPlCtin84i5W8fUb7dHE0Xs&callback=initMap&libraries=places&v=weekly" async></script>
 <script>
   const position = {
-    lat: <?= $_SESSION['lat'] ?? -8.596052 ?>,
-    lng: <?= $_SESSION['lng'] ?? 116.1057177 ?>
+    lat: -8.5970823,
+    lng: 116.1004891
   }
+
+  const mapIconR = "<?= base_url() ?>/assets/delivery.png"
+  const mapIconD = "<?= base_url() ?>/assets/car.png"
+  const mapIconDB = "<?= base_url() ?>/assets/taxi.png"
 
   function initMap() {
     currentPosition(position)
@@ -100,25 +104,36 @@
       gestureHandling: 'auto',
       mapTypeId: "roadmap",
     })
-    const mapIcon = "<?= base_url() ?>/assets/dest-icon.svg"
-    const marker = new google.maps.Marker({
-      position: position,
-      map,
-      // draggable: true,
-      icon: mapIcon,
-      anchorPoint: position,
-      // animation: google.maps.Animation.DROP,
-    })
+    setInterval(function() {
+      const coords = [
+      <?php foreach ($posisi as $key => $value) : ?>[<?= $value->loc_lat ?? -8.5970823 ?>, <?= $value->loc_lng ?? 116.1004891 ?>, <?= $value->kd_jenis_kendaraan ?>],
+      <?php endforeach; ?>
+    ]
+    coords.forEach((el) => {
+      const posisi = {
+        lat: el[0],
+        lng: el[1]
+      }
+      const picon = el[2];
+      if (picon == 1) {
+        icon = mapIconR
+      } else {
+        if (picon == 2) {
+          icon = mapIconD
+        } else {
+          icon = mapIconDB
+        }
 
-    map.addListener('drag', function() {
-      marker.setPosition(this.getCenter())
-    })
-
-    map.addListener('dragend', function() {
-      currentPosition(this.getCenter())
-    })
-
-    initAutocomplete(map, marker)
+      }
+      console.log(posisi)
+      const marker = new google.maps.Marker({
+        position: posisi,
+        map,
+        icon: icon,
+      })
+    });
+  }, 15000);
+    console.log(coords)
 
   }
 
