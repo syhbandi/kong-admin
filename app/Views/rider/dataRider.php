@@ -28,6 +28,24 @@
     <div class="tab-content" id="custom-tabs-four-tabContent">
       <!-- tab rider baru -->
       <div class="tab-pane fade show active" id="baru" role="tabpanel" aria-labelledby="tab-baru">
+        <form class="pb-3">
+          <fieldset>
+            <div class="row">
+              <div class="col-lg-2">
+                <div class="input-group date" id="datepicker">
+                  <input type="number" class="form-control" id="notif" placeholder="App Version"/>
+                  <span class="input-group-append">
+                    <span class="input-group-text bg-light d-block">
+                      <i class="fa fa-mobile"></i>
+                    </span>
+                </div>
+              </div>
+              <div class="col-sm-1 text-center">
+                <!-- <button id="btnSearch" class="btn btn-primary btn-md center-block" >Submit</button> -->
+                <button type="button" id="notif" class="btn btn-primary btn-md center-block notif">Send Notif</button>
+              </div>
+          </fieldset>
+        </form>
         <table id="riderBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
@@ -67,8 +85,8 @@
           </tbody>
         </table>
       </div>
-       <!-- tab rider data -->
-       <div class="tab-pane fade" id="vdata" role="tabpanel" aria-labelledby="tab-nonaktif">
+      <!-- tab rider data -->
+      <div class="tab-pane fade" id="vdata" role="tabpanel" aria-labelledby="tab-nonaktif">
         <table id="riderdata" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
@@ -88,8 +106,8 @@
           </tbody>
         </table>
       </div>
-       <!-- tab rider pembayaran -->
-       <div class="tab-pane fade" id="vpembayaran" role="tabpanel" aria-labelledby="tab-nonaktif">
+      <!-- tab rider pembayaran -->
+      <div class="tab-pane fade" id="vpembayaran" role="tabpanel" aria-labelledby="tab-nonaktif">
         <table id="riderpembayaran" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
@@ -109,8 +127,8 @@
           </tbody>
         </table>
       </div>
-       <!-- tab rider pembayaran -->
-       <div class="tab-pane fade" id="vatribut" role="tabpanel" aria-labelledby="tab-nonaktif">
+      <!-- tab rider pembayaran -->
+      <div class="tab-pane fade" id="vatribut" role="tabpanel" aria-labelledby="tab-nonaktif">
         <table id="attr" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
@@ -321,6 +339,49 @@
       ],
     });
 
+    $('.notif').on('click', function(){
+    let version = document.getElementById('notif').value
+    Swal.fire({
+        title: 'Notifikasi Pembaharuan Aplikasi Rider?',
+        text: "Anda Akan Mengirim Notifikasi Ke rider",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Send',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('rider/update_app') ?>',
+            type: 'POST',
+            data: {
+              notif : 10,
+              versi_app : version,
+              status: 1
+            },
+            dataType: 'json',
+            // contentType: false,
+            // processData: false,
+            success: function(res) {
+              if (res.success) {
+                location.href = res.redirect
+                console.log(version)
+              } else {
+                Swal.fire({
+                  title: 'Oops..',
+                  text: res.msg,
+                  icon: 'error',
+                })
+              }
+            },
+            error: function(e) {
+              console.log(e.response)
+            }
+          })
+        }
+      })
+  });
 
 
     $('table').on('click', '.verifikasi', function(e) {

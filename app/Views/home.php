@@ -76,6 +76,8 @@
         <div id="map" class="border-2" style="width: 100%; height: 500px;"></div>
         <textarea id="lokasi" class="form-control mt-3" readonly></textarea>
         <input id="distance" class="form-control mt-3" readonly>
+        <br>
+        <a onClick="window.location.reload()"><button class="btn btn-primary">Refresh</button></a>
       </div>
     </div>
   </div>
@@ -104,7 +106,6 @@
       gestureHandling: 'auto',
       mapTypeId: "roadmap",
     })
-    setInterval(function() {
       const coords = [
       <?php foreach ($posisi as $key => $value) : ?>[<?= $value->loc_lat ?? -8.5970823 ?>, <?= $value->loc_lng ?? 116.1004891 ?>, <?= $value->kd_jenis_kendaraan ?>],
       <?php endforeach; ?>
@@ -132,7 +133,6 @@
         icon: icon,
       })
     });
-  }, 15000);
     console.log(coords)
 
   }

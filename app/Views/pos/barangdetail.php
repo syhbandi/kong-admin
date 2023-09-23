@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 <div class="card">
   <div class="card-header d-flex align-items-center">
-    <h3 class="card-title">Data Lengkap Toko (<?= $barang['Nama Toko'] ?>)</h3>
+    <h3 class="card-title">Data Lengkap Toko (<?= $barang['Nama Toko'] ?>) </h3>
     <div class="ml-auto ">
     <button class="btn btn-default" onclick="window.history.back()"><i class="fas fa-arrow-left mr-1"></i>Batal</button>
       <!-- <button class="btn btn-warning perbaikan"><i class="fas fa-reply-all mr-1"></i> Ajukan Perbaikan</button> -->
@@ -66,6 +66,8 @@
 
 
 <script>
+    const barang = <?= json_encode($barang) ?>;
+    console.log(barang.company_id)
   $('.verifikasi').on('click', () => {
       console.log('<?= $code ?>')
       Swal.fire({
@@ -84,7 +86,8 @@
             type: 'POST',
             data: {
               status: 'aktif',
-              kd_barang: '<?= $code ?>'
+              kd_barang: '<?= $code ?>',
+              id : barang.company_id
             },
             dataType: 'json',
             // contentType: false,
@@ -107,7 +110,6 @@
         }
       })
     })
-
     $('.aktif').on('click', () => {
       console.log('<?= $code ?>')
       Swal.fire({
@@ -126,7 +128,7 @@
             type: 'POST',
             data: {
               status: 'nondisplay',
-              kd_barang: '<?= $code ?>'
+              kd_barang: '<?= $code ?>',
             },
             dataType: 'json',
             // contentType: false,

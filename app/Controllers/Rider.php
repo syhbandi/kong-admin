@@ -7,6 +7,7 @@ use App\Models\PencairanModel;
 use App\Models\Rider\RiderModel;
 use App\Models\Rider\TopUpModel;
 use App\Models\Atribut\AtributModel;
+use Faker\Provider\Base;
 
 class Rider extends BaseController
 {
@@ -95,7 +96,7 @@ class Rider extends BaseController
 				$value->alamat_tinggal,
 				$value->hp1 . "<br>" . $value->hp2,
 				$value->email,
-				"Rp " . number_format((int)$value->saldo,0,',','.'),
+				"Rp " . number_format((int)$value->saldo, 0, ',', '.'),
 				'<span class="' . $text . ' font-weight-bold">' . $status . '</span>',
 				'<a href="' . base_url('rider/detail/' . $value->kd_driver) . '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>',
 				$jenis == 'baru' ? '<button class="btn btn-primary btn-sm verifikasi" data-driver="' . $value->kd_driver . '"><i class="fas fa-check mr-1"></i> Verifikasi</button>' : '',
@@ -128,13 +129,13 @@ class Rider extends BaseController
 		$foto_depan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'depan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_kanan = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'kanan.jpg' : base_url() . '/assets/file-not-found.png';
 		$foto_belakang = file_exists(FCPATH . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg') ? base_url() . '/../kajek/images/kendaraan/' . $rider['kd_kendaraan'] . $rider['kd_driver'] . 'belakang.jpg' : base_url() . '/assets/file-not-found.png';
-		$avatar = file_exists(FCPATH . '/../kajek/images/avatar/' . $rider['avatar_path']) && !empty($rider['avatar_path']) ? base_url() . '/../kajek/images/avatar/' . $rider['avatar_path'] . '' : base_url() . '/assets/file-not-found.png'; 
-		$bukti_attr = file_exists(FCPATH . '/../kajek/images/topup/' . $rider['bukti_bayar']) && !empty($rider['bukti_bayar']) ? base_url() . '/../kajek/images/topup/' . $rider['bukti_bayar'] . '' : base_url() . '/assets/file-not-found.png'; 
-	foreach ($sim as $key => $value) {
-		$foto_sim = file_exists(FCPATH . '/../kajek/images/sim/' . $value->sim_path . '') ? base_url() . '/../kajek/images/sim/' .$value->sim_path . '' : base_url() . '/assets/file-not-found.png';
-		$data_sim[] = '<img class="img-thumbnail btn-dok" src="'.$foto_sim.'" data-title="Foto SIM" />';
-	}
-	$tanggal_lahir =(intval(substr($rider["no_ktp"], 6, 2)) > 40)?intval(substr($rider["no_ktp"], 6, 2))-40:intval(substr($rider["no_ktp"], 6, 2));
+		$avatar = file_exists(FCPATH . '/../kajek/images/avatar/' . $rider['avatar_path']) && !empty($rider['avatar_path']) ? base_url() . '/../kajek/images/avatar/' . $rider['avatar_path'] . '' : base_url() . '/assets/file-not-found.png';
+		$bukti_attr = file_exists(FCPATH . '/../kajek/images/topup/' . $rider['bukti_bayar']) && !empty($rider['bukti_bayar']) ? base_url() . '/../kajek/images/topup/' . $rider['bukti_bayar'] . '' : base_url() . '/assets/file-not-found.png';
+		foreach ($sim as $key => $value) {
+			$foto_sim = file_exists(FCPATH . '/../kajek/images/sim/' . $value->sim_path . '') ? base_url() . '/../kajek/images/sim/' . $value->sim_path . '' : base_url() . '/assets/file-not-found.png';
+			$data_sim[] = '<img class="img-thumbnail btn-dok" src="' . $foto_sim . '" data-title="Foto SIM" />';
+		}
+		$tanggal_lahir = (intval(substr($rider["no_ktp"], 6, 2)) > 40) ? intval(substr($rider["no_ktp"], 6, 2)) - 40 : intval(substr($rider["no_ktp"], 6, 2));
 		$data['rider'] = [
 			'No. Ktp' => $rider['no_ktp'],
 			'Nama Rider' => $rider['nama_depan'],
@@ -150,14 +151,14 @@ class Rider extends BaseController
 			'Plat Nomor' => $rider['nomor_plat'],
 			'Pesanan' => $rider['nama_attr'],
 			'Ukuran' => $rider['ukuran'],
-			'Harga Attr' => 'Rp.' .$rider['harga_jual'],
+			'Harga Attr' => 'Rp.' . $rider['harga_jual'],
 			'Tanggal Transaksi' => $rider['tanggal'],
 			'Tahun Pembuatan' => $rider['tahun_pembuatan'],
 			'Tgl Kadaluarsa STNK' => date('d/m/Y', strtotime($rider['STNK_expired'])),
 			'Dokumen Data Diri' =>
 			'
 					<img class="img-thumbnail btn-dok" src="' . $foto_ktp . '" data-title="Foto KTP" />
-					'.implode($data_sim).'
+					' . implode($data_sim) . '
 					<img class="img-thumbnail btn-dok" src="' . $foto_skck . '" data-title="Foto SKCK" />
 					<img class="img-thumbnail btn-dok" src="' . $foto_diri_ktp . '" data-title="Foto Dengan KTP" />
 			',
@@ -169,11 +170,11 @@ class Rider extends BaseController
 					<img class="img-thumbnail btn-dok" src="' . $foto_kanan . '" data-title="Foto tampak kanan" />
 					<img class="img-thumbnail btn-dok" src="' . $foto_belakang . '" data-title="Foto tampak belakang" />
 			',
-			'Profile Rider' => 
+			'Profile Rider' =>
 			'
 				<img class="img-thumbnail btn-dok" src="' . $avatar . '" data-title="Profile Rider" />
 			',
-			'Bukti Pembayaran Atribut'	 => 
+			'Bukti Pembayaran Atribut'	 =>
 			'
 				<img class="img-thumbnail btn-dok" src="' . $bukti_attr . '" data-title="Bukti Pembayaran Atribut" />
 			'
@@ -194,24 +195,22 @@ class Rider extends BaseController
 			$insert = $this->riderModel->db->query("INSERT INTO m_driver_kendaraan_log(kd_kendaraan,tanggal,aktivitas,pesan)
 			SELECT kd_kendaraan,NOW(),'Verifikasi Kendaraan Rider','sukses'
 			FROM m_driver_kendaraan 
-			WHERE kd_driver='$kd_driver' AND status=2"); 
+			WHERE kd_driver='$kd_driver' AND status=2");
 			$status_n = $status;
 			if ($status_n == 0) {
 				$this->sendNotifToRider($kd_driver, 'Selamat! Anda telah berhasil melakukan pendaftaran menjadi Mitra Driver MisterKong. Mohon menunggu untuk validasi berkas, data diri, dan jadwal interview online.', $status_n); //kirim notif ke rider
-			}
-			elseif ($status_n == 4) {
+			} elseif ($status_n == 4) {
 				$this->sendNotifToRider($kd_driver, 'Selamat! Berkas Anda telah di verifikasi dan Anda LOLOS interview online. Silahkan untuk melanjutkan ke pembelian atribut driver.', $status_n); //kirim notif ke rider
-			}
-			elseif ($status_n == 6) {
+			} elseif ($status_n == 6) {
 				// verifikasi pembayaran untuk atribut driver
 				$data_attr = $this->riderModel->get_att_rider($kd_driver)->getRowArray();
 				// print_r($data_attr);
 				if (!empty($data_attr)) {
 					$insert = $this->riderModel->query("INSERT INTO t_penjualan_attr_ver(penjualan_attr_id, tanggal, nominal, `status`, keterangan, jenis, bukti_bayar, admin_id)
-															VALUES('".$data_attr['id']."', '".$data_attr['tanggal']."', ".$data_attr['total'].", 1, '-', 0, '".$data_attr['bukti_bayar']."', 1)");
+															VALUES('" . $data_attr['id'] . "', '" . $data_attr['tanggal'] . "', " . $data_attr['total'] . ", 1, '-', 0, '" . $data_attr['bukti_bayar'] . "', 1)");
 				}
 				$this->sendNotifToRider($kd_driver, 'Pembayaran atribut Anda telah diterima. Nomor resi pengiriman atribut akan dikirimkan oleh admin.', $status_n);
-			}elseif ($status_n == 3) {
+			} elseif ($status_n == 3) {
 				$this->sendNotifToRider($kd_driver, 'Selamat, Anda Sudah Bisa Bekerja. Silahkan Loug Out Aplikasi dan Login Kembali untuk melanjutkan aktivitas anda.', $status_n);
 			}
 			return json_encode([
@@ -255,14 +254,14 @@ class Rider extends BaseController
 
 	public function verifikasi_pembayaran()
 	{
-
 	}
 
 	// ==========================================================================================================================================
 	// Fitur verifikasi top up rider
 	// ==========================================================================================================================================
 	public function tolak()
-	{}	
+	{
+	}
 	public function topUp()
 	{
 		// dd($this->topUpModel->getData('', '', '', '2')->getResult());
@@ -496,39 +495,39 @@ class Rider extends BaseController
 		$kd_driver = $this->request->getPost('kd_driver');
 		$nominal = $this->request->getVar('nominal');
 		$status = $this->request->getPost('status');
-		
+
 
 		$this->pencairanModel->transStart();
 		$pesan = $status == 1 ? 'Pengajuan pencairan saldo sudah diverifikasi' : 'Pengajuan pencairan saldo ditangguhkan karena ' . $this->request->getPost('pesan') . ', proses pencairan akan diproses apabila permohonan valid';
 		$approved = $this->pencairanModel->update($no_transaksi, ['approveat' => date('Y-m-d H:i:s'), 'status' => $status,]);
 		if ($status == 1) {
 			$pencairanValidasi = $this->pencairanModel->find($no_transaksi);
-		$updatestatus = $this->pencairanModel->db->query("UPDATE m_saldo_driver SET saldo = saldo - $nominal WHERE kd_driver = '$kd_driver'");
-		$insertPencairan = $this->pencairanModel->insertPenarikan([
-			'no_transaksi' => $pencairanValidasi["no_transaksi"],
-			'tanggal' => date('Y-m-d H:i:s'),
-			'id' => $pencairanValidasi["id"],
-			'jenis_user' => $pencairanValidasi["jenis_user"],
-			'nominal' => $pencairanValidasi["nominal"],
-			'kd_bank' => $pencairanValidasi["kd_bank"],
-			'no_rek_tujuan' => $pencairanValidasi["no_rek_tujuan"],
-			'atas_nama' => strtoupper($pencairanValidasi["atas_nama"]),
-		]);
-		$this->pencairanModel->transCommit();
-		if ($this->pencairanModel->transStatus() === false) {
-			return json_encode([
-				'success' => false,
-				'msg' => 'Gagal melakukan verifikasi pencairan'
+			$updatestatus = $this->pencairanModel->db->query("UPDATE m_saldo_driver SET saldo = saldo - $nominal WHERE kd_driver = '$kd_driver'");
+			$insertPencairan = $this->pencairanModel->insertPenarikan([
+				'no_transaksi' => $pencairanValidasi["no_transaksi"],
+				'tanggal' => date('Y-m-d H:i:s'),
+				'id' => $pencairanValidasi["id"],
+				'jenis_user' => $pencairanValidasi["jenis_user"],
+				'nominal' => $pencairanValidasi["nominal"],
+				'kd_bank' => $pencairanValidasi["kd_bank"],
+				'no_rek_tujuan' => $pencairanValidasi["no_rek_tujuan"],
+				'atas_nama' => strtoupper($pencairanValidasi["atas_nama"]),
 			]);
-		}else {
-			$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
-			$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
-			return json_encode([
-				'success' => true,
-				'redirect' => base_url('rider/pencairan'),
-			]);
-		}
-		}else {
+			$this->pencairanModel->transCommit();
+			if ($this->pencairanModel->transStatus() === false) {
+				return json_encode([
+					'success' => false,
+					'msg' => 'Gagal melakukan verifikasi pencairan'
+				]);
+			} else {
+				$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
+				$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
+				return json_encode([
+					'success' => true,
+					'redirect' => base_url('rider/pencairan'),
+				]);
+			}
+		} else {
 			$update = $this->pencairanModel->query("UPDATE t_penarikan_validasi SET status = -1 WHERE no_transaksi = '$no_transaksi'");
 			$this->session->setFlashdata('sukses', $status == 1 ? 'Pengajuan pencairan diverifikasi' : 'pengajuan pencairan ditangguhkan'); // tampilkan toast ke aplikasi
 			$this->sendNotifToRider($kd_driver, $pesan, 4); //kirim notif ke rider
@@ -537,9 +536,51 @@ class Rider extends BaseController
 				'redirect' => base_url('rider/pencairan'),
 			]);
 		}
-		
 	}
+	public function update_app()
+	{
+		$status =  $this->request->getVar('status');
+		$versi_app = $this->request->getVar('versi_app');
+		$notif = $this->request->getVar('notif');
+		if ($notif == 10) {
+			$pesan = "Ada Update Terbaru nih dari KongRider Yuk Buruan di Update ke Version Terbaru Agar transaksi Lancar";
+			$jenis = 10;
+			$redirect = 'rider';
+		}else {
+			$pesan = "Yuk Buruan Top Up saldo Misterkongmu Agar Dapat melakukan transaksi";
+			$jenis = 11;
+			$redirect = 'rider/top-up';
+		}
+		$payload = array(
+			'to' => '/topics/kongVal',
+			'priority' => 'high',
+			"mutable_content" => true,
+			'data' => array(
+				"psn" => $pesan,
+				"mode" => '1',
+				"jenis_notif" => $jenis,
+				"version" => $versi_app 
+			),
+		);
+		$headers = array(
+			'Authorization:key=AAAAJrZwZQg:APA91bEp4BYq1kZcVwUyuh02a_s5F3txxf_CJHNbvdwsdjs6qwdHuWIiS3BKN7ETR3gtQkVZgHebKCH4C6N-QaHeJTEC5m8pMT0MDD5i6oG2bqPwbPT3XR3dY9h_zku1TtamNt9_Tn9q', 'Content-Type: application/json',
+		);
 
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+		$result = curl_exec($ch);
+		curl_close($ch);
+		$this->session->setFlashdata('sukses', $status == 1 ? 'Notifikasi Berhasil Dikirim' : 'Notifikasi gagal dikirim'); // tampilkan toast ke aplikasi
+		return json_encode([
+			'success' => true,
+			'redirect' => base_url($redirect),
+		]);
+	}
 
 	// fungsi utk kirim notif ke aplikasi rider
 	public function sendNotifToRider($kd_driver, $pesan, $status_n, $jenis = 0)

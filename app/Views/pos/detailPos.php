@@ -10,6 +10,10 @@
       <button class="btn btn-warning tutup <?= $status == 0 ? 'd-none' : '' ?>"><i class="fas fa-eye-slash mr-1"></i> Tutup</button>
       <button class="btn btn-danger nonaktif <?= $status == -2 ? 'd-none' : '' ?>"><i class="fas fa-times-circle mr-1"></i> Banned</button>
       <button class="btn btn-info edit <?= $status == 0 ? 'd-none' : '' ?>"><i class="fas fa-edit mr-1"></i> Edit Toko</button>
+      <a href="https://wa.me/62<?= substr($pos['No. Hp'], 1) ?>?text=Hallo%20selamat%20pagi/siang/sore.%20Selamat%Anda%20telah%20lulus%20administrasi%20pendataran%20mitra%20rider%20MisterKong.%20Untuk%20tahap%20selanjutnya%20proses%20interview%20melalui%20video%20call%20WA.%20Kami%20akan%20jadwalkan%20waktu%20interview%20Anda%20dengan%20waktu%20sebagai%20berikut:%20
+            Hari/Tanggal:%20<?= date('Y-m-d') ?>%20
+            Jam:%20<?= date("h:i:sa") ?>%20
+            Jika%20Anda%20tidak%20ada%20waktu%20di%20tanggal%20dan%20jam%20tersebut,%20bisa%20mengajukan%20perubahan.%20Terima%20kasih"><button class="btn btn-success chat"><i class="fas fa-arrow-to-top mr-1"></i> Chat User</button></a>
     </div>
   </div>
   <div class="card-body">

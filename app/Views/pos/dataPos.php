@@ -20,6 +20,24 @@
   <div class="card-body">
     <div class="tab-content" id="custom-tabs-four-tabContent">
       <!-- tab Toko baru -->
+      <form class="pb-3">
+          <fieldset>
+            <div class="row">
+              <div class="col-lg-2">
+                <div class="input-group date" id="datepicker">
+                  <input type="number" class="form-control" id="notif" placeholder="App Version"/>
+                  <span class="input-group-append">
+                    <span class="input-group-text bg-light d-block">
+                      <i class="fa fa-mobile"></i>
+                    </span>
+                </div>
+              </div>
+              <div class="col-sm-1 text-center">
+                <!-- <button id="btnSearch" class="btn btn-primary btn-md center-block" >Submit</button> -->
+                <button type="button" id="notif" class="btn btn-primary btn-md center-block notif">Send Notif</button>
+              </div>
+          </fieldset>
+        </form>
       <div class="tab-pane fade show active" id="baru" role="tabpanel" aria-labelledby="tab-baru">
         <table id="posBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
@@ -124,69 +142,49 @@
         }
       ],
     });
-
-    $('#posaktif').DataTable({
-      processing: true,
-      serverSide: true,
-      responsive: true,
-      order: [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/aktif`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
+  });
+  $('.notif').on('click', function(){
+    let version = document.getElementById('notif').value
+    Swal.fire({
+        title: 'Notifikasi Pembaharuan Aplikasi POS?',
+        text: "Anda Akan Mengirim Notifikasi Ke POS",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Send',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('pos/update_app') ?>',
+            type: 'POST',
+            data: {
+              notif : 10,
+              versi_app : version,
+              status: 1
+            },
+            dataType: 'json',
+            // contentType: false,
+            // processData: false,
+            success: function(res) {
+              if (res.success) {
+                location.href = res.redirect
+                console.log(version)
+              } else {
+                Swal.fire({
+                  title: 'Oops..',
+                  text: res.msg,
+                  icon: 'error',
+                })
+              }
+            },
+            error: function(e) {
+              console.log(e.response)
+            }
+          })
         }
-      ],
-    });
-    $('#postutup').DataTable({
-      processing: true,
-      serverSide: true,
-      responsive: true,
-      order: [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/tutup`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
-        }
-      ],
-    });
-
-    $('#posbaned').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "responsive": true,
-      "order": [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getToko/banned`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
-        }
-      ],
-    });
-
+      })
   });
 </script>
 <?= $this->endSection() ?>

@@ -53,6 +53,8 @@ class TokoModel extends Model
              INNER JOIN m_barang_gambar f ON brg.id=f.barang_id
     INNER JOIN m_barang_verifikasi i ON brg.id = i.barang_id
     INNER JOIN m_barang_gambar_verifikasi j ON f.id = j.barang_gambar_id
+    INNER JOIN m_user_company r ON brg.company_id = r.id
+    WHERE r.company_id = '$company_id'
     group BY company_id) g",
             "ON a.id = g.company_id",
             "LEFT"
@@ -118,13 +120,15 @@ class TokoModel extends Model
     }
     public function verivikasiBarang($status, $kd_barang)
     {
+
         if ($status == 'aktif') {
-            $verbarang = $this->db->query("UPDATE m_barang_verifikasi SET status_barang = '1' WHERE barang_id = '$kd_barang'");
+            $verbarang = $this->db->query("UPDATE m_barang_verifikasi SET status_barang = '1' WHERE barang_id IN (".implode(',', $kd_barang).")");
         } elseif ($status == 'nondisplay') {
             $verbarang = $this->db->query("UPDATE m_barang_verifikasi  SET status_barang = '-1' WHERE barang_id = '$kd_barang'");
         } else {
             $verbarang = $this->db->query("UPDATE m_barang_verifikasi  SET status_barang = '0' WHERE barang_id = '$kd_barang'");
         }
+        
         return $verbarang;
     }
 
@@ -223,7 +227,7 @@ class TokoModel extends Model
         if ($start != null && $limit != null) {
             $builder->limit($limit, $start);
         }
-
+        // echo $sql = $builder->getCompiledSelect();
         return $builder->get();
     }
     public function getjmlbrng($cari = null, $start = null, $limit = null, $company_id = null, $kd_barang = null, $jenis = null, $id = null)
@@ -288,6 +292,8 @@ class TokoModel extends Model
             INNER JOIN m_satuan s ON s.id=mbs.satuan_id
             INNER JOIN m_barang_verifikasi i ON brg.id = i.barang_id
             INNER JOIN m_barang_gambar_verifikasi j ON f.id = j.barang_gambar_id
+            INNER JOIN m_user_company r ON brg.company_id = r.id
+            WHERE r.company_id = '$company_id'
             GROUP BY brg.kd_barang, brg.company_id
         ) a",
             "a.company_id = e.id",
@@ -302,7 +308,6 @@ class TokoModel extends Model
         $builder->join("m_warna h", "a.warna_id = h.id", "INNER");
         //       $builder->join("m_barang_verifikasi i", "a.id= i.barang_id", "INNER");
         //       $builder->join("m_barang_gambar_verifikasi j", "f.id = j.barang_gambar_id", "INNER");
-        $builder->where("e.company_id = '$company_id'");
 
 
         if ($kd_barang != null) {
@@ -328,6 +333,7 @@ class TokoModel extends Model
             $builder->limit($limit, $start);
         }
 
+        // echo $sql = $builder->getCompiledSelect();
         return $builder->get();
     }
 }

@@ -15,6 +15,15 @@
   <div class="card-body">
     <div class="tab-content">
       <div class="tab-pane fade show active" id="belum-verifikasi-content" role="tabpanel" aria-labelledby="belum-verifikasi">
+      <form class="pb-3" style="margin-left: 95%;">
+          <fieldset>
+            <div class="row">
+              <div class="text-center">
+                <!-- <button id="btnSearch" class="btn btn-primary btn-md center-block" >Submit</button> -->
+                <button type="button" id="notif" class="btn btn-primary btn-md center-block notif">Send Notif</button>
+              </div>
+          </fieldset>
+        </form>
         <table id="topUp" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
@@ -56,6 +65,46 @@
 </div>
 
 <script>
+  $('.notif').on('click', function(){
+    let version = document.getElementById('notif').value
+    console.log(version);
+    Swal.fire({
+        title: 'Notifikasi Pembaharuan Aplikasi Rider?',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Send',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('rider/update_app') ?>',
+            type: 'POST',
+            data: {
+              notif : 11,
+              status: 1
+            },
+            dataType: 'json',
+            // contentType: false,
+            // processData: false,
+            success: function(res) {
+              if (res.success) {
+                location.href = res.redirect
+              } else {
+                Swal.fire({
+                  title: 'Oops..',
+                  text: res.msg,
+                  icon: 'error',
+                })
+              }
+            },
+            error: function(e) {
+              console.log(e.response)
+            }
+          })
+        }
+      })
+  });
   $(function() {
     $('#topUp').DataTable({
       "processing": true,

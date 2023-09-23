@@ -14,6 +14,7 @@
       </li>
     </ul>
   </div>
+  <button class="btn btn-primary verifikasi" id="verif"><i class="fas fa-check-circle mr-1"></i> Verifikasi</button>
   <div class="card-body">
     <div class="tab-content" id="custom-tabs-four-tabContent">
       <!-- tab Barang baru -->
@@ -21,6 +22,7 @@
         <table id="barangBaru" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
             <tr>
+              <th></th>
               <th>No</th>
               <th>Kode Barang</th>
               <th>Nama Barang</th>
@@ -148,5 +150,62 @@
       ],
     });
   });
+</script>
+<script>
+$("document").ready(function(){
+  var files = new Array();
+$('#verif').click(function(){
+
+    //xzyId is table id.
+    $('#barangBaru tbody tr  input:checkbox').each(function() {
+      if ($(this).is(':checked')) {
+      files.push(this.value);
+      }
+    });
+    console.log(files);
+      Swal.fire({
+        title: 'Aktif(Display) Barang?',
+        text: "Pastikan sudah mengecek Barang",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Verifikasi',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('pos/verivikasiBarang') ?>',
+            type: 'POST',
+            data: {
+              status: 'aktif',
+              kd_barang: files,
+              id : `<?= $company_id ?>`,
+            },
+            dataType: 'json',
+            // contentType: false,
+            // processData: false,
+            success: function(res) {
+              if (res.success) {
+                location.href = res.redirect
+              } else {
+                Swal.fire({
+                  title: 'Oops..',
+                  text: res.msg,
+                  icon: 'error',
+                })
+              }
+            },
+            error: function(e) {
+              console.log(e.response)
+            }
+          })
+        }
+      })
+
+    
+ });
+})
+
 </script>
 <?= $this->endSection() ?>

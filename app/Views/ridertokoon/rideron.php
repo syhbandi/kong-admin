@@ -13,6 +13,9 @@
       <li class="nav-item">
         <a class="nav-link text-dark" id="tab-vatribut" data-toggle="pill" href="#banned" role="tab" aria-controls="vatribut" aria-selected="false"><i class="fas fa-biking mr-1 text-danger"></i> Offline</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" id="tab-vatribut" data-toggle="pill" href="#nosaldo" role="tab" aria-controls="vatribut" aria-selected="false"><i class="fas fa-money-bill-alt mr-1 text-danger"></i> Tidak Ada Saldo</a>
+      </li>
     </ul>
   </div>
   <div class="card-body">
@@ -26,6 +29,7 @@
               <th>Nama</th>
               <th>Alamat</th>
               <th>WhatsApp</th>
+              <th>Saldo</th>
               <th>Terakhir Online</th>
               <th>Jumlah Transaksi</th>
               <th>Chat Rider</th>
@@ -44,6 +48,7 @@
               <th>Nama</th>
               <th>Alamat</th>
               <th>WhatsApp</th>
+              <th>Saldo</th>
               <th>Terakhir Online</th>
               <th>Jumlah Transaksi</th>
               <th>Chat Rider</th>
@@ -61,6 +66,25 @@
               <th>Nama</th>
               <th>Alamat</th>
               <th>WhatsApp</th>
+              <th>Saldo</th>
+              <th>Terakhir Online</th>
+              <th>Jumlah Transaksi</th>
+              <th>Chat Rider</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="nosaldo" role="tabpanel" aria-labelledby="tab-nosaldo">
+        <table id="ridernosaldo" class="table table-bordered table-hover table-striped w-100">
+          <thead class="align-middle text-center">
+            <tr>
+              <th>No</th>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>WhatsApp</th>
+              <th>Saldo</th>
               <th>Terakhir Online</th>
               <th>Jumlah Transaksi</th>
               <th>Chat Rider</th>
@@ -125,6 +149,26 @@
       order: [],
       "ajax": {
         "url": `<?= base_url() ?>/Ridertokoon/getRider/offline`,
+        "type": "POST",
+        'data': {}
+      },
+      "columnDefs": [{
+          "targets": [0, 1, 4, 5, 6],
+          "className": "text-center",
+        },
+        {
+          "targets": [6],
+          "className": "text-body-right"
+        }
+      ],
+    });
+    $('#ridernosaldo').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      order: [],
+      "ajax": {
+        "url": `<?= base_url() ?>/Ridertokoon/getRider/nosaldo`,
         "type": "POST",
         'data': {}
       },

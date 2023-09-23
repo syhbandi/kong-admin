@@ -180,22 +180,66 @@ class Pos extends BaseController
 		]);
 
 	}
-
-	public function sendNotifToToko($company_id, $pesan, $jenis = 0)
+	public function update_app()
 	{
+		$status =  $this->request->getVar('status');
+		$versi_app = $this->request->getVar('versi_app');
+		$notif = $this->request->getVar('notif');
+		if ($notif == 10) {
+			$pesan = "Ada Update Terbaru nih dari KongPos Yuk Buruan di Update ke Version Terbaru Agar transaksi Lancar";
+			$jenis = 10;
+			$redirect = 'pos';
+		}else {
+			$pesan = "Yuk Buruan Top Up saldo Misterkongmu Agar Dapat melakukan transaksi";
+			$jenis = 11;
+			$redirect = 'rider/top-up';
+		}
 		$payload = array(
-			'to' => '/topics/kongVal',
+			'to' => '/topics/kongpos',
 			'priority' => 'high',
 			"mutable_content" => true,
 			'data' => array(
-				"id_dr" => $company_id,
+				"title" => "New Version",
+				"body" => $pesan,
+				"mode" => '1',
+				"jenis_notif" => $jenis,
+				"version" => $versi_app,
+			),
+		);
+		$headers = array(
+			'Authorization:key=AAAAf50odws:APA91bERBP6tLNfAWz_aeNhmXjbOOItI2aZ_bZEy1xNX47SWCr8LbrfNVQfuVJ8xYT7_mCFKRn6pBW7_qO-fG5qFNfIU-8nfWm1-M_zhezLK12dlsIeFi8ZfYeizEhPVQTdIbGj0DtUt', 'Content-Type: application/json',
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+		$result = curl_exec($ch);
+		curl_close($ch);
+		$this->session->setFlashdata('sukses', $status == 1 ? 'Notifikasi Berhasil Dikirim' : 'Notifikasi gagal dikirim'); // tampilkan toast ke aplikasi
+		return json_encode([
+			'success' => true,
+			'redirect' => base_url($redirect),
+		]);
+	}
+	public function sendNotifToToko($company_id, $pesan, $jenis = 0)
+	{
+		$payload = array(
+			'to' => '/topics/kongpos',
+			'priority' => 'high',
+			"mutable_content" => true,
+			'data' => array(
+				"id_toko" => $company_id,
 				"psn" => $pesan,
 				"mode" => '1',
 				"jenis_notif" => $jenis
 			),
 		);
 		$headers = array(
-			'Authorization:key=AAAAJrZwZQg:APA91bEp4BYq1kZcVwUyuh02a_s5F3txxf_CJHNbvdwsdjs6qwdHuWIiS3BKN7ETR3gtQkVZgHebKCH4C6N-QaHeJTEC5m8pMT0MDD5i6oG2bqPwbPT3XR3dY9h_zku1TtamNt9_Tn9q', 'Content-Type: application/json',
+			'Authorization:key=AAAAf50odws:APA91bERBP6tLNfAWz_aeNhmXjbOOItI2aZ_bZEy1xNX47SWCr8LbrfNVQfuVJ8xYT7_mCFKRn6pBW7_qO-fG5qFNfIU-8nfWm1-M_zhezLK12dlsIeFi8ZfYeizEhPVQTdIbGj0DtUt', 'Content-Type: application/json',
 		);
 
 		$ch = curl_init();
@@ -389,16 +433,19 @@ class Pos extends BaseController
 					$textColor = 'danger';
 					break;
 			}
-
+			$foto_barang = file_exists(FCPATH . '/../back_end_mp/'.$value->company_id.'_config/images/' . $value->gambar . '') ? base_url() . '/../back_end_mp/'.$value->company_id.'_config/images/' . $value->gambar . '' : base_url() . '/assets/file-not-found.png';
 			$data[$key] = [
+				'<input type="checkbox" value="'.$value->code.'" >',
 				$no,
 				$value->kd_barang,
 				$value->nama,
 				$value->kategori,
 				$value->merk,
 				$value->nama_usaha,
+				'
+					<img class="img-thumbnail btn-dok" src="' . $foto_barang . '" data-title="Foto Barang" width="95%"/>
+				',
 				$value->date_add,
-				$value->date_modif,
 				'<a href="' . base_url('pos/detailBarang/' . $value->code) . '" class="btn btn-'.$textColor.' btn-sm"><i class="fas fa-eye"></i></a>',
 			];
 			$no++;
@@ -430,6 +477,7 @@ class Pos extends BaseController
 			'Satuan' =>$barang['satuan'],
 			'Nama Toko'  => $barang['nama_usaha'],
 			'Keterangan' => $barang['keterangan'],
+			'company_id' => $barang['company_id'],
 			'Foto Barang' => 
 			'
 					<img class="img-thumbnail btn-dok" src="' . $foto_barang . '" data-title="Foto Barang" />
@@ -445,20 +493,22 @@ class Pos extends BaseController
 	{
 		$kd_barang = $this->request->getVar('kd_barang');
 		$status = $this->request->getVar('status');
+		$company_id = $this->request->getVar('id');
 		$setStatus = $this->TokoModel->verivikasiBarang($status, $kd_barang);
 
 		if ($setStatus == 'TRUE') {
-			$this->session->setFlashdata('sukses', 'Barang dengan kode ' . $kd_barang . ' telah diverifikasi'); 
+			$this->session->setFlashdata('sukses', 'Barang dengan kode ' . implode(',', $kd_barang) . ' telah diverifikasi'); 
 			$this->sendNotifToToko($kd_barang, 'Selamat, data anda sudah divalidasi. Silahkan Log Out dan Login kembali ke aplikasi untuk memulai aktifitas anda.'); 
 			return json_encode([
 				'success' => true,
-				'redirect' => base_url('pos/barang'),
+				'redirect' => base_url('pos/barangc/'.$company_id),
 				'company' => $kd_barang
 			]);
 		}
 		return json_encode([
 			'success' => false,
-			'msg' => 'Gagal melakukan validasi'
+			'msg' => 'Gagal melakukan validasi',
+			'data' => $setStatus
 		]);
 
 	}

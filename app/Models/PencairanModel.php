@@ -130,22 +130,37 @@ class PencairanModel extends Model
 			$test = "IN";
 			$select_status = "1 as status";
 		}
-			$builder->select("c.company_id, a.jenis_transaksi,
-			c.nama_usaha, $select_status, c.no_rek, j.nama_bank, c.nama_pemilik_rekening,
-			SUM((b.harga_jual - (b.harga_jual * b.diskon / 100)) * b.qty - a.potongan_toko) AS total_transfer");
-			$builder->join("t_penjualan_detail b", "a.no_transaksi = b.no_transaksi", "INNER");
-			$builder->join("m_user_company c", "a.user_id_toko = c.id", "INNER");
-			$builder->join("m_bank j", "c.kd_bank = j.kd_bank", "LEFT");
-			$builder->join("t_pengiriman d", "a.no_transaksi = d.no_resi", "INNER");
-			$builder->join("t_pengiriman_status e", "a.no_transaksi = e.no_resi", "INNER");
-			$builder->where("e.`status` = 2 AND a.jenis_transaksi = 'FOOD' AND 
-			tanggal <= CONCAT('$akhir', ' 12:00:00')
-			AND a.no_transaksi $test (SELECT no_transaksi FROM t_penarikan)");
-			$builder->groupBy('c.company_id, a.jenis_transaksi, c.nama_usaha');
+		$limit = "";
 		if ($start != null && $limit != null) {
-			$builder->limit($limit, $start);
+			$limit = "limit $limit , $start";
 		}
-		return $builder->get();
+	$builder = $this->db->query("SELECT 
+		c.`company_id`,$select_status, penjualan.`jenis_transaksi`, c.`nama_usaha`, 0 as `status`, c.`no_rek`, `j`.`nama_bank`, `c`.`nama_pemilik_rekening`, total_transfer-potongan_toko AS total_transfer
+		 FROM
+		(
+			SELECT user_id_toko,'FOOD' AS jenis_transaksi,potongan_toko,
+			SUM(
+				(harga_jual - (CASE WHEN jl_dt.diskon<1 THEN harga_jual*diskon/100 ELSE diskon END)) *qty
+			) AS total_transfer
+			FROM 
+			t_penjualan jl
+			INNER JOIN t_penjualan_detail jl_dt
+			ON jl.no_transaksi=jl_dt.no_transaksi
+			INNER JOIN `t_pengiriman` `d` ON jl.`no_transaksi` = `d`.`no_resi`
+			INNER JOIN 
+			(SELECT no_resi,GROUP_CONCAT(status ORDER BY waktu_status DESC LIMIT 1) AS status FROM t_pengiriman_status GROUP BY no_resi) e ON d.no_resi = `e`.`no_resi`
+			WHERE jenis_transaksi='FOOD'
+			AND `tanggal` <= CONCAT('$akhir', ' 12:00:00')
+			AND jl.no_transaksi $test (SELECT no_transaksi FROM t_penarikan)
+			AND (status_barang=1)
+			GROUP BY user_id_toko
+		) penjualan
+		INNER JOIN m_user_company c ON c.id=penjualan.user_id_toko
+		LEFT JOIN `m_bank` `j` ON `c`.`kd_bank` = `j`.`kd_bank`
+		WHERE c.`status`=1 $limit");
+
+		// print_r($builder->getResult());
+		return $builder;
 	}
 
 	public function getdetail($company_id = null, $akhir = null, $jenis = null)

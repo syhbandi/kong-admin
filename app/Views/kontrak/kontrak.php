@@ -64,7 +64,7 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/KontrakController/getkontrak/aktif`,
+        "url": `<?= base_url() ?>getkontrak/aktif`,
         "type": "POST",
         'data': {}
       },
@@ -85,7 +85,7 @@
       responsive: true,
       order: [],
       "ajax": {
-        "url": `<?= base_url() ?>/KontrakController/getkontrak/nonaktif`,
+        "url": `<?= base_url() ?>getkontrak/nonaktif`,
         "type": "POST",
         'data': {}
       },
@@ -109,7 +109,7 @@
       "responsive": true,
       "order": [],
       "ajax": {
-        "url": `<?= base_url() ?>/KontrakController/getkontrak/aktif`,
+        "url": `<?= base_url() ?>getkontrak/aktif`,
         "type": "POST",
         'data': {}
       },
@@ -130,7 +130,7 @@
       responsive: true,
       order: [],
       "ajax": {
-        "url": `<?= base_url() ?>/KontrakController/getkontrak/nonktif`,
+        "url": `<?= base_url() ?>getkontrak/nonktif`,
         "type": "POST",
         'data': {}
       },

@@ -69,9 +69,10 @@ class Ridertokoon extends BaseController
                 $value->nama_depan,
                 $value->alamat_tinggal,
                 $value->hp2,
+                'Rp.'.$value->saldo,
                 '<span class="' . $text . ' font-weight-bold">' . $online . '</span>',
                 '<span class="' . $warna . ' font-weight-bold">' . $transaksi . '</span>',
-                '<a href="https://wa.me/' . $value->hp2 . '?text=Selamat%20pagi/siang/sore/malam.%20Halo%20Kak%20'.$value->nama_depan.',%20kamu%20terlihat%20sudah%20'.$online.'%20hari%20tidak%20online%20nih%20di%20KongRider.
+                '<a href="https://wa.me/+62' . $value->hp2 . '?text=Selamat%20pagi/siang/sore/malam.%20Halo%20Kak%20'.$value->nama_depan.',%20kamu%20terlihat%20sudah%20'.$online.'%20hari%20tidak%20online%20nih%20di%20KongRider.
                 Hayuk%20sekarang%20juga%20online%20kan%20aplikasi%20KongRider%20untuk%20mendapatkan%20orderan"><button class="btn btn-success btn-sm"><i class="fas fa-phone-alt mr-1"></i> WhatsApp</button></a>'
             ];
             $no++;

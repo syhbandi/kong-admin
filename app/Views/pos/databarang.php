@@ -40,7 +40,8 @@
       <div class="tab-pane fade" id="aktif" role="tabpanel" aria-labelledby="tab-aktif">
         <table id="barangaktif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
-          <tr>
+            <tr>
+              <th>test</th>
               <th>No</th>
               <th>Kode Barang</th>
               <th>Nama Barang</th>
@@ -60,7 +61,8 @@
       <div class="tab-pane fade" id="verif" role="tabpanel" aria-labelledby="tab-verif">
         <table id="barang-verif" class="table table-bordered table-hover table-striped w-100">
           <thead class="align-middle text-center">
-          <tr>
+            <tr>
+            <th>test</th>
               <th>No</th>
               <th>Kode Barang</th>
               <th>Nama Barang</th>
@@ -76,73 +78,81 @@
           </tbody>
         </table>
       </div>
-  <!-- /.card -->
-</div>
+      <!-- /.card -->
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+          
 
-<script>
-  $(function() {
-    $('#barangBaru').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "responsive": true,
-      "order": [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getBarang/nonaktif`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
-        }
-      ],
-    });
 
-    $('#barang-verif').DataTable({
-      processing: true,
-      serverSide: true,
-      responsive: true,
-      order: [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getBarang/nonverification`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
-        }
-      ],
-    });
 
-    $('#barangaktif').DataTable({
-      processing: true,
-      serverSide: true,
-      responsive: true,
-      order: [],
-      "ajax": {
-        "url": `<?= base_url() ?>/pos/getBarang/aktif`,
-        "type": "POST",
-        'data': {}
-      },
-      "columnDefs": [{
-          "targets": [0, 1, 4, 5, 7, 8],
-          "className": "text-center",
-        },
-        {
-          "targets": [6],
-          "className": "text-body-right"
-        }
-      ],
-    });
-  });
-</script>
-<?= $this->endSection() ?>
+          
+    </script>
+    <script>
+      $(function() {
+        $('#barangBaru').DataTable({
+          "processing": true,
+          "serverSide": true,
+          "responsive": true,
+          "order": [],
+          "ajax": {
+            "url": `<?= base_url() ?>/pos/getBarang/nonaktif`,
+            "type": "POST",
+            'data': {}
+          },
+          "columnDefs": [{
+              "targets": [0, 1, 4, 5, 7, 8],
+              "className": "text-center",
+            },
+            {
+              "targets": [6],
+              "className": "text-body-right"
+            }
+          ],
+        });
+
+        $('#barang-verif').DataTable({
+          processing: true,
+          serverSide: true,
+          responsive: true,
+          order: [],
+          "ajax": {
+            "url": `<?= base_url() ?>/pos/getBarang/nonverification`,
+            "type": "POST",
+            'data': {}
+          },
+          "columnDefs": [{
+              "targets": [0, 1, 4, 5, 7, 8],
+              "className": "text-center",
+            },
+            {
+              "targets": [6],
+              "className": "text-body-right"
+            }
+          ],
+        });
+
+        $('#barangaktif').DataTable({
+          processing: true,
+          serverSide: true,
+          responsive: true,
+          order: [],
+          "ajax": {
+            "url": `<?= base_url() ?>/pos/getBarang/aktif`,
+            "type": "POST",
+            'data': {}
+          },
+          "columnDefs": [{
+              "targets": [0, 1, 4, 5, 7, 8],
+              "className": "text-center",
+            },
+            {
+              "targets": [6],
+              "className": "text-body-right"
+            }
+          ],
+        });
+      });
+
+    </script>
+    <?= $this->endSection() ?>

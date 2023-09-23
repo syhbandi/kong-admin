@@ -15,6 +15,10 @@ class AtributController extends BaseController
     {
         return view('atribut/dataatribut');
     }
+	public function transaksi()
+	{
+		return view('atribut/transaksi');
+	}
     public function getattr()
      {
         $search = $this->request->getPost('search')['value'];
