@@ -44,6 +44,8 @@ $routes->add('rider/top-up', 'Rider::topUp');
 $routes->add('rider/detail/(:num)', 'Rider::detail/$1');
 $routes->add('rider/pencairan', 'Rider::pencairan');
 $routes->add('rider/kendaraan', 'Rider::Kendaraan');
+$routes->add('rider/verifikasi', 'Rider::verifikasi');
+$routes->add('rider/update_app', 'Rider::update_app');
 $routes->add('rider/top-up/detail/(:segment)', 'Rider::detailTopUp/$1');
 $routes->add('rider/pencairan/detail/(:segment)', 'Rider::detailPencairan/$1');
 
@@ -55,6 +57,8 @@ $routes->add('pos/pencairan/(:segment)', 'Pos::pencairan/detailPencairan/$1');
 $routes->add('pos/barang', 'Pos::barang');
 $routes->add('pos/barangc/(:segment)', 'Pos::barangc/$1');
 $routes->add('pos/detailBarang/(:segment)', 'Pos::detailBarang/$1');
+$routes->add('pos/update_app', 'Pos::update_app');
+$routes->add('pos/verifikasiPencairan', 'Pos::verifikasiPencairan');
 
 // routing User marketplace
 $routes->add('market', 'Marketplace::index');
@@ -75,6 +79,51 @@ $routes->add('atribut/transaksi', 'AtributController::transaksi');
 $routes->add('cek_rider', 'Ridertokoon::index');
 $routes->add('cek_toko', 'Ridertokoon::toko');
 $routes->add('cek_driver', 'Ridertokoon::driver');
+
+//ajax  routes
+$routes->add('pos/getToko/(:segment)', 'Pos::getToko/$1');
+$routes->add('pos/getBarang/(:segment)', 'Pos::getBarang/$1');
+$routes->add('pos/getjmlbrng/(:segment)', 'Pos::getjmlbrng/$1');
+$routes->add('pos/getPencairan/(:segment)', 'Pos::getPencairan/$1');
+$routes->add('pos/verivikasiBarang', 'Pos::verivikasiBarang');
+$routes->add('pos/verivikasiToko', 'Pos::verivikasiToko');
+$routes->add('pos/editkategori', 'Pos::editkategori');
+
+$routes->add('AtributController/getattr', 'AtributController::getattr');
+$routes->add('AtributController/getbaykd', 'AtributController::getbaykd');
+$routes->add('AtributController/editattr', 'AtributController::editattr');
+
+
+$routes->add('BankController/getbank', 'BankController::getbank');
+$routes->add('BankController/getbaykd', 'BankController::getbaykd');
+$routes->add('BankController/editbank', 'BankController::editbank');
+
+$routes->add('getkontrak/(:any)', 'KontrakController::getkontrak/$1');
+$routes->add('KontrakController/updatekontrak', 'KontrakController::updatekontrak');
+
+$routes->add('rider/getRider/(:segment)', 'Rider::getRider/$1');
+$routes->add('rider/getKendaraan/(:segment)', 'Rider::getKendaraan/$1');
+$routes->add('rider/getPencairan/(:any)', 'Rider::getPencairan/$1');
+$routes->add('rider/getTopUp/(:any)', 'Rider::getTopUp/$1');
+$routes->add('rider/perbaikan', 'Rider::perbaikan');
+$routes->add('rider/verifikasi', 'Rider::verifikasi');
+$routes->add('rider/verifikasiPencairan', 'Rider::verifikasiPencairan');
+$routes->add('rider/verifikasiTopUp', 'Rider::verifikasiTopUp');
+
+$routes->add('Ridertokoon/getDriver/(:segment)', 'Ridertokoon::getDriver/$1');
+$routes->add('Ridertokoon/getRider/(:segment)', 'Ridertokoon::getRider/$1');
+$routes->add('Ridertokoon/getToko/(:segment)', 'Ridertokoon::getToko/$1');
+
+$routes->add('Transaksi/updatezona', 'Transaksi::updatezona');
+$routes->add('Transaksi/addzona', 'Transaksi::addzona');
+$routes->add('Transaksi/show', 'Transaksi::show');
+$routes->add('Transaksi/tarif', 'Transaksi::tarif');
+
+$routes->add('Marketplace/getmpUser/(:segment)', 'Marketplace::getmpUser/$1');
+$routes->add('Marketplace/update', 'Marketplace::update');
+
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
