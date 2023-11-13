@@ -199,6 +199,12 @@
                 <p>Validasi Pembayaran</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="<?= base_url('bayar-mapper') ?>" class="nav-link <?= service('uri')->getPath() == 'bayar-mapper' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-dollar-sign"></i>
+                <p>Validasi Mapper (Desktop)</p>
+              </a>
+            </li>
           </ul>
         </li>
         <li class="nav-item <?= service('uri')->getSegment(1) == 'cek_rider' ? 'menu-open' : '' ?>">

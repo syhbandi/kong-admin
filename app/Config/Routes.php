@@ -67,6 +67,12 @@ $routes->add('market/detailMp/(:segment)', 'Marketplace::detail_user/$1');
 // kontrak
 $routes->add('kontrak', 'KontrakController::index');
 $routes->add('kontrak/detailkontrak/(:segment)', 'KontrakController::detailkontrak/$1');
+
+// mapper
+$routes->add('bayar-mapper', 'MapperController::index');
+$routes->add('verifikasi', 'MapperController::verifikasiPembayaran');
+// $routes->add('kontrak/detailkontrak/(:segment)', 'KontrakController::detailkontrak/$1');
+
 //tarif
 $routes->add('tarif', 'Transaksi::index');
 $routes->add('transaksi', 'Alltransaksi::index');
