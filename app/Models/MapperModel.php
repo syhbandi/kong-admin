@@ -10,11 +10,11 @@ class MapperModel extends Model
     {
         // jenis: 1. belum bayar, 2. sudah bayar, belum verif, 3. sudah verif, 4.expired
         if ($jenis==1) {
-            $where="id=2";
+            $where="ISNULL(bukti_bayar)";
         }elseif($jenis==2){
             $where="tanggal_bayar>tanggal_verifikasi OR (tanggal_bayar IS NOT NULL AND ISNULL(tanggal_verifikasi))";
         }elseif($jenis==3){
-            $where="tanggal_verifikasi>tanggal_bayar";
+            $where="tanggal_verifikasi>=tanggal_bayar";
         }else{
             $where="NOW() > DATE_ADD(awal, INTERVAL periode MONTH)";
         }
