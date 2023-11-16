@@ -7,6 +7,11 @@ class Home extends BaseController
 {
     public function __construct()
 	{
+        $this->session = \Config\Services::session();
+        if (!$this->session->has('login')) {
+            header("Location: /login");
+            die();
+        }
 		$this->HomeModel = new HomeModel();
 	}
     public function index()

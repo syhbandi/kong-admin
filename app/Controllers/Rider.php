@@ -17,6 +17,11 @@ class Rider extends BaseController
 
 	public function __construct()
 	{
+		$this->session = \Config\Services::session();
+        if (!$this->session->has('login')) {
+            header("Location: /login");
+            die();
+        }
 		$this->riderModel = new RiderModel();
 		$this->topUpModel = new TopUpModel();
 		$this->pencairanModel = new PencairanModel();
